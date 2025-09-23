@@ -8,3 +8,5 @@ Docker-конфиги — в корне (docker-compose.yaml, nginx/, dockerfile
 [Пока нет :\]
 Hello world
 Привет 
+ууауу
+Как дела

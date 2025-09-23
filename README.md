@@ -6,3 +6,4 @@ Docker-конфиги — в корне (docker-compose.yaml, nginx/, dockerfile
 
 Быстрый старт
 [Пока нет :\]
+Hello world

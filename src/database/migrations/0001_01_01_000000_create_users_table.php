@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 255);
-            $table->rememberToken();
+            $table->enum('role', ['customer', 'admin', 'manager'])->default('customer'); // Изменено на enum с примерами значений
+            $table->string('remember_token', 100)->nullable();
             $table->timestamps();
         });
 

@@ -36,3 +36,19 @@ services:
     volumes:
       - ./src:/var/www/laravel
     entrypoint: [ "php", "/var/www/laravel/artisan" ]
+
+  node:
+    image: node:22
+    working_dir: /var/www/laravel
+    volumes:
+      - ./src:/var/www/laravel
+    tty: true
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: password

@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_items', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // вместо increments('id')
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // современный синтаксис
+            $table->decimal('total_price', 10, 2);
+            $table->string('status', 20);
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

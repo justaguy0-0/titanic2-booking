@@ -3,7 +3,7 @@
 @section('title', 'Регистрация')
 
 @section('main_content')
-<div class="register-container" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%); padding: 2rem 0;">
+<div class="register-container" style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem 0;">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-6">

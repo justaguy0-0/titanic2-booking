@@ -40,7 +40,7 @@
 
     {{-- Шапка для гостей (только на публичных страницах, кроме login/register/password) --}}
     @elseif (!request()->routeIs('login') && !request()->routeIs('register') && !request()->is('password.request*'))
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4"
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3"
                 style="background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%); border-bottom: 2px solid #fbbf24;">
             
             <div class="col-md-3 mb-2 mb-md-0 ps-3">
@@ -135,7 +135,7 @@
 
         /* Фон для страниц login/register/password */
         body.auth-bg {
-            background: linear-gradient(135deg, #0c2d48 0%, #1a365d 50%, #2d3748 100%);
+            background: #1e293b;  /* Однотонный темно-синий */
             min-height: 100vh;
         }
 

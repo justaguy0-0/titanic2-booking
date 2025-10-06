@@ -9,4 +9,8 @@ class IcebergArrival extends Model
 {
     /** @use HasFactory<\Database\Factories\IcebergArrivalFactory> */
     use HasFactory;
+
+    protected $fillable = [
+    'name',
+];
 }

@@ -9,4 +9,9 @@ class PlaceDeparture extends Model
 {
     /** @use HasFactory<\Database\Factories\PlaceDepartureFactory> */
     use HasFactory;
+
+    protected $fillable = [
+    'name', 
+];
+
 }

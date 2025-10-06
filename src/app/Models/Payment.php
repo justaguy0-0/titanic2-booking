@@ -9,4 +9,12 @@ class Payment extends Model
 {
     /** @use HasFactory<\Database\Factories\PaymentFactory> */
     use HasFactory;
+
+    protected $fillable = [
+    'order_id', // foreign key
+    'amount',
+    'provider',
+    'transaction_id',
+    'status',
+];
 }

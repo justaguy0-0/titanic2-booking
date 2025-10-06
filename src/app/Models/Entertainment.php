@@ -9,4 +9,9 @@ class Entertainment extends Model
 {
     /** @use HasFactory<\Database\Factories\EntertainmentFactory> */
     use HasFactory;
+
+    protected $fillable = [
+    'name',
+    'price',
+];
 }

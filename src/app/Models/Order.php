@@ -9,4 +9,10 @@ class Order extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
+    
+    protected $fillable = [
+    'user_id', // foreign key
+    'total_price',
+    'status',
+];
 }

@@ -9,4 +9,11 @@ class OrderItem extends Model
 {
     /** @use HasFactory<\Database\Factories\OrderItemFactory> */
     use HasFactory;
+
+    protected $fillable = [
+    'order_id', // foreign key (если добавил)
+    'user_id',
+    'total_price',
+    'status',
+];
 }

@@ -9,4 +9,12 @@ class Ticket extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketFactory> */
     use HasFactory;
+
+    protected $fillable = [
+    'voyages_id', // foreign key
+    'type',
+    'number',
+    'price',
+    'status',
+];
 }

@@ -9,6 +9,11 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::get('/test-places', function () {
+    $places = PlaceDeparture::paginate(10);
+    return view('admin.place-departures.index', compact('places'));
+});
+
 //Route::get('/', function () {
 //    return view('welcome');
 //});
@@ -24,7 +29,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('placeDepartures', PlaceDepartureController::class);
+    Route::resource('place-departures', PlaceDepartureController::class);
 });
 
 require __DIR__.'/auth.php';

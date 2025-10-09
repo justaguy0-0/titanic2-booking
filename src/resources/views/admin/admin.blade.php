@@ -19,7 +19,7 @@
                 {{-- Логотип и название --}}
                 <div class="flex items-center">
                     <a href="{{ route('admin.place-departures.index') }}" class="text-xl font-bold text-gray-800">
-                        🚀 Админ-панель
+                        Админ-панель
                     </a>
                 </div>
 

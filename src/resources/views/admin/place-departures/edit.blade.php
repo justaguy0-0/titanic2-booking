@@ -1,4 +1,4 @@
-@extends('admin')
+@extends('admin.admin')
 
 @section('title', 'Редактировать место отправления')
 

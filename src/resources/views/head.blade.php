@@ -24,13 +24,15 @@
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="#" class="nav-link px-3">Home</a></li>
-                <li><a href="#" class="nav-link px-3">Flights</a></li>
+                <li><a href="#" class="nav-link px-3">Voyage</a></li>
                 <li><a href="#" class="nav-link px-3">Amenities</a></li>
                 <li><a href="#" class="nav-link px-3">Booking</a></li>
             </ul>
 
             <div class="col-md-3 text-end pe-3">
-                <span class="me-3" style="color: #fcd34d;">{{ Auth::user()->name }}</span>
+                <span class="me-3">
+                    <a href="profile" class="profile-link">{{ Auth::user()->name }}</a>
+                </span>
                 <form method="POST" action="{{ route('logout') }}" class="d-inline">
                     @csrf
                     <button type="submit" class="btn btn-logout">Logout</button>
@@ -54,7 +56,7 @@
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="#" class="nav-link px-3">Home</a></li>
-                <li><a href="#" class="nav-link px-3">Flights</a></li>
+                <li><a href="#" class="nav-link px-3">Voyage</a></li>
                 <li><a href="#" class="nav-link px-3">Amenities</a></li>
                 <li><a href="#" class="nav-link px-3">Booking</a></li>
             </ul>
@@ -131,6 +133,18 @@
         .btn-logout:hover {
             background-color: #a6801f;
             color: #1e293b;
+        }
+
+        .profile-link {
+            color: #fcd34d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .profile-link:hover {
+            color: #fbbf24 !important;
+            border-bottom: 2px solid #fbbf24;
+            padding-bottom: 0.25rem;
         }
 
         /* Фон для страниц login/register/password */

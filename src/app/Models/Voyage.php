@@ -38,7 +38,7 @@ protected $casts = [
 
     public function getFormattedPriceAttribute()
     {
-        return number_format($this->base_price, 2, ',', ' ') . ' ₽';
+        return number_format((float)$this->base_price, 2, ',', ' ') . ' ₽';
     }
 
     /**

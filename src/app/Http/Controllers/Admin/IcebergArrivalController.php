@@ -14,6 +14,7 @@ class IcebergArrivalController extends Controller
     public function index()
     {
         $arrivals = IcebergArrival::paginate(10);
+        return view('admin.iceberg-arrivals.index', compact('arrivals'));
     }
 
     /**
@@ -21,7 +22,7 @@ class IcebergArrivalController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.iceberg-arrivals.create');
     }
 
     /**
@@ -29,7 +30,14 @@ class IcebergArrivalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+        'name' => 'required|string|max:100|unique:iceberg_arrivals',
+    ]);
+        IcebergArrival::create($validated);
+
+        return redirect()
+            ->route('admin.iceberg-arrivals.index')
+            ->with('success', 'Место прибытия добавлено!');
     }
 
     /**
@@ -43,24 +51,32 @@ class IcebergArrivalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(IcebergArrival $icebergArrival)
     {
-        //
+        return view('admin.iceberg-arrivals.edit', compact('icebergArrival'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, IcebergArrival $icebergArrival)
     {
-        //
+          $validated = $request->validate([
+        'name' => 'required|string|max:100|unique:iceberg_arrivals,name,' . $icebergArrival->id,                
+        ]);
+
+        $icebergArrival->update($validated);
+
+        return redirect()->route('admin.iceberg-arrivals.index')->with('success', 'Обновлено!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(IcebergArrival $icebergArrival)
     {
-        //
+        $icebergArrival->delete();
+
+        return redirect()->route('admin.iceberg-arrivals.index')->with('success', 'Удалено!');
     }
 }

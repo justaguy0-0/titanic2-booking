@@ -1,14 +1,14 @@
 @extends('admin.admin')
 
-@section('title', 'Места отправления')
+@section('title', 'Айсберги')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Места отправления</h1>
-        <a href="{{ route('admin.place-departures.create') }}" 
+        <h1 class="text-3xl font-bold text-gray-800">Айсберги</h1>
+        <a href="{{ route('admin.iceberg-arrivals.create') }}" 
            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition">
-            + Добавить место
+            + Добавить айсберг
         </a>
     </div>
 
@@ -43,29 +43,29 @@
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-                @forelse($places as $place)
+                @forelse($arrivals as $iceberg)
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $place->id }}
+                            {{ $iceberg->id }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {{ $place->name }}
+                            {{ $iceberg->name }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ $place->created_at->format('d.m.Y H:i') }}
+                            {{ $iceberg->created_at->format('d.m.Y H:i') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             {{-- Кнопка редактирования --}}
-                            <a href="{{ route('admin.place-departures.edit', $place) }}" 
+                            <a href="{{ route('admin.iceberg-arrivals.edit', $iceberg) }}" 
                                class="text-blue-600 hover:text-blue-900 mr-3">
                                 Редактировать
                             </a>
 
                             {{-- Кнопка удаления --}}
-                            <form action="{{ route('admin.place-departures.destroy', $place) }}" 
+                            <form action="{{ route('admin.iceberg-arrivals.destroy', $iceberg) }}" 
                                   method="POST" 
                                   class="inline"
-                                  onsubmit="return confirm('Вы уверены, что хотите удалить это место?')">
+                                  onsubmit="return confirm('Вы уверены, что хотите удалить этот айсберг?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:text-red-900">
@@ -77,7 +77,7 @@
                 @empty
                     <tr>
                         <td colspan="4" class="px-6 py-4 text-center text-gray-500">
-                            Нет мест отправления. <a href="{{ route('admin.place-departures.create') }}" class="text-blue-600">Добавить первое?</a>
+                            Нет айсбергов. <a href="{{ route('admin.iceberg-arrivals.create') }}" class="text-blue-600">Добавить первый?</a>
                         </td>
                     </tr>
                 @endforelse
@@ -86,7 +86,7 @@
     </div>
 
     <div class="mt-6">
-        {{ $places->links() }}
+        {{ $arrivals->links() }}
     </div>
 </div>
 @endsection

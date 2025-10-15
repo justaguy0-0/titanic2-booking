@@ -17,4 +17,13 @@ class Ticket extends Model
     'price',
     'status',
 ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
+
+    public function voyage()
+    {
+        return $this->belongsTo(Voyage::class, 'voyages_id');
+    }
 }

@@ -1,7 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EntertainmentController;
+use App\Http\Controllers\Admin\IcebergArrivalController;
 use App\Http\Controllers\Admin\PlaceDepartureController;
+use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\Admin\VoyageController;
 use App\Http\Controllers\ProfileController;
+use App\Models\IcebergArrival;
 use App\Models\PlaceDeparture;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +40,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('place-departures', PlaceDepartureController::class);
+    Route::resource('iceberg-arrivals', IcebergArrivalController::class);
+    Route::resource('voyages', VoyageController::class);
+    Route::resource('tickets', TicketController::class);
+    Route::resource('entertainments', EntertainmentController::class);
+    Route::resource('dashboard', DashboardController::class);
 });
 
 require __DIR__.'/auth.php';

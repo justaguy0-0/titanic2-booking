@@ -1,17 +1,16 @@
 @extends('admin.admin')
 
-@section('title', 'Добавить место отправления')
+@section('title', 'Добавить место прибытия')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <div class="mb-6">
         <h1 class="text-3xl font-bold text-gray-800">Добавить место прибытия</h1>
-        <p class="text-gray-600 mt-2">Заполните форму для добавления нового места</p>
+        <p class="text-gray-600 mt-2">Введите данные и сохраните новое место</p>
     </div>
 
-
     <div class="bg-white shadow-md rounded-lg p-6 max-w-2xl">
-        <form action="{{ route('admin.iceberg-arrival.store') }}" method="POST">
+        <form action="{{ route('admin.iceberg-arrivals.store') }}" method="POST">
             @csrf
 
             <div class="mb-6">
@@ -24,7 +23,7 @@
                     id="name" 
                     value="{{ old('name') }}"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-500 @enderror"
-                    placeholder="Например: Москва, Санкт-Петербург"
+                    placeholder="Например: Тот самый айсберг из фильма"
                     required
                 >
                 
@@ -43,7 +42,7 @@
                 </button>
                 
                 <a 
-                    href="{{ route('admin.place-departures.index') }}" 
+                    href="{{ route('admin.iceberg-arrivals.index') }}" 
                     class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg transition">
                     Отмена
                 </a>

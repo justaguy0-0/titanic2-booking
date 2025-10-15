@@ -14,4 +14,8 @@ class Entertainment extends Model
     'name',
     'price',
 ];
-}
+
+    protected $casts = [
+            'price' => 'decimal:2',
+        ];
+    }

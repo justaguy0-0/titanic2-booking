@@ -33,6 +33,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Номер</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Создано</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
                 </tr>
             </thead>
@@ -45,6 +46,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $ticket->number }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($ticket->price, 2, ',', ' ') }} руб.</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ticket->status }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ticket->created_at->format('d.m.Y H:i') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <a href="{{ route('admin.tickets.edit', $ticket) }}" class="text-blue-600 hover:text-blue-900 mr-3">Редактировать</a>
                             <form action="{{ route('admin.tickets.destroy', $ticket) }}" method="POST" class="inline"

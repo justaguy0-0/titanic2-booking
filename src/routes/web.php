@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\IcebergArrivalController;
 use App\Http\Controllers\Admin\PlaceDepartureController;
 use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\Admin\VoyageController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Models\IcebergArrival;
 use App\Models\PlaceDeparture;
@@ -43,6 +44,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('iceberg-arrivals', IcebergArrivalController::class);
     Route::resource('voyages', VoyageController::class);
     Route::resource('tickets', TicketController::class);
+    Route::resource('orders', OrderController::class);
     Route::resource('entertainments', EntertainmentController::class);
     Route::resource('dashboard', DashboardController::class);
 });

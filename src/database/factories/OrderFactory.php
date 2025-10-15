@@ -18,8 +18,8 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(), 
-            'total_price' => $this->faker->randomFloat(2, 200, 10000), 
+            'user_id' => User::inRandomOrder()->first() ?? User::factory(),
+            'total_price' => $this->faker->randomFloat(2, 200, 10000),
             'status' => $this->faker->randomElement(['Новый', 'Обработан', 'Оплачен', 'Отправлен', 'Отменён']),
         ];
     }

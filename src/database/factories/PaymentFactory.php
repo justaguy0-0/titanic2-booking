@@ -18,7 +18,7 @@ class PaymentFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_id' => Order::factory(), 
+            'order_id' => Order::inRandomOrder()->first() ?? Order::factory(),
             'amount' => $this->faker->randomFloat(2, 100, 5000),
             'provider' => $this->faker->randomElement(['Visa', 'MasterCard', 'SBP', 'Tinkoff', 'Yandex']),
             'transaction_id' => $this->faker->unique()->numerify('TXN########'),

@@ -19,8 +19,8 @@ class OrderItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_id' => Order::factory(),
-            'user_id' => User::factory(),
+            'order_id' => Order::inRandomOrder()->first() ?? Order::factory(),
+            'user_id' => User::inRandomOrder()->first() ?? User::factory(),
             'total_price' => $this->faker->randomFloat(2, 50, 500),
             'status' => $this->faker->randomElement(['Активен', 'Завершён', 'Отменён']),
         ];

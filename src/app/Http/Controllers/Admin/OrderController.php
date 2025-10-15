@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -12,54 +14,60 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::with('user')->paginate(10);
+        return view('admin.orders.index', compact('orders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $users = User::all();
+        return view('admin.orders.create', compact('users'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'total_price' => 'required|numeric|min:0|max:99999999.99',
+            'status' => 'required|string|in:Новый,Обработан,Оплачен,Отправлен,Отменён',
+        ]);
+
+        Order::create($validated);
+
+        return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно добавлен.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Order $order)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Order $order)
     {
-        //
+        $users = User::all();
+        return view('admin.orders.edit', compact('order', 'users'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Order $order)
     {
-        //
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'total_price' => 'required|numeric|min:0|max:99999999.99',
+            'status' => 'required|string|in:Новый,Обработан,Оплачен,Отправлен,Отменён',
+        ]);
+
+        $order->update($validated);
+
+        return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно обновлён.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Order $order)
     {
-        //
+        try {
+            $order->delete();
+            return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно удалён.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ошибка удаления: возможно, связанные элементы или платежи.');
+        }
     }
 }

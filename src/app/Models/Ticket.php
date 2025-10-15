@@ -11,7 +11,7 @@ class Ticket extends Model
     use HasFactory;
 
     protected $fillable = [
-    'voyages_id', // foreign key
+    'voyages_id',
     'type',
     'number',
     'price',

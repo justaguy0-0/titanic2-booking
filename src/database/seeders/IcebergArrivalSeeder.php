@@ -13,6 +13,8 @@ class IcebergArrivalSeeder extends Seeder
      */
     public function run(): void
     {
-        IcebergArrival::factory()->count(5)->create();
+        if (IcebergArrival::count() < 5) {
+            IcebergArrival::factory()->count(5)->create();
+        }
     }
 }

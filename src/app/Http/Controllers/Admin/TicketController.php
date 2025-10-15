@@ -34,7 +34,7 @@ class TicketController extends Controller
     {
         $validated = $request->validate([
             'voyages_id' => 'required|exists:voyages,id',
-            'type' => 'required|string|max:20',
+            'type' => 'required|in:Первый класс,Второй класс,Третий класс,Люкс',
             'number' => 'required|string|max:20|unique:tickets,number',
             'price' => 'required|numeric|min:0|max:99999999.99',
             'status' => 'required|string|in:Доступно,Забронировано,Продано',
@@ -69,7 +69,7 @@ class TicketController extends Controller
     {
         $validated = $request->validate([
             'voyages_id' => 'required|exists:voyages,id',
-            'type' => 'required|string|max:20',
+            'type' => 'required|in:Первый класс,Второй класс,Третий класс,Люкс',
             'number' => 'required|string|max:20|unique:tickets,number,' . $ticket->id,
             'price' => 'required|numeric|min:0|max:99999999.99',
             'status' => 'required|string|in:Доступно,Забронировано,Продано',

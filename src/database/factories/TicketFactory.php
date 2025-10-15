@@ -19,7 +19,7 @@ class TicketFactory extends Factory
     public function definition(): array
     {
         return [
-            'voyages_id' => Voyage::factory(),
+            'voyages_id' => Voyage::inRandomOrder()->first() ?? Voyage::factory(),
             'type' => $this->faker->randomElement(['Первый класс', 'Второй класс', 'Третий класс', 'Люкс']),
             'number' => $this->faker->unique()->numerify('TIT####'),
             'price' => $this->faker->randomFloat(2, 100, 2000),

@@ -13,6 +13,8 @@ class PlaceDepartureSeeder extends Seeder
      */
     public function run(): void
     {
-        PlaceDeparture::factory()->count(5)->create();
+        if (PlaceDeparture::count() < 5) {
+            PlaceDeparture::factory()->count(5)->create();
+        }
     }
 }

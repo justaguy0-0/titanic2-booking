@@ -14,10 +14,8 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        if (User::count() === 0) {
-            User::factory()->count(3)->create();
+        if (Order::count() < 20) {
+            Order::factory()->count(20)->create();
         }
-
-        Order::factory()->count(20)->create();
     }
 }

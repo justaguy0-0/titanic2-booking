@@ -13,6 +13,8 @@ class OrderItemSeeder extends Seeder
      */
     public function run(): void
     {
-        OrderItem::factory()->count(30)->create();
+        if (OrderItem::count() < 15) {
+            OrderItem::factory()->count(15)->create();
+        }
     }
 }

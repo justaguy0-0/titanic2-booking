@@ -13,6 +13,8 @@ class EntertainmentSeeder extends Seeder
      */
     public function run(): void
     {
-        Entertainment::factory()->count(15)->create();
+        if (Entertainment::count() < 15) {
+            Entertainment::factory()->count(15)->create();
+        }
     }
 }

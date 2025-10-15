@@ -33,12 +33,19 @@
 
             <div class="mb-6">
                 <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Тип <span class="text-red-500">*</span></label>
-                <input type="text" name="type" id="type" value="{{ old('type', $ticket->type) }}"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('type') border-red-500 @enderror"
-                       placeholder="Например: Стандарт" required>
+                <select name="type" id="type"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('type') border-red-500 @enderror"
+                        required>
+                    <option value="">Выберите тип</option>
+                    <option value="Первый класс" {{ old('type', $ticket->type) == 'Первый класс' ? 'selected' : '' }}>Первый класс</option>
+                    <option value="Второй класс" {{ old('type', $ticket->type) == 'Второй класс' ? 'selected' : '' }}>Второй класс</option>
+                    <option value="Третий класс" {{ old('type', $ticket->type) == 'Третий класс' ? 'selected' : '' }}>Третий класс</option>
+                    <option value="Люкс" {{ old('type', $ticket->type) == 'Люкс' ? 'selected' : '' }}>Люкс</option>
+                </select>
                 @error('type')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
+                <p class="text-gray-500 text-xs mt-1">Выберите один из доступных типов билета.</p>
             </div>
 
             <div class="mb-6">

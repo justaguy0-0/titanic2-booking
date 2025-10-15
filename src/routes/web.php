@@ -9,6 +9,10 @@ Route::get('/', function () {
     return view('home');
 });
 
+Route::get('/voyage', function () {
+    return view('voyage');
+});
+
 Route::get('/test-places', function () {
     $places = PlaceDeparture::paginate(10);
     return view('admin.place-departures.index', compact('places'));

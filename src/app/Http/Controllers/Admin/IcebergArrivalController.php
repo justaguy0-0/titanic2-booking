@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\IcebergArrival;
 use Illuminate\Http\Request;
 
 class IcebergArrivalController extends Controller
@@ -12,7 +13,7 @@ class IcebergArrivalController extends Controller
      */
     public function index()
     {
-        //
+        $arrivals = IcebergArrival::paginate(10);
     }
 
     /**

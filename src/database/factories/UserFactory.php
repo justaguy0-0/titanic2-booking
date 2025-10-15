@@ -33,14 +33,6 @@ class UserFactory extends Factory
         ];
     }
 
-    public function admin(): static
-    {
-    return $this->state(fn (array $attributes) => [
-        'email' => 'admin@example.com',
-        'name' => 'Admin User',
-        'roles' => Role::where('name','admin')->get(),
-    ]);
-    }
 
     /**
      * Indicate that the model's email address should be unverified.

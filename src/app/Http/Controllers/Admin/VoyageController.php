@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\IcebergArrival;
-use App\Models\PlaceDeparture;
+use App\Models\Place;
 use App\Models\Voyage;
 use Illuminate\Http\Request;
 
@@ -16,9 +15,9 @@ class VoyageController extends Controller
      */
     public function index()
     {
-        // Получаем путешествия с подгруженными связями (оптимизация)
-        $voyages = Voyage::with(['placeDeparture', 'icebergArrival'])
-            ->orderBy('departure_date', 'desc') // ✅ Сортировка по дате
+        // Изменено: Загружаем новые relations (Place с типами)
+        $voyages = Voyage::with(['departurePlace', 'arrivalPlace'])
+            ->orderBy('departure_date', 'desc')
             ->paginate(10);
 
         return view('admin.voyages.index', compact('voyages'));
@@ -30,11 +29,11 @@ class VoyageController extends Controller
      */
     public function create()
     {
-        // Получаем все места отправления и прибытия для выпадающих списков
-        $placeDepartures = PlaceDeparture::orderBy('name')->get();
-        $icebergArrivals = IcebergArrival::orderBy('name')->get();
+        // Изменено: Получаем места по типу (scopes из Place модели)
+        $departures = Place::departure()->orderBy('name')->get();
+        $arrivals = Place::arrival()->orderBy('name')->get();
 
-        return view('admin.voyages.create', compact('placeDepartures', 'icebergArrivals'));
+        return view('admin.voyages.create', compact('departures', 'arrivals'));
     }
 
     /**
@@ -43,20 +42,20 @@ class VoyageController extends Controller
      */
     public function store(Request $request)
     {
+        // Изменено: Новые имена полей (departure_place_id, arrival_place_id) и exists:places,id
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'place_departure' => 'required|exists:place_departures,id',
-            'iceberg_arrival' => 'required|exists:iceberg_arrivals,id',
-            'departure_date' => 'required|date|after_or_equal:today', // ✅ Не раньше сегодня
+            'departure_place_id' => 'required|exists:places,id',  // Новое поле, проверка на Place
+            'arrival_place_id' => 'required|exists:places,id',
+            'departure_date' => 'required|date|after_or_equal:today',
             'arrival_date' => 'required|date|after:departure_date',
             'travel_time' => 'required|integer|min:0',
             'base_price' => 'required|numeric|min:0|max:99999999.99',
         ], [
-            // ✅ Пользовательские сообщения об ошибках
             'departure_date.after_or_equal' => 'Дата отправления не может быть в прошлом',
             'arrival_date.after' => 'Дата прибытия должна быть после даты отправления',
-            'place_departure.required' => 'Выберите место отправления',
-            'iceberg_arrival.required' => 'Выберите место прибытия',
+            'departure_place_id.required' => 'Выберите место отправления',
+            'arrival_place_id.required' => 'Выберите место прибытия',
         ]);
 
         Voyage::create($validated);
@@ -72,7 +71,8 @@ class VoyageController extends Controller
      */
     public function show(Voyage $voyage)
     {
-        $voyage->load(['placeDeparture', 'icebergArrival']);
+        // Изменено: Загружаем новые relations
+        $voyage->load(['departurePlace', 'arrivalPlace']);
         return view('admin.voyages.show', compact('voyage'));
     }
 
@@ -82,13 +82,14 @@ class VoyageController extends Controller
      */
     public function edit(Voyage $voyage)
     {
-        $placeDepartures = PlaceDeparture::orderBy('name')->get();
-        $icebergArrivals = IcebergArrival::orderBy('name')->get();
-        
-        // Загружаем связанные данные
-        $voyage->load(['placeDeparture', 'icebergArrival']);
+        // Изменено: Места по типу
+        $departures = Place::departure()->orderBy('name')->get();
+        $arrivals = Place::arrival()->orderBy('name')->get();
 
-        return view('admin.voyages.edit', compact('voyage', 'placeDepartures', 'icebergArrivals'));
+        // Загружаем связанные данные
+        $voyage->load(['departurePlace', 'arrivalPlace']);
+
+        return view('admin.voyages.edit', compact('voyage', 'departures', 'arrivals'));
     }
 
     /**
@@ -97,10 +98,11 @@ class VoyageController extends Controller
      */
     public function update(Request $request, Voyage $voyage)
     {
+        // Изменено: Новые поля и валидация
         $validated = $request->validate([
             'name' => 'required|string|max:100',
-            'place_departure' => 'required|exists:place_departures,id',
-            'iceberg_arrival' => 'required|exists:iceberg_arrivals,id',
+            'departure_place_id' => 'required|exists:places,id',
+            'arrival_place_id' => 'required|exists:places,id',
             'departure_date' => 'required|date',
             'arrival_date' => 'required|date|after:departure_date',
             'travel_time' => 'required|integer|min:0',
@@ -122,14 +124,6 @@ class VoyageController extends Controller
      */
     public function destroy(Voyage $voyage)
     {
-        // ✅ ДОБАВЛЕНО: Проверка перед удалением
-        // Если у вас есть модель Booking (бронирования)
-        // if ($voyage->bookings()->count() > 0) {
-        //     return redirect()
-        //         ->back()
-        //         ->with('error', 'Нельзя удалить путешествие с активными бронированиями!');
-        // }
-
         // Проверка: нельзя удалить путешествие, которое уже началось
         if ($voyage->departure_date && $voyage->departure_date->isPast()) {
             return redirect()

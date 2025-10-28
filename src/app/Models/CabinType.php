@@ -5,12 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IcebergArrival extends Model
+class CabinType extends Model
 {
-    /** @use HasFactory<\Database\Factories\IcebergArrivalFactory> */
     use HasFactory;
 
     protected $fillable = [
-    'name',
-];
+        'name',
+        'description',
+    ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

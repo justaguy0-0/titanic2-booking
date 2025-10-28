@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
-        Schema::create('iceberg_arrivals', function (Blueprint $table) {
+        Schema::create('cabin_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name',100);
+            $table->string('name', 100)->unique();
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->engine = 'InnoDB';
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('iceberg_arrivals');
+        Schema::dropIfExists('cabin_types');
     }
 };

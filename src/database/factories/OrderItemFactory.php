@@ -3,26 +3,18 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
 use App\Models\Order;
+use App\Models\Ticket;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItem>
- */
 class OrderItemFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = \App\Models\OrderItem::class;
+
     public function definition(): array
     {
         return [
-            'order_id' => Order::inRandomOrder()->first() ?? Order::factory(),
-            'user_id' => User::inRandomOrder()->first() ?? User::factory(),
-            'total_price' => $this->faker->randomFloat(2, 50, 500),
-            'status' => $this->faker->randomElement(['Активен', 'Завершён', 'Отменён']),
+            'order_id' => Order::inRandomOrder()->first()->id ?? Order::factory()->create()->id,
+            'ticket_id' => Ticket::where('status', 'Доступно')->inRandomOrder()->first()->id ?? Ticket::factory()->create()->id,
         ];
     }
 }

@@ -5,25 +5,23 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Model\Ticket;
 use App\Models\Voyage;
+use App\Models\CabinType;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Ticket>
  */
 class TicketFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = \App\Models\Ticket::class;
+
     public function definition(): array
     {
         return [
-            'voyages_id' => Voyage::inRandomOrder()->first() ?? Voyage::factory(),
-            'type' => $this->faker->randomElement(['Первый класс', 'Второй класс', 'Третий класс', 'Люкс']),
-            'number' => $this->faker->unique()->numerify('TIT####'),
-            'price' => $this->faker->randomFloat(2, 100, 2000),
-            'status' => $this->faker->randomElement(['Доступно', 'Забронировано', 'Продано', 'Отменено']),
+            'voyages_id' => Voyage::inRandomOrder()->first()->id ?? Voyage::factory()->create()->id,
+            'cabin_type_id' => CabinType::inRandomOrder()->first()->id ?? CabinType::factory()->create()->id,
+            'number' => $this->faker->unique()->regexify('TIT[0-9]{4}'),
+            'price' => $this->faker->randomFloat(2, 50, 5000),
+            'status' => 'Доступно',
         ];
     }
 }

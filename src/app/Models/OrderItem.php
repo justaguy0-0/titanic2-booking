@@ -7,13 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderItemFactory> */
     use HasFactory;
 
     protected $fillable = [
-    'order_id', // foreign key (если добавил)
-    'user_id',
-    'total_price',
-    'status',
-];
+        'order_id',
+        'ticket_id',
+    ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
+    }
 }

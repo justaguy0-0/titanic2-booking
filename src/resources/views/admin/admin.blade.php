@@ -71,8 +71,8 @@
                 <a href="{{ route('admin.order-items.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-box mr-2"></i> Детали заказа
                 </a>
-                <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                    <i class="fas fa-credit-card mr-2"></i> Payments
+                <a href="{{ route('admin.payments.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
+                    <i class="fas fa-credit-card mr-2"></i> Платежи
                 </a>
             </div>
 

@@ -27,7 +27,7 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-500">Статус</p>
-                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
                                 @if($order->status === 'Новый') bg-blue-100 text-blue-800
                                 @elseif($order->status === 'Обработан') bg-yellow-100 text-yellow-800
                                 @elseif($order->status === 'Оплачен') bg-green-100 text-green-800
@@ -88,7 +88,7 @@
                                         <tr>
                                             <td class="px-6 py-4">
                                                 <div class="text-sm">
-                                                    @if($item->item_type === 'ticket' && $item->ticket)
+                                                    @if($item->type === 'ticket' && $item->ticket)
                                                         <div>
                                                             <p class="font-semibold text-gray-900">{{ $item->ticket->type }}</p>
                                                             <p class="text-xs text-gray-500">Билет № {{ $item->ticket->number }}</p>
@@ -101,7 +101,7 @@
                                                                 </p>
                                                             @endif
                                                         </div>
-                                                    @elseif($item->item_type === 'entertainment' && $item->entertainment)
+                                                    @elseif($item->type === 'entertainment' && $item->entertainment)
                                                         <p class="font-semibold text-gray-900">{{ $item->entertainment->name }}</p>
                                                         <p class="text-xs text-gray-500">Развлечение</p>
                                                     @else
@@ -110,11 +110,11 @@
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                                    @if($item->item_type === 'ticket') bg-blue-100 text-blue-800
+                                                <span class="px-2 py-1 text-xs font-semibold rounded-full
+                                                    @if($item->type === 'ticket') bg-blue-100 text-blue-800
                                                     @else bg-purple-100 text-purple-800
                                                     @endif">
-                                                    @if($item->item_type === 'ticket') Билет
+                                                    @if($item->type === 'ticket') Билет
                                                     @else Развлечение
                                                     @endif
                                                 </span>

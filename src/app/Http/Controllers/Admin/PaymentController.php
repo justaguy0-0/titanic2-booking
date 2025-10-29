@@ -3,63 +3,69 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Payment;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $payments = Payment::with('order')->latest()->paginate(20);
+        return view('admin.payments.index', compact('payments'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $orders = Order::orderBy('id', 'desc')->pluck('id', 'id'); // Можно улучшить: добавить номер заказа + клиент
+        return view('admin.payments.create', compact('orders'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'amount' => 'required|numeric|min:0.01',
+            'provider' => 'required|in:Visa,MasterCard,SBP,Tinkoff,Yandex',
+            'transaction_id' => 'required|string|unique:payments,transaction_id|max:100',
+            'status' => 'required|in:Успешно,Отклонено,В обработке',
+        ]);
+
+        Payment::create($validated);
+
+        return redirect()->route('admin.payments.index')->with('success', 'Платёж успешно добавлен.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Payment $payment)
     {
-        //
+        $orders = Order::orderBy('id', 'desc')->pluck('id', 'id');
+        return view('admin.payments.edit', compact('payment', 'orders'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Payment $payment)
     {
-        //
+        $validated = $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'amount' => 'required|numeric|min:0.01',
+            'provider' => 'required|in:Visa,MasterCard,SBP,Tinkoff,Yandex',
+            'transaction_id' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('payments')->ignore($payment->id),
+            ],
+            'status' => 'required|in:Успешно,Отклонено,В обработке',
+        ]);
+
+        $payment->update($validated);
+
+        return redirect()->route('admin.payments.index')->with('success', 'Платёж обновлён.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Payment $payment)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $payment->delete();
+        return back()->with('success', 'Платёж удалён.');
     }
 }

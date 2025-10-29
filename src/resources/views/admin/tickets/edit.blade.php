@@ -39,7 +39,7 @@
                         <option value="">Выберите тип каюты</option>
                         @foreach($cabinTypes as $cabinType)
                             <option value="{{ $cabinType->id }}" data-price="{{ $cabinType->base_price }}" {{ old('cabin_type_id', $ticket->cabin_type_id) == $cabinType->id ? 'selected' : '' }}>
-                                {{ $cabinType->name }} ({{ number_format($cabinType->base_price, 2, ',', ' ') }} ₽)
+                                {{ $cabinType->name }}
                             </option>
                         @endforeach
                     </select>

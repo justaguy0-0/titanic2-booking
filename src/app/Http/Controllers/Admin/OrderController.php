@@ -14,7 +14,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with(['user', 'orderItems.ticket'])->paginate(10);
+        $orders = Order::with(['user', 'orderItems.ticket.voyage'])->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -36,19 +36,21 @@ class OrderController extends Controller
             'entertainments.*.id' => 'exists:entertainments,id',
             'entertainments.*.quantity' => 'integer|min:1',
             'status' => 'required|string|in:Новый,Обработан,Оплачен,Отправлен,Отменён',
+            'total_price' => 'required|numeric|min:0',
         ]);
 
         $order = Order::create([
             'user_id' => $validated['user_id'],
             'status' => $validated['status'],
-            'total_price' => 0,
+            'total_price' => $validated['total_price'],
         ]);
 
-        // Билеты
+        // === БИЛЕТЫ ===
         if (!empty($validated['tickets'])) {
             foreach ($validated['tickets'] as $ticketId) {
                 $ticket = Ticket::findOrFail($ticketId);
                 if ($ticket->status !== 'Доступно') continue;
+
                 OrderItem::create([
                     'order_id' => $order->id,
                     'ticket_id' => $ticketId,
@@ -60,7 +62,7 @@ class OrderController extends Controller
             }
         }
 
-        // Развлечения
+        // === РАЗВЛЕЧЕНИЯ ===
         if (!empty($validated['entertainments'])) {
             foreach ($validated['entertainments'] as $item) {
                 $ent = Entertainment::findOrFail($item['id']);
@@ -74,14 +76,12 @@ class OrderController extends Controller
             }
         }
 
-        $order->refreshTotalPrice();
-
         return redirect()->route('admin.orders.index')->with('success', 'Заказ создан.');
     }
 
     public function show(Order $order)
     {
-        $order->load(['user', 'orderItems.ticket.voyage']);
+        $order->load(['user', 'orderItems.ticket.voyage', 'orderItems.entertainment']);
         return view('admin.orders.show', compact('order'));
     }
 
@@ -90,7 +90,20 @@ class OrderController extends Controller
         $users = User::all();
         $tickets = Ticket::where('status', 'Доступно')->with('voyage')->get();
         $entertainments = Entertainment::all();
-        return view('admin.orders.edit', compact('order', 'users', 'tickets', 'entertainments'));
+
+        // ← КЛЮЧЕВОЕ: Подготовка данных для чекбоксов
+        $existingEntertainments = $order->orderItems
+            ->where('type', 'entertainment')
+            ->pluck('quantity', 'entertainment_id')
+            ->toArray();
+
+        return view('admin.orders.edit', compact(
+            'order',
+            'users',
+            'tickets',
+            'entertainments',
+            'existingEntertainments'
+        ));
     }
 
     public function update(Request $request, Order $order)
@@ -103,22 +116,42 @@ class OrderController extends Controller
             'entertainments.*.id' => 'exists:entertainments,id',
             'entertainments.*.quantity' => 'integer|min:1',
             'status' => 'required|string|in:Новый,Обработан,Оплачен,Отправлен,Отменён',
+            'total_price' => 'required|numeric|min:0',
         ]);
 
+        // === ОБНОВЛЯЕМ ЗАКАЗ ===
         $order->update([
             'user_id' => $validated['user_id'],
             'status' => $validated['status'],
+            'total_price' => $validated['total_price'], // ← из формы
         ]);
 
-        // Добавляем новые билеты
-        if (!empty($validated['tickets'])) {
-            foreach ($validated['tickets'] as $ticketId) {
-                $ticket = Ticket::findOrFail($ticketId);
-                if ($ticket->status !== 'Доступно') continue;
-                OrderItem::firstOrCreate([
+        // === БИЛЕТЫ ===
+        $newTicketIds = $validated['tickets'] ?? [];
+
+        $order->orderItems()
+            ->where('type', 'ticket')
+            ->whereNotIn('ticket_id', $newTicketIds)
+            ->each(function ($item) {
+                if ($item->ticket) {
+                    $item->ticket->update(['status' => 'Доступно']);
+                }
+                $item->delete();
+            });
+
+        foreach ($newTicketIds as $ticketId) {
+            $ticket = Ticket::find($ticketId);
+            if (!$ticket || $ticket->status !== 'Доступно') continue;
+
+            $exists = $order->orderItems()
+                ->where('type', 'ticket')
+                ->where('ticket_id', $ticketId)
+                ->exists();
+
+            if (!$exists) {
+                OrderItem::create([
                     'order_id' => $order->id,
                     'ticket_id' => $ticketId,
-                ], [
                     'type' => 'ticket',
                     'price' => $ticket->price,
                     'quantity' => 1,
@@ -127,24 +160,31 @@ class OrderController extends Controller
             }
         }
 
-        // Добавляем новые развлечения
-        if (!empty($validated['entertainments'])) {
-            foreach ($validated['entertainments'] as $item) {
-                $ent = Entertainment::findOrFail($item['id']);
-                OrderItem::updateOrCreate([
+        // === РАЗВЛЕЧЕНИЯ ===
+        $newEntIds = collect($validated['entertainments'] ?? [])->pluck('id')->toArray();
+
+        $order->orderItems()
+            ->where('type', 'entertainment')
+            ->whereNotIn('entertainment_id', $newEntIds)
+            ->delete();
+
+        foreach ($validated['entertainments'] ?? [] as $item) {
+            $ent = Entertainment::findOrFail($item['id']);
+            OrderItem::updateOrCreate(
+                [
                     'order_id' => $order->id,
                     'entertainment_id' => $ent->id,
-                ], [
+                ],
+                [
                     'type' => 'entertainment',
                     'price' => $ent->price,
                     'quantity' => $item['quantity'] ?? 1,
-                ]);
-            }
+                ]
+            );
         }
 
-        $order->refreshTotalPrice();
-
-        return redirect()->route('admin.orders.index')->with('success', 'Заказ обновлён.');
+        // ← УБРАЛ refreshTotalPrice() — сумма из формы!
+        return redirect()->route('admin.orders.edit', $order)->with('success', 'Заказ обновлён.');
     }
 
     public function destroy(Order $order)

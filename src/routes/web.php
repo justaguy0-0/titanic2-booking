@@ -10,11 +10,12 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\CabinTypeController;
 use App\Http\Controllers\Admin\OrderItemController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Models\Place;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', [ShopController::class, 'index'])->name('shop'); 
+Route::get('/', [ShopController::class, 'index'])->name('shop');
 
 // === ПУБЛИЧНЫЕ МАРШРУТЫ ===
 Route::get('/voyage', function () {
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('dashboard', DashboardController::class);
     Route::resource('cabin-types', CabinTypeController::class);
     Route::resource('order-items', OrderItemController::class);
+    Route::resource('payments', PaymentController::class);
 });
 
 // === АУТЕНТИФИКАЦИЯ ===

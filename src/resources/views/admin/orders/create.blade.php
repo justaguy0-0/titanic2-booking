@@ -65,9 +65,9 @@
 
                 <!-- Сумма -->
                 <div class="mb-6">
-                    <label for="total_price" class="block text-sm font-medium text-gray-700 mb-2">Сумма</label>
-                    <input type="number" step="0.01" name="total_price" id="total_price" value="0.00"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Сумма</label>
+                    <div id="total_price_display" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100">0.00 ₽</div>
+                    <input type="hidden" name="total_price" id="total_price" value="0.00">
                     <p class="text-gray-500 text-xs mt-1">Рассчитывается автоматически.</p>
                 </div>
 
@@ -100,35 +100,46 @@
         <script>
             const ticketsSelect = document.getElementById('tickets');
             const totalPriceInput = document.getElementById('total_price');
+            const totalPriceDisplay = document.getElementById('total_price_display');
 
-            // Обновление суммы
+            // Функция: извлечь цену из label
+            function getPriceFromLabel(label) {
+                const match = label.textContent.match(/([\d\s.,]+)\s*₽/);
+                if (!match) return 0;
+                return parseFloat(match[1].replace(/\s/g, '').replace(',', '.'));
+            }
+
             function updateTotalPrice() {
                 let total = 0;
 
-                // Билеты
-                Array.from(ticketsSelect.options).forEach(option => {
-                    if (option.selected) {
-                        total += parseFloat(option.dataset.price || 0);
-                    }
+                // === БИЛЕТЫ ===
+                Array.from(ticketsSelect.selectedOptions).forEach(option => {
+                    total += parseFloat(option.dataset.price || 0);
                 });
 
-                // Развлечения
+                // === РАЗВЛЕЧЕНИЯ ===
                 document.querySelectorAll('.entertainment-item').forEach(item => {
                     const checkbox = item.querySelector('.ent-checkbox');
                     const quantityInput = item.querySelector('.ent-quantity');
+                    const label = item.querySelector('label');
+
                     if (checkbox.checked && quantityInput.value) {
-                        const price = parseFloat(checkbox.closest('.entertainment-item').querySelector('label').textContent.match(/[\d.,]+/)[0].replace(',', '.'));
-                        total += price * parseInt(quantityInput.value);
+                        const price = getPriceFromLabel(label);
+                        const quantity = parseInt(quantityInput.value) || 1;
+                        total += price * quantity;
                     }
                 });
 
+                // Обновляем hidden и отображение
                 totalPriceInput.value = total.toFixed(2);
+                totalPriceDisplay.textContent = new Intl.NumberFormat('ru-RU', {
+                    minimumFractionDigits: 2
+                }).format(total) + ' ₽';
             }
 
-            // Билеты
+            // === СЛУШАТЕЛИ ===
             ticketsSelect.addEventListener('change', updateTotalPrice);
 
-            // Развлечения: checkbox и quantity
             document.querySelectorAll('.ent-checkbox').forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
                     const quantityInput = this.closest('.entertainment-item').querySelector('.ent-quantity');
@@ -142,7 +153,7 @@
                 input.addEventListener('input', updateTotalPrice);
             });
 
-            // Инициализация
+            // Запуск при загрузке
             updateTotalPrice();
         </script>
     @endpush

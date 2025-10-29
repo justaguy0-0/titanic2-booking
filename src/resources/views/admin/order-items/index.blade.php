@@ -50,7 +50,7 @@
                                 {{ $item->ticket->number }}
                                 <br><small class="text-gray-500">{{ $item->ticket->voyage->name ?? '—' }}</small>
                             @else
-                                {{ $item->entertainment->name }}
+                                {{ $item->entertainment?->name ?? '—' }}
                                 @if($item->quantity > 1) <span class="text-gray-500">×{{ $item->quantity }}</span> @endif
                             @endif
                         </td>

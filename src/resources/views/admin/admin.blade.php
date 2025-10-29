@@ -42,6 +42,10 @@
                    class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-location-dot mr-2"></i> Места
                 </a>
+                <a href="{{ route('admin.cabin-types.index') }}"
+                   class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
+                    <i class="fas fa-house mr-2"></i> Типы кают
+                </a>
             </div>
 
             {{-- Пользователи --}}

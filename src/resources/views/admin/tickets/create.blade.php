@@ -1,18 +1,14 @@
 @extends('admin.admin')
-
 @section('title', 'Добавить билет')
-
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Добавить билет</h1>
             <p class="text-gray-600 mt-2">Введите данные и сохраните новый билет</p>
         </div>
-
         <div class="bg-white shadow-md rounded-lg p-6 max-w-2xl">
             <form action="{{ route('admin.tickets.store') }}" method="POST">
                 @csrf
-
                 <div class="mb-6">
                     <label for="voyages_id" class="block text-sm font-medium text-gray-700 mb-2">Рейс <span class="text-red-500">*</span></label>
                     <select name="voyages_id" id="voyages_id"
@@ -37,8 +33,10 @@
                             required>
                         <option value="">Выберите тип каюты</option>
                         @foreach($cabinTypes as $cabinType)
-                            <option value="{{ $cabinType->id }}" data-price="{{ $cabinType->base_price }}" {{ old('cabin_type_id') == $cabinType->id ? 'selected' : '' }}>
-                                {{ $cabinType->name }} ({{ number_format($cabinType->base_price, 2, ',', ' ') }} ₽)
+                            <option value="{{ $cabinType->id }}"
+                                    data-price="{{ $cabinType->base_price }}"
+                                {{ old('cabin_type_id') == $cabinType->id ? 'selected' : '' }}>
+                                {{ $cabinType->name }}
                             </option>
                         @endforeach
                     </select>
@@ -61,7 +59,7 @@
                     <label for="price" class="block text-sm font-medium text-gray-700 mb-2">Цена (руб) <span class="text-red-500">*</span></label>
                     <input type="number" step="0.01" name="price" id="price" value="{{ old('price') }}"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('price') border-red-500 @enderror"
-                           readonly>
+                           min="0" required>
                     @error('price')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
@@ -82,14 +80,35 @@
         </div>
     </div>
 
-    @section('scripts')
+    @push('scripts')
         <script>
-            document.getElementById('cabin_type_id').addEventListener('change', function () {
-                const priceInput = document.getElementById('price');
-                const selectedOption = this.options[this.selectedIndex];
-                const basePrice = selectedOption.getAttribute('data-price') || 0;
-                priceInput.value = parseFloat(basePrice).toFixed(2);
+            const cabinSelect = document.getElementById('cabin_type_id');
+            const priceInput = document.getElementById('price');
+
+            // При загрузке — если есть old() или selected → установить цену
+            function updatePrice() {
+                const selected = cabinSelect.options[cabinSelect.selectedIndex];
+                if (selected && selected.value) {
+                    const basePrice = selected.getAttribute('data-price');
+                    if (basePrice && !priceInput.dataset.manuallyEdited) {
+                        priceInput.value = parseFloat(basePrice).toFixed(2);
+                    }
+                }
+            }
+
+            // При смене типа каюты — обновить цену (если не редактировалось вручную)
+            cabinSelect.addEventListener('change', function () {
+                updatePrice();
+                priceInput.dataset.manuallyEdited = 'false';
             });
+
+            // Если пользователь начал вводить вручную — больше не автозаполнять
+            priceInput.addEventListener('input', function () {
+                this.dataset.manuallyEdited = 'true';
+            });
+
+            // При загрузке страницы
+            document.addEventListener('DOMContentLoaded', updatePrice);
         </script>
-    @endsection
+    @endpush
 @endsection

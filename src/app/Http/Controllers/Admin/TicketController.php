@@ -42,12 +42,6 @@ class TicketController extends Controller
             'status' => 'required|in:Доступно',
         ]);
 
-        // Проверяем, что цена соответствует base_price типа каюты
-        $cabinType = CabinType::findOrFail($validated['cabin_type_id']);
-        if (round($validated['price'], 2) !== round($cabinType->base_price, 2)) {
-            return back()->withErrors(['price' => 'Цена должна соответствовать базовой цене типа каюты.'])->withInput();
-        }
-
         Ticket::create($validated);
 
         return redirect()->route('admin.tickets.index')->with('success', 'Билет успешно добавлен.');
@@ -83,12 +77,6 @@ class TicketController extends Controller
         }
 
         $validated = $request->validate($rules);
-
-        // Проверяем, что цена соответствует base_price типа каюты
-        $cabinType = CabinType::findOrFail($validated['cabin_type_id']);
-        if (round($validated['price'], 2) !== round($cabinType->base_price, 2)) {
-            return back()->withErrors(['price' => 'Цена должна соответствовать базовой цене типа каюты.'])->withInput();
-        }
 
         $ticket->update($validated);
 

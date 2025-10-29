@@ -67,7 +67,7 @@
         </div>
 
         <div class="mt-6">
-            {{ $cabinTypes->links('vendor.pagination.custom-tailwind') }}
+            {{ $cabinTypes->links() }}
         </div>
     </div>
 @endsection

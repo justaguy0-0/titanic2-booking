@@ -1,7 +1,5 @@
 @extends('admin.admin')
-
 @section('title', 'Заказы')
-
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
@@ -29,7 +27,7 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Пользователь</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Билеты</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Элементы</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Сумма</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Создано</th>
@@ -41,7 +39,7 @@
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $order->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $order->user->email ?? 'Не указано' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $order->orderItems->count() }} билет(ов)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $order->orderItems->count() }} элемент(ов)</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ number_format($order->total_price, 2, ',', ' ') }} руб.</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $order->status }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $order->created_at->format('d.m.Y H:i') }}</td>
@@ -49,7 +47,7 @@
                             <a href="{{ route('admin.orders.show', $order) }}" class="text-blue-600 hover:text-blue-900 mr-3">Просмотр</a>
                             <a href="{{ route('admin.orders.edit', $order) }}" class="text-blue-600 hover:text-blue-900 mr-3">Редактировать</a>
                             <form action="{{ route('admin.orders.destroy', $order) }}" method="POST" class="inline"
-                                  onsubmit="return confirm('Вы уверены, что хотите удалить заказ #{{ $order->id }}? Это удалит все связанные билеты.')">
+                                  onsubmit="return confirm('Вы уверены, что хотите удалить заказ #{{ $order->id }}? Это удалит все связанные элементы.')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>

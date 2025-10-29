@@ -7,100 +7,104 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Ticket;
 use App\Models\OrderItem;
+use App\Models\Entertainment;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $orders = Order::with(['user', 'orderItems.ticket'])->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $users = User::all();
         $tickets = Ticket::where('status', 'Доступно')->with('voyage')->get();
-        return view('admin.orders.create', compact('users', 'tickets'));
+        $entertainments = Entertainment::all();
+        return view('admin.orders.create', compact('users', 'tickets', 'entertainments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'tickets' => 'required|array|min:1',
+            'tickets' => 'nullable|array',
             'tickets.*' => 'exists:tickets,id',
+            'entertainments' => 'nullable|array',
+            'entertainments.*.id' => 'exists:entertainments,id',
+            'entertainments.*.quantity' => 'integer|min:1',
             'status' => 'required|string|in:Новый,Обработан,Оплачен,Отправлен,Отменён',
         ]);
 
-        // Создаём заказ
         $order = Order::create([
             'user_id' => $validated['user_id'],
             'status' => $validated['status'],
-            'total_price' => 0, // Будет обновлено
+            'total_price' => 0,
         ]);
 
-        // Добавляем билеты
-        foreach ($validated['tickets'] as $ticketId) {
-            $ticket = Ticket::findOrFail($ticketId);
-            if ($ticket->status !== 'Доступно') {
-                return back()->withErrors(['tickets' => "Билет {$ticket->number} недоступен."])->withInput();
+        // Билеты
+        if (!empty($validated['tickets'])) {
+            foreach ($validated['tickets'] as $ticketId) {
+                $ticket = Ticket::findOrFail($ticketId);
+                if ($ticket->status !== 'Доступно') continue;
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'ticket_id' => $ticketId,
+                    'type' => 'ticket',
+                    'price' => $ticket->price,
+                    'quantity' => 1,
+                ]);
+                $ticket->update(['status' => 'Забронировано']);
             }
-            OrderItem::create([
-                'order_id' => $order->id,
-                'ticket_id' => $ticketId,
-            ]);
-            $ticket->update(['status' => 'Забронировано']);
         }
 
-        // Обновляем total_price
-        $totalPrice = $order->orderItems()->join('tickets', 'order_items.ticket_id', '=', 'tickets.id')->sum('tickets.price');
-        $order->update(['total_price' => $totalPrice]);
+        // Развлечения
+        if (!empty($validated['entertainments'])) {
+            foreach ($validated['entertainments'] as $item) {
+                $ent = Entertainment::findOrFail($item['id']);
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'entertainment_id' => $ent->id,
+                    'type' => 'entertainment',
+                    'price' => $ent->price,
+                    'quantity' => $item['quantity'] ?? 1,
+                ]);
+            }
+        }
 
-        return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно добавлен.');
+        $order->refreshTotalPrice();
+
+        return redirect()->route('admin.orders.index')->with('success', 'Заказ создан.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Order $order)
     {
         $order->load(['user', 'orderItems.ticket.voyage']);
         return view('admin.orders.show', compact('order'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Order $order)
     {
         $users = User::all();
         $tickets = Ticket::where('status', 'Доступно')->with('voyage')->get();
-        return view('admin.orders.edit', compact('order', 'users', 'tickets'));
+        $entertainments = Entertainment::all();
+        return view('admin.orders.edit', compact('order', 'users', 'tickets', 'entertainments'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Order $order)
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
             'tickets' => 'nullable|array',
             'tickets.*' => 'exists:tickets,id',
+            'entertainments' => 'nullable|array',
+            'entertainments.*.id' => 'exists:entertainments,id',
+            'entertainments.*.quantity' => 'integer|min:1',
             'status' => 'required|string|in:Новый,Обработан,Оплачен,Отправлен,Отменён',
         ]);
 
-        // Обновляем заказ
         $order->update([
             'user_id' => $validated['user_id'],
             'status' => $validated['status'],
@@ -110,39 +114,52 @@ class OrderController extends Controller
         if (!empty($validated['tickets'])) {
             foreach ($validated['tickets'] as $ticketId) {
                 $ticket = Ticket::findOrFail($ticketId);
-                if ($ticket->status !== 'Доступно') {
-                    return back()->withErrors(['tickets' => "Билет {$ticket->number} недоступен."])->withInput();
-                }
+                if ($ticket->status !== 'Доступно') continue;
                 OrderItem::firstOrCreate([
                     'order_id' => $order->id,
                     'ticket_id' => $ticketId,
+                ], [
+                    'type' => 'ticket',
+                    'price' => $ticket->price,
+                    'quantity' => 1,
                 ]);
                 $ticket->update(['status' => 'Забронировано']);
             }
         }
 
-        // Обновляем total_price
-        $totalPrice = $order->orderItems()->join('tickets', 'order_items.ticket_id', '=', 'tickets.id')->sum('tickets.price');
-        $order->update(['total_price' => $totalPrice]);
+        // Добавляем новые развлечения
+        if (!empty($validated['entertainments'])) {
+            foreach ($validated['entertainments'] as $item) {
+                $ent = Entertainment::findOrFail($item['id']);
+                OrderItem::updateOrCreate([
+                    'order_id' => $order->id,
+                    'entertainment_id' => $ent->id,
+                ], [
+                    'type' => 'entertainment',
+                    'price' => $ent->price,
+                    'quantity' => $item['quantity'] ?? 1,
+                ]);
+            }
+        }
 
-        return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно обновлён.');
+        $order->refreshTotalPrice();
+
+        return redirect()->route('admin.orders.index')->with('success', 'Заказ обновлён.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Order $order)
     {
         try {
-            // Обновляем статус билетов на Доступно
             foreach ($order->orderItems as $item) {
-                $item->ticket->update(['status' => 'Доступно']);
+                if ($item->type === 'ticket' && $item->ticket) {
+                    $item->ticket->update(['status' => 'Доступно']);
+                }
                 $item->delete();
             }
             $order->delete();
-            return redirect()->route('admin.orders.index')->with('success', 'Заказ успешно удалён.');
+            return redirect()->route('admin.orders.index')->with('success', 'Заказ удалён.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Ошибка удаления: возможно, связанные элементы или платежи.');
+            return back()->with('error', 'Ошибка удаления.');
         }
     }
 }

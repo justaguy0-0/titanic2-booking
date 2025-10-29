@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Order;
 use App\Models\Ticket;
+use App\Models\Entertainment;
 
 class OrderItemFactory extends Factory
 {
@@ -12,9 +13,30 @@ class OrderItemFactory extends Factory
 
     public function definition(): array
     {
-        return [
-            'order_id' => Order::inRandomOrder()->first()->id ?? Order::factory()->create()->id,
-            'ticket_id' => Ticket::where('status', 'Доступно')->inRandomOrder()->first()->id ?? Ticket::factory()->create()->id,
-        ];
+        $type = $this->faker->randomElement(['ticket', 'entertainment']);
+
+        if ($type === 'ticket') {
+            $ticket = Ticket::where('status', 'Доступно')->inRandomOrder()->first()
+                ?? Ticket::factory()->create(['status' => 'Доступно']);
+            return [
+                'order_id'         => Order::factory(),
+                'ticket_id'        => $ticket->id,
+                'entertainment_id' => null,
+                'type'             => 'ticket',
+                'price'            => $ticket->price,
+                'quantity'         => 1,
+            ];
+        } else {
+            $entertainment = Entertainment::inRandomOrder()->first()
+                ?? Entertainment::factory()->create();
+            return [
+                'order_id'         => Order::factory(),
+                'ticket_id'        => null,
+                'entertainment_id' => $entertainment->id,
+                'type'             => 'entertainment',
+                'price'            => $entertainment->price,
+                'quantity'         => $this->faker->numberBetween(1, 3),
+            ];
+        }
     }
 }

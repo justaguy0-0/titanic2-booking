@@ -12,6 +12,10 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'ticket_id',
+        'entertainment_id',
+        'type',
+        'price',
+        'quantity',
     ];
 
     public function order()
@@ -22,5 +26,10 @@ class OrderItem extends Model
     public function ticket()
     {
         return $this->belongsTo(Ticket::class);
+    }
+
+    public function entertainment()
+    {
+        return $this->belongsTo(Entertainment::class);
     }
 }

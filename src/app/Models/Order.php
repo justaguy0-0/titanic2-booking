@@ -24,4 +24,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    public function refreshTotalPrice()
+    {
+        $total = $this->orderItems()->sum(\DB::raw('price * quantity'));
+        $this->update(['total_price' => $total]);
+    }
 }

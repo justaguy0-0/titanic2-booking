@@ -24,14 +24,14 @@
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="#" class="nav-link px-3">Home</a></li>
-                <li><a href="#" class="nav-link px-3">Voyage</a></li>
+                <li><a href="{{ route('shop') }}" class="nav-link px-3 {{ request()->is('/') ? 'active' : '' }}">Voyage</a></li>
                 <li><a href="#" class="nav-link px-3">Amenities</a></li>
                 <li><a href="#" class="nav-link px-3">Booking</a></li>
             </ul>
 
             <div class="col-md-3 text-end pe-3">
                 <span class="me-3">
-                    <a href="profile" class="profile-link">{{ Auth::user()->name }}</a>
+                    <a href="{{ route('profile.edit') }}" class="profile-link">{{ Auth::user()->name }}</a>
                 </span>
                 <form method="POST" action="{{ route('logout') }}" class="d-inline">
                     @csrf
@@ -56,7 +56,7 @@
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="#" class="nav-link px-3">Home</a></li>
-                <li><a href="#" class="nav-link px-3">Voyage</a></li>
+                <li><a href="{{ route('shop') }}" class="nav-link px-3 {{ request()->is('/') ? 'active' : '' }}">Voyage</a></li>
                 <li><a href="#" class="nav-link px-3">Amenities</a></li>
                 <li><a href="#" class="nav-link px-3">Booking</a></li>
             </ul>
@@ -72,7 +72,15 @@
         @yield('main_content')
     </main>
 
+    @yield('scripts')
+
     <style>
+        /* Общий фон */
+        body {
+            background: #0f172a;
+            min-height: 100vh;
+        }
+
         /* Навигация */
         header .nav-link {
             color: #fcd34d;
@@ -83,7 +91,8 @@
             transition: all 0.3s ease;
         }
 
-        header .nav-link:hover {
+        header .nav-link:hover,
+        header .nav-link.active {
             color: #fbbf24 !important;
             border-bottom: 2px solid #fbbf24;
             padding-bottom: 0.25rem;
@@ -97,11 +106,12 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             text-decoration: none;
+            padding: 0.375rem 1rem;
             transition: all 0.3s ease;
         }
 
         .btn-login:hover {
-            background-color: #a6801f;
+            background-color: #fbbf24;
             color: #1e293b;
         }
 
@@ -113,11 +123,13 @@
             letter-spacing: 1px;
             border: none;
             text-decoration: none;
+            padding: 0.375rem 1rem;
             transition: all 0.3s ease;
         }
 
         .btn-signup:hover {
             background-color: #f59e0b;
+            color: #1e293b;
         }
 
         .btn-logout {
@@ -127,11 +139,12 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             background: none;
+            padding: 0.375rem 1rem;
             transition: all 0.3s ease;
         }
 
         .btn-logout:hover {
-            background-color: #a6801f;
+            background-color: #fbbf24;
             color: #1e293b;
         }
 
@@ -141,15 +154,14 @@
             font-weight: 500;
             transition: all 0.3s ease;
         }
+        
         .profile-link:hover {
             color: #fbbf24 !important;
-            border-bottom: 2px solid #fbbf24;
-            padding-bottom: 0.25rem;
         }
 
         /* Фон для страниц login/register/password */
         body.auth-bg {
-            background: #1e293b;  /* Однотонный темно-синий */
+            background: #1e293b;
             min-height: 100vh;
         }
 

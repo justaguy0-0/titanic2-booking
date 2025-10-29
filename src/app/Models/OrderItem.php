@@ -16,8 +16,14 @@ class OrderItem extends Model
         'type',
         'price',
         'quantity',
+        //'item_type',   // 'ticket' или 'entertainment'
     ];
 
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
+
+    // === Связи ===
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -31,5 +37,11 @@ class OrderItem extends Model
     public function entertainment()
     {
         return $this->belongsTo(Entertainment::class);
+    }
+
+    // === Удобно: получить сам предмет ===
+    public function getItemAttribute()
+    {
+        return $this->item_type === 'ticket' ? $this->ticket : $this->entertainment;
     }
 }

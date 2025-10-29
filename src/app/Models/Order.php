@@ -30,4 +30,9 @@ class Order extends Model
         $total = $this->orderItems()->sum(\DB::raw('price * quantity'));
         $this->update(['total_price' => $total]);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

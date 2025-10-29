@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EntertainmentController;
 use App\Http\Controllers\Admin\TicketController;
@@ -8,35 +10,37 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\CabinTypeController;
 use App\Http\Controllers\Admin\OrderItemController;
-use App\Http\Controllers\ProfileController;
 use App\Models\Place;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-});
 
+Route::get('/', [ShopController::class, 'index'])->name('shop'); 
+
+// === ПУБЛИЧНЫЕ МАРШРУТЫ ===
 Route::get('/voyage', function () {
     return view('voyage');
 });
 
-Route::get('/test-places', function () {
-    $places = Place::paginate(10);
-    return view('admin.place.index', compact('places'));
-});
-
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// === ТОЛЬКО АВТОРИЗОВАННЫЕ ===
 Route::middleware('auth')->group(function () {
+
+    // Магазин — выбор билетов и покупка
+    Route::get('/shop/voyage/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.voyage');
+    Route::post('/shop/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
+
+    // Профиль
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Заказы
+    Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
+    Route::get('/profile/orders/{order}', [ProfileController::class, 'showOrder'])->name('profile.orders.show');
+    Route::patch('/profile/orders/{order}/cancel', [ProfileController::class, 'cancelOrder'])->name('profile.orders.cancel');
+
+    // Дашборд
+    Route::get('/dashboard', fn() => view('dashboard'))
+        ->name('dashboard');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -50,4 +54,5 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('order-items', OrderItemController::class);
 });
 
+// === АУТЕНТИФИКАЦИЯ ===
 require __DIR__.'/auth.php';

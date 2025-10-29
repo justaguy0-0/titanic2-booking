@@ -38,6 +38,11 @@ class Voyage extends Model
         return $this->belongsTo(Place::class, 'arrival_place_id');
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'voyages_id');
+    }
+
     public function getFormattedPriceAttribute()
     {
         return number_format((float)$this->base_price, 2, ',', ' ') . ' ₽';

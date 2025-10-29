@@ -11,23 +11,11 @@ return new class extends Migration
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-
-            $table->foreignId('ticket_id')
-                ->nullable()
-                ->constrained('tickets')
-                ->onDelete('set null');
-
-            $table->foreignId('entertainment_id')
-                ->nullable()
-                ->constrained('entertainments')
-                ->onDelete('set null');
-
-            $table->enum('type', ['ticket', 'entertainment']);
-
+            $table->foreignId('ticket_id')->nullable()->constrained('tickets')->onDelete('set null');
+            $table->foreignId('entertainment_id')->nullable()->constrained('entertainments')->onDelete('set null');
+            $table->string('item_type', 20); // 'ticket' или 'entertainment'
+            $table->integer('quantity')->default(1);
             $table->decimal('price', 10, 2);
-
-            $table->unsignedInteger('quantity')->default(1);
-
             $table->timestamps();
 
             $table->engine = 'InnoDB';

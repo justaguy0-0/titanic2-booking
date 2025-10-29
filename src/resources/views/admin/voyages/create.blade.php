@@ -24,36 +24,36 @@
             </div>
 
             <div class="mb-6">
-                <label for="place_departure" class="block text-sm font-medium text-gray-700 mb-2">Место отправления <span class="text-red-500">*</span></label>
-                <select name="place_departure" id="place_departure"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('place_departure') border-red-500 @enderror"
+                <label for="departure_place_id" class="block text-sm font-medium text-gray-700 mb-2">Место отправления <span class="text-red-500">*</span></label>
+                <select name="departure_place_id" id="departure_place_id"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('departure_place_id') border-red-500 @enderror"
                         required>
                     <option value="">Выберите место отправления</option>
-                    @foreach($placeDepartures as $departure)
-                        <option value="{{ $departure->id }}" {{ old('place_departure') == $departure->id ? 'selected' : '' }}>
-                            {{ $departure->name }}
+                    @foreach($departures as $place)
+                        <option value="{{ $place->id }}" {{ old('departure_place_id') == $place->id ? 'selected' : '' }}>
+                            {{ $place->name }}
                         </option>
                     @endforeach
                 </select>
-                @error('place_departure')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @error('departure_place_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="mb-6">
-                <label for="iceberg_arrival" class="block text-sm font-medium text-gray-700 mb-2">Место прибытия <span class="text-red-500">*</span></label>
-                <select name="iceberg_arrival" id="iceberg_arrival"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('iceberg_arrival') border-red-500 @enderror"
+                <label for="arrival_place_id" class="block text-sm font-medium text-gray-700 mb-2">Место прибытия <span class="text-red-500">*</span></label>
+                <select name="arrival_place_id" id="arrival_place_id"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('arrival_place_id') border-red-500 @enderror"
                         required>
                     <option value="">Выберите место прибытия</option>
-                    @foreach($icebergArrivals as $arrival)
-                        <option value="{{ $arrival->id }}" {{ old('iceberg_arrival') == $arrival->id ? 'selected' : '' }}>
-                            {{ $arrival->name }}
+                    @foreach($arrivals as $place)
+                        <option value="{{ $place->id }}" {{ old('arrival_place_id') == $place->id ? 'selected' : '' }}>
+                            {{ $place->name }}
                         </option>
                     @endforeach
                 </select>
-                @error('iceberg_arrival')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @error('arrival_place_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 

@@ -3,30 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-      
-       $this->call(RoleSeeder::class);
+        // Сначала создаём роли
+        $this->call(RoleSeeder::class);
 
-        $this->call([
-            PlaceDepartureSeeder::class,
-            IcebergArrivalSeeder::class,
-            VoyageSeeder::class,
-            EntertainmentSeeder::class,
-            TicketSeeder::class,
-            OrderSeeder::class,
-            OrderItemSeeder::class,
-            PaymentSeeder::class,
-        ]);
-
+        // Затем создаём пользователей
         User::factory(10)->create()->each(function ($user) {
             $user->assignRole('user');
         });
@@ -36,5 +22,17 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@example.com',
         ]);
         $admin->assignRole('admin');
+
+        // Затем остальные сиды
+        $this->call([
+            PlaceSeeder::class,
+            CabinTypeSeeder::class,
+            VoyageSeeder::class,
+            EntertainmentSeeder::class,
+            TicketSeeder::class,
+            OrderSeeder::class,
+            OrderItemSeeder::class,
+            PaymentSeeder::class,
+        ]);
     }
 }

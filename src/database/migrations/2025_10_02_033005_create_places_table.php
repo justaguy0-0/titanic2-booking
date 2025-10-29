@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('place_departures', function (Blueprint $table) {
+        Schema::create('places', function (Blueprint $table) {
             $table->id();
-            $table->string('name',100);
+            $table->string('name', 100);
+            $table->enum('type', ['departure', 'arrival'])->index();
             $table->timestamps();
             $table->engine = 'InnoDB';
+            $table->unique(['name', 'type']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('place_departures');
+        Schema::dropIfExists('places');
     }
 };

@@ -40,8 +40,8 @@
                     <tr class="hover:bg-gray-50 transition">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $voyage->id }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $voyage->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $voyage->placeDeparture->name ?? 'Не указано' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $voyage->icebergArrival->name ?? 'Не указано' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $voyage->departurePlace->name ?? 'Не указано' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $voyage->arrivalPlace->name ?? 'Не указано' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $voyage->departure_date ? $voyage->departure_date->format('d.m.Y H:i') : 'Не указано' }}
                         </td>

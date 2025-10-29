@@ -2,6 +2,15 @@
 
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EntertainmentController;
+use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\Admin\VoyageController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PlaceController;
+use App\Http\Controllers\Admin\CabinTypeController;
+use App\Http\Controllers\Admin\OrderItemController;
+use App\Models\Place;
 use Illuminate\Support\Facades\Route;
 
 // === ГЛАВНАЯ СТРАНИЦА — МАГАЗИН БИЛЕТОВ ===
@@ -34,19 +43,16 @@ Route::middleware('auth')->group(function () {
         ->name('dashboard');
 });
 
-// === АДМИНКА ===
-Route::middleware(['auth', 'admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::resource('place-departures', \App\Http\Controllers\Admin\PlaceDepartureController::class);
-        Route::resource('iceberg-arrivals', \App\Http\Controllers\Admin\IcebergArrivalController::class);
-        Route::resource('voyages', \App\Http\Controllers\Admin\VoyageController::class);
-        Route::resource('tickets', \App\Http\Controllers\Admin\TicketController::class);
-        Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class);
-        Route::resource('entertainments', \App\Http\Controllers\Admin\EntertainmentController::class);
-        Route::resource('dashboard', \App\Http\Controllers\Admin\DashboardController::class);
-    });
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('places', PlaceController::class);
+    Route::resource('voyages', VoyageController::class);
+    Route::resource('tickets', TicketController::class);
+    Route::resource('orders', OrderController::class);
+    Route::resource('entertainments', EntertainmentController::class);
+    Route::resource('dashboard', DashboardController::class);
+    Route::resource('cabin-types', CabinTypeController::class);
+    Route::resource('order-items', OrderItemController::class);
+});
 
 // === АУТЕНТИФИКАЦИЯ ===
 require __DIR__.'/auth.php';

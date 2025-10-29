@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('voyages_id')->constrained('voyages')->onDelete('cascade');
-            $table->string('type', 20);
-            $table->string('number', 20);
-            $table->decimal('price', 10,2);
+            $table->foreignId('cabin_type_id')->constrained('cabin_types')->onDelete('restrict');
+            $table->string('number', 20)->unique();
+            $table->decimal('price', 10, 2);
             $table->string('status', 20)->default('Доступно');
             $table->timestamps();
             $table->engine = 'InnoDB';

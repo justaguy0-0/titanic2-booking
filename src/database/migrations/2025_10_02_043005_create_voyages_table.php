@@ -6,16 +6,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('voyages', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->foreignId('place_departure')->constrained('place_departures')->onDelete('cascade');
-            $table->foreignId('iceberg_arrival')->constrained('iceberg_arrivals')->onDelete('cascade');
+            $table->foreignId('departure_place_id')->constrained('places')->onDelete('restrict');
+            $table->foreignId('arrival_place_id')->constrained('places')->onDelete('restrict');
             $table->timestamp('departure_date');
             $table->timestamp('arrival_date');
             $table->integer('travel_time');
@@ -25,9 +22,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('voyages');

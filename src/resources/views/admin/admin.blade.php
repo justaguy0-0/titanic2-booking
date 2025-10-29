@@ -34,22 +34,18 @@
             {{-- Справочники --}}
             <div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Справочники</div>
-                <a href="{{ route('admin.place-departures.index') }}"
-                   class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                    <i class="fas fa-ship mr-2"></i> Места отправления
-                </a>
-                <a href="{{ route('admin.iceberg-arrivals.index') }}"
-                   class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                    <i class="fas fa-cube mr-2"></i> Места прибытия
-                </a>
                 <a href="{{ route('admin.voyages.index') }}"
                    class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                    <i class="fas fa-route mr-2"></i> Маршруты
+                    <i class="fas fa-route mr-2"></i> Рейсы
+                </a>
+                <a href="{{ route('admin.places.index') }}"
+                   class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
+                    <i class="fas fa-location-dot mr-2"></i> Места
                 </a>
             </div>
 
             {{-- Пользователи --}}
-            <div>
+            {{-- <div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Пользователи</div>
                 <a class="flex items-center text-gray-400 px-3 py-2 rounded-md pointer-events-none opacity-50 cursor-not-allowed">
                     <i class="fas fa-users mr-2"></i> Все пользователи
@@ -57,7 +53,7 @@
                 <a class="flex items-center text-gray-400 px-3 py-2 rounded-md pointer-events-none opacity-50 cursor-not-allowed">
                     <i class="fas fa-user-cog mr-2"></i> Администраторы
                 </a>
-            </div>
+            </div> --}}
 
             {{-- Продажи --}}
             <div>
@@ -68,8 +64,8 @@
                 <a href="{{ route('admin.orders.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-file-invoice mr-2"></i> Заказы
                 </a>
-                <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                    <i class="fas fa-box mr-2"></i> Order Items
+                <a href="{{ route('admin.order-items.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
+                    <i class="fas fa-box mr-2"></i> Детали заказа
                 </a>
                 <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-credit-card mr-2"></i> Payments
@@ -80,20 +76,20 @@
             <div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Развлечения</div>
                 <a href="{{ route('admin.entertainments.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
-                    <i class="fas fa-masks-theater mr-2"></i> Entertainments
+                    <i class="fas fa-masks-theater mr-2"></i> Развлечения
                 </a>
             </div>
 
             {{-- Настройки --}}
-            <div>
+            {{-- }}<div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Система</div>
                 <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-cog mr-2"></i> Настройки
                 </a>
-                <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
+                <a href="{{ route('telescope') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-folder mr-2"></i> Логи
                 </a>
-            </div>
+            </div> --}}
 
             {{-- Кнопка выхода --}}
             <form action="{{ route('logout') }}" method="POST" class="pt-4 border-t mt-6">

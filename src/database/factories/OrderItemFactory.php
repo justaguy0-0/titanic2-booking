@@ -3,15 +3,11 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
 use App\Models\Order;
 use App\Models\Entertainment;
 use App\Models\OrderItem;
 use App\Models\Ticket;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\OrderItem>
- */
 class OrderItemFactory extends Factory
 {
     protected $model = OrderItem::class;

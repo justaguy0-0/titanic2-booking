@@ -36,6 +36,11 @@ protected $casts = [
         return $this->belongsTo(IcebergArrival::class, 'iceberg_arrival');
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'voyages_id');
+    }
+
     public function getFormattedPriceAttribute()
     {
         return number_format((float)$this->base_price, 2, ',', ' ') . ' ₽';

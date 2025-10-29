@@ -57,4 +57,49 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    /**
+     * Display user's orders.
+     */
+      public function orders(Request $request): View
+    {
+        $orders = $request->user()
+            ->orders()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('profile.orders', compact('orders'));
+    }
+
+    /**
+     * Show specific order details.
+     */
+     public function showOrder(Request $request, $orderId): View
+    {
+        $order = $request->user()
+            ->orders()
+            ->with(['orderItems.ticket.voyage.placeDeparture', 'orderItems.ticket.voyage.icebergArrival', 'orderItems.entertainment'])
+            ->findOrFail($orderId);
+
+        return view('profile.order-details', compact('order'));
+    }
+
+    /**
+     * Cancel user's order (if allowed).
+     */
+    public function cancelOrder(Request $request, $orderId): RedirectResponse
+    {
+        $order = $request->user()
+            ->orders()
+            ->findOrFail($orderId);
+
+        // Можно отменить только заказы со статусом "Новый" или "Обработан"
+        if (!in_array($order->status, ['Новый', 'Обработан'])) {
+            return Redirect::back()->with('error', 'Заказ нельзя отменить на текущем этапе.');
+        }
+
+        $order->update(['status' => 'Отменён']);
+
+        return Redirect::route('profile.orders')->with('success', 'Заказ успешно отменён.');
+    }
 }

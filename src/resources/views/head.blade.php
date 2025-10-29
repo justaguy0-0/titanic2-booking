@@ -24,7 +24,7 @@
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="#" class="nav-link px-3">Home</a></li>
-                <li><a href="#" class="nav-link px-3">Voyage</a></li>
+                <li><a href="{{ route('home') }}" class="nav-link px-3 {{ request()->is('/') ? 'active' : '' }}">Voyage</a></li>
                 <li><a href="#" class="nav-link px-3">Amenities</a></li>
                 <li><a href="#" class="nav-link px-3">Booking</a></li>
             </ul>

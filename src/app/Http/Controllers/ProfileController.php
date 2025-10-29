@@ -47,11 +47,8 @@ class ProfileController extends Controller
         ]);
 
         $user = $request->user();
-
         Auth::logout();
-
         $user->delete();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -61,7 +58,7 @@ class ProfileController extends Controller
     /**
      * Display user's orders.
      */
-      public function orders(Request $request): View
+    public function orders(Request $request): View
     {
         $orders = $request->user()
             ->orders()
@@ -74,11 +71,16 @@ class ProfileController extends Controller
     /**
      * Show specific order details.
      */
-     public function showOrder(Request $request, $orderId): View
+    public function showOrder(Request $request, $orderId): View
     {
         $order = $request->user()
             ->orders()
-            ->with(['orderItems.ticket.voyage.placeDeparture', 'orderItems.ticket.voyage.icebergArrival', 'orderItems.entertainment'])
+            ->with([
+                // Исправлено: используем новые связи
+                'orderItems.ticket.voyage.departurePlace',
+                'orderItems.ticket.voyage.arrivalPlace',
+                'orderItems.entertainment'
+            ])
             ->findOrFail($orderId);
 
         return view('profile.order-details', compact('order'));
@@ -93,7 +95,6 @@ class ProfileController extends Controller
             ->orders()
             ->findOrFail($orderId);
 
-        // Можно отменить только заказы со статусом "Новый" или "Обработан"
         if (!in_array($order->status, ['Новый', 'Обработан'])) {
             return Redirect::back()->with('error', 'Заказ нельзя отменить на текущем этапе.');
         }

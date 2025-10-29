@@ -1,57 +1,48 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Order;
 use App\Models\Ticket;
 use App\Models\OrderItem;
-use Faker\Factory as FakerFactory;
+use App\Models\Entertainment;
 
 class OrderItemSeeder extends Seeder
 {
-    protected $faker;
-
-    public function __construct()
-    {
-        $this->faker = FakerFactory::create('ru_RU');
-    }
-
     public function run(): void
     {
-        if (Order::count() === 0 || Ticket::count() === 0) {
-            throw new \Exception('Заказы или билеты отсутствуют. Сначала запустите OrderSeeder и TicketSeeder.');
-        }
+        $orders = Order::all();
+        $availableTickets = Ticket::where('status', 'Доступно')->get();
 
-        $orders = Order::pluck('id')->toArray();
-        $tickets = Ticket::where('status', 'Доступно')->pluck('id')->toArray();
+        foreach ($orders as $order) {
+            // Берём 1-2 случайных доступных билета
+            $tickets = $availableTickets->random(min(2, $availableTickets->count()));
+            
+            $totalPrice = 0;
 
-        if (empty($tickets)) {
-            throw new \Exception('Нет доступных билетов для создания элементов заказа.');
-        }
-
-        foreach ($orders as $orderId) {
-            // Ограничиваем количество элементов количеством доступных билетов
-            $numItems = $this->faker->numberBetween(1, min(3, count($tickets)));
-            $selectedTickets = $this->faker->randomElements($tickets, $numItems);
-
-            foreach ($selectedTickets as $ticketId) {
+            foreach ($tickets as $ticket) {
                 OrderItem::create([
-                    'order_id' => $orderId,
-                    'ticket_id' => $ticketId,
+                    'order_id' => $order->id,
+                    'ticket_id' => $ticket->id,
+                    'entertainment_id' => null,
+                    'item_type' => 'ticket',
+                    'quantity' => 1,
+                    'price' => $ticket->price,
                 ]);
 
-                // Обновляем статус билета
-                Ticket::where('id', $ticketId)->update(['status' => 'Забронировано']);
-                // Удаляем использованный билет из списка доступных
-                $tickets = array_diff($tickets, [$ticketId]);
+                $ticket->update(['status' => 'Забронирован']);
+                $totalPrice += $ticket->price;
+
+                // Удаляем из доступных
+                $availableTickets = $availableTickets->reject(fn($t) => $t->id === $ticket->id);
             }
 
-            // Обновляем total_price заказа
-            $totalPrice = OrderItem::where('order_id', $orderId)
-                ->join('tickets', 'order_items.ticket_id', '=', 'tickets.id')
-                ->sum('tickets.price');
-            Order::where('id', $orderId)->update(['total_price' => $totalPrice]);
+            // Обновляем цену заказа
+            $order->update(['total_price' => $totalPrice]);
+
+            if ($availableTickets->isEmpty()) {
+                break;
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $voyages = Voyage::with(['placeDeparture', 'icebergArrival'])
+        $voyages = Voyage::with(['departurePlace', 'arrivalPlace'])
             ->where('departure_date', '>=', now())
             ->orderBy('departure_date')
             ->get();
@@ -33,8 +33,9 @@ class ShopController extends Controller
      */
     public function showVoyage($voyageId)
     {
-        $voyage = Voyage::with(['placeDeparture', 'icebergArrival'])->findOrFail($voyageId);
-        
+        $voyage = Voyage::with(['departurePlace', 'arrivalPlace'])
+            ->findOrFail($voyageId);
+
         $tickets = Ticket::where('voyages_id', $voyageId)
             ->where('status', 'Доступно')
             ->get();
@@ -60,7 +61,7 @@ class ShopController extends Controller
 
         DB::beginTransaction();
         try {
-            // Получаем билеты
+            // Получаем билеты с блокировкой
             $tickets = Ticket::whereIn('id', $validated['tickets'])
                 ->where('status', 'Доступно')
                 ->lockForUpdate()
@@ -72,7 +73,7 @@ class ShopController extends Controller
 
             // Рассчитываем общую стоимость
             $totalPrice = $tickets->sum('price');
-            
+
             // Добавляем развлечения
             $entertainmentItems = [];
             if (!empty($validated['entertainments'])) {
@@ -107,7 +108,6 @@ class ShopController extends Controller
                     'price' => $ticket->price,
                 ]);
 
-                // Обновляем статус билета
                 $ticket->update(['status' => 'Забронирован']);
             }
 
@@ -127,7 +127,6 @@ class ShopController extends Controller
 
             return redirect()->route('profile.orders')
                 ->with('success', 'Заказ успешно оформлен! Номер заказа: #' . $order->id);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Ошибка при оформлении заказа: ' . $e->getMessage());

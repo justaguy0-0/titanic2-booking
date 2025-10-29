@@ -13,8 +13,7 @@ use App\Http\Controllers\Admin\OrderItemController;
 use App\Models\Place;
 use Illuminate\Support\Facades\Route;
 
-// === ГЛАВНАЯ СТРАНИЦА — МАГАЗИН БИЛЕТОВ ===
-Route::get('/', [ShopController::class, 'index'])->name('home');
+
 Route::get('/', [ShopController::class, 'index'])->name('shop'); 
 
 // === ПУБЛИЧНЫЕ МАРШРУТЫ ===

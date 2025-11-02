@@ -1,82 +1,64 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('My Orders') }}
-        </h2>
-    </x-slot>
+@extends('head')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+@section('title', 'Мои заказы')
+
+@section('main_content')
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-11">
+            <h2 class="page-title mb-4">Мои заказы</h2>
+
             @if (session('success'))
-                <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+                <div class="alert alert-success alert-dismissible fade show">
                     {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
             @if (session('error'))
-                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                <div class="alert alert-danger alert-dismissible fade show">
                     {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+            <div class="orders-section">
+                <div class="card-body">
                     @if($orders->count() > 0)
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
+                        <div class="table-responsive">
+                            <table class="orders-table">
+                                <thead>
                                     <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            № Заказа
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Дата
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Сумма
-                                        </th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Статус
-                                        </th>
-                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Действия
-                                        </th>
+                                        <th>№ Заказа</th>
+                                        <th>Дата</th>
+                                        <th>Сумма</th>
+                                        <th>Статус</th>
+                                        <th class="text-end">Действия</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
+                                <tbody>
                                     @foreach($orders as $order)
                                         <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                #{{ $order->id }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $order->created_at->format('d.m.Y H:i') }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {{ number_format($order->total_price, 2) }} ₽
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                    @if($order->status === 'Новый') bg-blue-100 text-blue-800
-                                                    @elseif($order->status === 'Обработан') bg-yellow-100 text-yellow-800
-                                                    @elseif($order->status === 'Оплачен') bg-green-100 text-green-800
-                                                    @elseif($order->status === 'Отправлен') bg-purple-100 text-purple-800
-                                                    @elseif($order->status === 'Отменён') bg-red-100 text-red-800
-                                                    @endif">
+                                            <td class="order-id">#{{ $order->id }}</td>
+                                            <td class="order-date">{{ $order->created_at->format('d.m.Y H:i') }}</td>
+                                            <td class="order-price">{{ number_format($order->total_price, 2) }} ₽</td>
+                                            <td>
+                                                <span class="status-badge status-{{ strtolower($order->status) }}">
                                                     {{ $order->status }}
                                                 </span>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="{{ route('profile.orders.show', $order->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">
+                                            <td class="text-end">
+                                                <a href="{{ route('profile.orders.show', $order->id) }}" class="action-link">
                                                     Подробнее
                                                 </a>
                                                 @if(in_array($order->status, ['Новый', 'Обработан']))
-                                                    <form action="{{ route('profile.orders.cancel', $order->id) }}" method="POST" class="inline" onsubmit="return confirm('Вы уверены, что хотите отменить заказ?');">
+                                                    <form action="{{ route('profile.orders.cancel', $order->id) }}" 
+                                                          method="POST" 
+                                                          class="d-inline"
+                                                          onsubmit="return confirm('Вы уверены, что хотите отменить заказ?');">
                                                         @csrf
                                                         @method('PATCH')
-                                                        <button type="submit" class="text-red-600 hover:text-red-900">
-                                                            Отменить
-                                                        </button>
+                                                        <button type="submit" class="action-link cancel-link">Отменить</button>
                                                     </form>
                                                 @endif
                                             </td>
@@ -90,10 +72,11 @@
                             {{ $orders->links() }}
                         </div>
                     @else
-                        <p class="text-gray-500 text-center py-8">У вас пока нет заказов.</p>
+                        <p class="empty-message">У вас пока нет заказов.</p>
                     @endif
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection

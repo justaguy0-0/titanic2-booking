@@ -27,7 +27,6 @@ class Voyage extends Model
         'base_price' => 'decimal:2',
     ];
 
-    // Новые отношения
     public function departurePlace()
     {
         return $this->belongsTo(Place::class, 'departure_place_id');

@@ -12,7 +12,7 @@ class PlaceController extends Controller
 
     public function index(Request $request)
     {
-        $type = $request->query('type', 'departure');  // Фильтр по типу
+        $type = $request->query('type', 'departure');
         $places = Place::where('type', $type)->paginate(10);
         return view('admin.places.index', compact('places', 'type'));
     }

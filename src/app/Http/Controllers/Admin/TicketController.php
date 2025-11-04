@@ -10,18 +10,12 @@ use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $tickets = Ticket::with(['voyage', 'cabinType', 'orderItems'])->paginate(10);
         return view('admin.tickets.index', compact('tickets'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $voyages = Voyage::all();
@@ -29,9 +23,6 @@ class TicketController extends Controller
         return view('admin.tickets.create', compact('voyages', 'cabinTypes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -47,9 +38,6 @@ class TicketController extends Controller
         return redirect()->route('admin.tickets.index')->with('success', 'Билет успешно добавлен.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Ticket $ticket)
     {
         $voyages = Voyage::all();
@@ -57,9 +45,6 @@ class TicketController extends Controller
         return view('admin.tickets.edit', compact('ticket', 'voyages', 'cabinTypes'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Ticket $ticket)
     {
         $rules = [
@@ -69,7 +54,6 @@ class TicketController extends Controller
             'price' => 'required|numeric|min:0|max:99999999.99',
         ];
 
-        // Если билет связан с заказом, статус нельзя изменить
         if ($ticket->orderItems->isNotEmpty()) {
             $rules['status'] = 'required|in:' . $ticket->status;
         } else {
@@ -83,9 +67,6 @@ class TicketController extends Controller
         return redirect()->route('admin.tickets.index')->with('success', 'Билет успешно обновлён.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Ticket $ticket)
     {
         if ($ticket->orderItems->isNotEmpty()) {

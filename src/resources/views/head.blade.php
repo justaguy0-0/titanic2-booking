@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ТИТАНИК 2')</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="@if(request()->is('login') || request()->is('register') || request()->is('password.request*')) auth-bg @endif">
 
-    {{-- Шапка для авторизованных пользователей --}}
     @if (Auth::check())
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4"
                 style="background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%); border-bottom: 2px solid #fbbf24;">
-            
+
             <div class="col-md-3 mb-2 mb-md-0 ps-3">
                 <a href="/" class="d-inline-flex align-items-center text-decoration-none">
                     <div class="ms-2">
@@ -40,11 +40,10 @@
             </div>
         </header>
 
-    {{-- Шапка для гостей (только на публичных страницах, кроме login/register/password) --}}
     @elseif (!request()->routeIs('login') && !request()->routeIs('register') && !request()->is('password.request*'))
         <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3"
                 style="background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%); border-bottom: 2px solid #fbbf24;">
-            
+
             <div class="col-md-3 mb-2 mb-md-0 ps-3">
                 <a href="/" class="d-inline-flex align-items-center text-decoration-none">
                     <div class="ms-2">
@@ -154,7 +153,7 @@
             font-weight: 500;
             transition: all 0.3s ease;
         }
-        
+
         .profile-link:hover {
             color: #fbbf24 !important;
         }
@@ -170,7 +169,5 @@
             padding-top: 1rem;
         }
     </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

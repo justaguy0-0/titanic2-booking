@@ -17,12 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ShopController::class, 'index'])->name('shop');
 
-// === ПУБЛИЧНЫЕ МАРШРУТЫ ===
 Route::get('/voyage', function () {
     return view('voyage');
 });
 
-// === ТОЛЬКО АВТОРИЗОВАННЫЕ ===
 Route::middleware('auth')->group(function () {
 
     // Магазин — выбор билетов и покупка
@@ -56,5 +54,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('payments', PaymentController::class);
 });
 
-// === АУТЕНТИФИКАЦИЯ ===
 require __DIR__.'/auth.php';

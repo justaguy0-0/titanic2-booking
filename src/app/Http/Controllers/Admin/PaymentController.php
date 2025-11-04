@@ -18,7 +18,7 @@ class PaymentController extends Controller
 
     public function create()
     {
-        $orders = Order::orderBy('id', 'desc')->pluck('id', 'id'); // Можно улучшить: добавить номер заказа + клиент
+        $orders = Order::orderBy('id', 'desc')->pluck('id', 'id');
         return view('admin.payments.create', compact('orders'));
     }
 

@@ -22,33 +22,33 @@
             @endif
 
             {{-- Информация о рейсе --}}
-            <div class="card border-0 shadow-sm mb-4" style="background: #1e293b; border: 1px solid #334155;">
+            <div class="voyage-info-card mb-4">
                 <div class="card-body p-4">
                     <div class="row align-items-center">
                         <div class="col-md-8">
-                            <h2 class="h4 fw-bold mb-3" style="color: #fbbf24;">{{ $voyage->name }}</h2>
-                            <div class="d-flex flex-wrap gap-3 small" style="color: #fcd34d;">
-                                <div>
+                            <h2 class="voyage-title mb-3">{{ $voyage->name }}</h2>
+                            <div class="voyage-details">
+                                <div class="detail-item">
                                     <strong>Отправление:</strong>
                                     {{ \Carbon\Carbon::parse($voyage->departure_date)->format('d.m.Y H:i') }}
                                     @if($voyage->departurePlace)
-                                        <span class="ms-1" style="color: #fbbf24;">{{ $voyage->departurePlace->name }}</span>
+                                        <span class="place-name">{{ $voyage->departurePlace->name }}</span>
                                     @endif
                                 </div>
-                                <div>
+                                <div class="detail-item">
                                     <strong>Прибытие:</strong>
                                     {{ \Carbon\Carbon::parse($voyage->arrival_date)->format('d.m.Y H:i') }}
                                     @if($voyage->arrivalPlace)
-                                        <span class="ms-1" style="color: #fbbf24;">{{ $voyage->arrivalPlace->name }}</span>
+                                        <span class="place-name">{{ $voyage->arrivalPlace->name }}</span>
                                     @endif
                                 </div>
-                                <div>
+                                <div class="detail-item">
                                     <strong>Время в пути:</strong> {{ $voyage->travel_time }} ч
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                            <a href="{{ route('shop') }}" class="btn btn-outline-warning">
+                            <a href="{{ route('shop') }}" class="btn-back">
                                 ← Назад к рейсам
                             </a>
                         </div>
@@ -65,45 +65,40 @@
 
                     {{-- БИЛЕТЫ --}}
                     <div class="col-lg-7">
-                        <div class="card border-0 shadow-sm" style="background: #1e293b; border: 1px solid #334155;">
-                            <div class="card-header text-white py-3" style="background: linear-gradient(135deg, #1e293b, #334155); border-bottom: 2px solid #fbbf24;">
-                                <h5 class="mb-0" style="color: #fbbf24;">Выберите билеты</h5>
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h5 class="mb-0">Выберите билеты</h5>
                             </div>
                             <div class="card-body">
                                 @if($tickets->count() > 0)
-                                    <div class="row row-cols-1 g-3">
+                                    <div class="tickets-grid">
                                         @foreach($tickets as $ticket)
-                                            <div class="col">
-                                                <div class="border rounded p-3 d-flex justify-content-between align-items-center hover-shadow transition" 
-                                                     style="background: #0f172a; border-color: #334155 !important;">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input ticket-checkbox" 
-                                                               type="checkbox" 
-                                                               name="tickets[]" 
-                                                               value="{{ $ticket->id }}" 
-                                                               id="ticket-{{ $ticket->id }}"
-                                                               data-price="{{ $ticket->price }}">
-                                                        <label class="form-check-label fw-medium" for="ticket-{{ $ticket->id }}" style="color: #fcd34d;">
-                                                            {{ $ticket->type ?? 'Стандартный билет' }}
-                                                            @if($ticket->place_number)
-                                                                <span class="text-muted small">(Место {{ $ticket->place_number }})</span>
-                                                            @endif
-                                                        </label>
-                                                    </div>
-                                                    <div class="text-end">
-                                                        <span class="h5 fw-bold mb-0" style="color: #fbbf24;">
-                                                            {{ number_format($ticket->price, 0) }} ₽
-                                                        </span>
-                                                    </div>
+                                            <div class="ticket-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input ticket-checkbox" 
+                                                           type="checkbox" 
+                                                           name="tickets[]" 
+                                                           value="{{ $ticket->id }}" 
+                                                           id="ticket-{{ $ticket->id }}"
+                                                           data-price="{{ $ticket->price }}">
+                                                    <label class="form-check-label ticket-label" for="ticket-{{ $ticket->id }}">
+                                                        {{ $ticket->type ?? 'Стандартный билет' }}
+                                                        @if($ticket->place_number)
+                                                            <span class="place-number">(Место {{ $ticket->place_number }})</span>
+                                                        @endif
+                                                    </label>
+                                                </div>
+                                                <div class="ticket-price">
+                                                    {{ number_format($ticket->price, 0) }} ₽
                                                 </div>
                                             </div>
                                         @endforeach
                                     </div>
-                                    <div class="mt-3 text-danger small">
+                                    <div class="selection-note">
                                         * Обязательно выберите хотя бы один билет
                                     </div>
                                 @else
-                                    <p class="text-center py-4" style="color: #94a3b8;">
+                                    <p class="empty-message">
                                         К сожалению, билеты на этот рейс закончились.
                                     </p>
                                 @endif
@@ -114,43 +109,40 @@
                     {{-- РАЗВЛЕЧЕНИЯ И ИТОГО --}}
                     <div class="col-lg-5">
                         {{-- РАЗВЛЕЧЕНИЯ --}}
-                        <div class="card border-0 shadow-sm" style="background: #1e293b; border: 1px solid #334155;">
-                            <div class="card-header py-3" style="background: linear-gradient(135deg, #1e293b, #334155); border-bottom: 2px solid #fbbf24;">
-                                <h5 class="mb-0" style="color: #fbbf24;">Дополнительные развлечения</h5>
+                        <div class="section-card">
+                            <div class="section-header">
+                                <h5 class="mb-0">Дополнительные развлечения</h5>
                             </div>
                             <div class="card-body">
                                 @if($entertainments->count() > 0)
-                                    <div class="d-flex flex-column gap-3">
+                                    <div class="entertainments-list">
                                         @foreach($entertainments as $ent)
-                                            <div class="border rounded p-3" style="background: #0f172a; border-color: #334155 !important;">
-                                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                                    <div>
-                                                        <h6 class="fw-bold mb-1" style="color: #fcd34d;">{{ $ent->name }}</h6>
-                                                        <small class="text-muted">{{ $ent->description ?? 'Дополнительная услуга' }}</small>
+                                            <div class="entertainment-item">
+                                                <div class="entertainment-info">
+                                                    <div class="flex-grow-1">
+                                                        <h6 class="entertainment-name">{{ $ent->name }}</h6>
+                                                        <small class="entertainment-desc">{{ $ent->description ?? 'Дополнительная услуга' }}</small>
                                                     </div>
-                                                    <div class="text-end ms-3">
-                                                        <span class="h6 fw-bold mb-0" style="color: #fbbf24;">
-                                                            {{ number_format($ent->price, 0) }} ₽
-                                                        </span>
+                                                    <div class="entertainment-price">
+                                                        {{ number_format($ent->price, 0) }} ₽
                                                     </div>
                                                 </div>
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <label class="small text-muted me-2" style="color: #94a3b8;">Количество:</label>
+                                                <div class="quantity-control">
+                                                    <label class="quantity-label">Количество:</label>
                                                     <input type="hidden" name="entertainments[{{ $loop->index }}][id]" value="{{ $ent->id }}">
                                                     <input type="number" 
                                                            name="entertainments[{{ $loop->index }}][quantity]" 
                                                            value="0" 
                                                            min="0" 
                                                            max="10"
-                                                           class="form-control form-control-sm quantity-input" 
-                                                           data-price="{{ $ent->price }}"
-                                                           style="width: 80px; background: #0f172a; border-color: #334155; color: #fcd34d;">
+                                                           class="quantity-input" 
+                                                           data-price="{{ $ent->price }}">
                                                 </div>
                                             </div>
                                         @endforeach
                                     </div>
                                 @else
-                                    <p class="text-center py-3" style="color: #94a3b8;">
+                                    <p class="empty-message">
                                         Развлечения скоро появятся!
                                     </p>
                                 @endif
@@ -158,14 +150,14 @@
                         </div>
 
                         {{-- ИТОГО --}}
-                        <div class="card border-0 shadow-sm mt-4" style="background: #1e293b; border: 1px solid #334155;">
+                        <div class="total-card">
                             <div class="card-body p-4">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h5 class="fw-bold mb-0" style="color: #fbbf24;">Итого:</h5>
-                                    <h4 class="fw-bold mb-0" style="color: #fbbf24;" id="total-price">0 ₽</h4>
+                                <div class="total-row">
+                                    <h5 class="total-label">Итого:</h5>
+                                    <h4 class="total-amount" id="total-price">0 ₽</h4>
                                 </div>
                                 <button type="submit" 
-                                        class="btn btn-gold w-100 fw-bold py-2" 
+                                        class="btn-submit" 
                                         id="submit-btn" 
                                         disabled>
                                     Оформить заказ
@@ -193,30 +185,23 @@ document.addEventListener('DOMContentLoaded', function () {
         let total = 0;
         let hasTickets = false;
 
-        // Считаем стоимость билетов
         ticketCheckboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 hasTickets = true;
-                const price = parseFloat(checkbox.dataset.price);
-                total += price;
+                total += parseFloat(checkbox.dataset.price);
             }
         });
 
-        // Считаем стоимость развлечений
         quantityInputs.forEach(input => {
             const quantity = parseInt(input.value) || 0;
             const price = parseFloat(input.dataset.price);
             total += quantity * price;
         });
 
-        // Обновляем итоговую сумму
         totalPriceEl.textContent = total.toLocaleString('ru-RU') + ' ₽';
-        
-        // Активируем/деактивируем кнопку
         submitBtn.disabled = !hasTickets;
     }
 
-    // Валидация перед отправкой формы
     form.addEventListener('submit', function(e) {
         const hasChecked = document.querySelector('.ticket-checkbox:checked');
         if (!hasChecked) {
@@ -226,71 +211,11 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Добавляем обработчики событий
     ticketCheckboxes.forEach(cb => cb.addEventListener('change', updateTotal));
     quantityInputs.forEach(input => input.addEventListener('input', updateTotal));
 
-    // Инициализация
     updateTotal();
 });
 </script>
 
-<style>
-body {
-    background: #0f172a;
-}
-
-.hover-shadow {
-    transition: all 0.3s ease;
-}
-
-.hover-shadow:hover {
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.25) !important;
-    transform: translateY(-2px);
-    border-color: #fbbf24 !important;
-}
-
-.btn-gold {
-    background: linear-gradient(45deg, #fbbf24, #f59e0b);
-    border: none;
-    color: #1e293b;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-.btn-gold:hover {
-    background: linear-gradient(45deg, #f59e0b, #d97706);
-    color: #1e293b;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
-}
-
-.btn-gold:disabled {
-    background: #334155;
-    color: #64748b;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-}
-
-.btn-outline-warning {
-    border-color: #fbbf24;
-    color: #fbbf24;
-}
-
-.btn-outline-warning:hover {
-    background: #fbbf24;
-    color: #1e293b;
-}
-
-.form-check-input:checked {
-    background-color: #fbbf24;
-    border-color: #fbbf24;
-}
-
-.form-control:focus {
-    border-color: #fbbf24;
-    box-shadow: 0 0 0 0.2rem rgba(251, 191, 36, 0.25);
-}
-</style>
 @endsection

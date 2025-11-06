@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.my-custom-class {
+    @apply text-red-500 font-bold;
+}
+
+@layer components {
+    /* Навигация */
+    header .nav-link {
+        @apply font-semibold uppercase transition-all duration-300;
+        color: #fcd34d;
+        letter-spacing: 1.5px;
+        font-size: 0.875rem;
+    }
+
+    header .nav-link:hover {
+        color: #fbbf24 !important;
+        border-bottom: 2px solid #fbbf24;
+        padding-bottom: 0.25rem;
+    }
+
+    /* Кнопки */
+    .btn-login {
+        border: 2px solid #fbbf24;
+        color: #fbbf24;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-login:hover {
+        background-color: #a6801f;
+        color: #1e293b;
+    }
+
+    .btn-signup {
+        background-color: #fbbf24;
+        color: #1e293b;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border: none;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-signup:hover {
+        background-color: #f59e0b;
+    }
+
+    .btn-logout {
+        border: 2px solid #fbbf24;
+        color: #fbbf24;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        background: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-logout:hover {
+        background-color: #a6801f;
+        color: #1e293b;
+    }
+
+    /* Фон для страниц login/register/password */
+    body.auth-bg {
+        background: #1e293b;
+        min-height: 100vh;
+    }
+
+    /* Отступ для контента */
+    main {
+        padding-top: 1rem;
+    }
+}

@@ -207,80 +207,6 @@
             background: #0f172a; /* Темный фон для всего */
         }
 
-        /* Остальные стили... */
-        header .nav-link {
-            color: #fcd34d;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        header .nav-link:hover {
-            color: #fbbf24 !important;
-            border-bottom: 2px solid #fbbf24;
-            padding-bottom: 0.25rem;
-        }
-
-        .btn-login {
-            border: 2px solid #fbbf24;
-            color: #fbbf24;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-login:hover {
-            background-color: #a6801f;
-            color: #1e293b;
-        }
-
-        .btn-signup {
-            background-color: #fbbf24;
-            color: #1e293b;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-signup:hover {
-            background-color: #f59e0b;
-        }
-
-        .btn-logout {
-            border: 2px solid #fbbf24;
-            color: #fbbf24;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-logout:hover {
-            background-color: #a6801f;
-            color: #1e293b;
-        }
-
-        .profile-link {
-            color: #fcd34d;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .profile-link:hover {
-            color: #fbbf24 !important;
-            border-bottom: 2px solid #fbbf24;
-            padding-bottom: 0.25rem;
-        }
-
-        /* Фон для страниц login/register/password */
         body.auth-bg {
             background: #1e293b;
             min-height: 100vh;
@@ -296,6 +222,576 @@
             transform: scale(1.2);
             transition: transform 0.3s ease;
         }
+
+
+        .nav-link {
+            color: #fcd34d;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: #fbbf24;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fbbf24;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 80%;
+        }
+
+        .profile-link {
+            color: #fcd34d;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.375rem 0.75rem;
+            white-space: nowrap;
+        }
+
+        .profile-link:hover {
+            color: #fbbf24;
+        }
+
+        .btn-login,
+        .btn-logout {
+            border: 2px solid #fbbf24;
+            color: #fbbf24;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: transparent;
+            padding: 0.5rem 1.25rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .btn-login:hover,
+        .btn-logout:hover {
+            background-color: #fbbf24;
+            color: #1e293b;
+            border-color: #fbbf24;
+        }
+
+        .btn-signup {
+            background-color: #fbbf24;
+            color: #1e293b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid #fbbf24;
+            padding: 0.5rem 1.25rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .btn-signup:hover {
+            background-color: #f59e0b;
+            border-color: #f59e0b;
+            color: #1e293b;
+        }
+
+        /* ========== ОБЩИЕ КОМПОНЕНТЫ ========== */
+
+        /* Заголовки страниц */
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fbbf24;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Карточки секций */
+        .section-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-bottom: 2px solid #fbbf24;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .section-header h5 {
+            color: #fbbf24;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .section-subtitle {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Кнопка назад */
+        .btn-back {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            border: 2px solid #fbbf24;
+            color: #fbbf24;
+            text-decoration: none;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: #fbbf24;
+            color: #1e293b;
+        }
+
+        /* Формы */
+        .form-label {
+            color: #fcd34d;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-input,
+        .form-control {
+            background: #0f172a !important;
+            border: 1px solid #334155 !important;
+            color: #fcd34d !important;
+            padding: 0.625rem 0.875rem;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+        }
+
+        .custom-input:focus,
+        .form-control:focus {
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1) !important;
+            outline: none;
+        }
+
+        /* Чекбоксы */
+        .form-check-input:checked {
+            background-color: #fbbf24;
+            border-color: #fbbf24;
+        }
+
+        .form-check-input:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 0.25rem rgba(251, 191, 36, 0.25);
+        }
+
+        /* Кнопки действий */
+        .btn-submit {
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            border: none;
+            color: #1e293b;
+            padding: 0.625rem 1.5rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+            color: #1e293b;
+        }
+
+        .btn-submit:disabled {
+            background: #334155;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            border: none;
+            color: white;
+            padding: 0.625rem 1.5rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #334155;
+            border: none;
+            color: #fcd34d;
+            padding: 0.625rem 1.5rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+        }
+
+        /* Сообщения */
+        .empty-message {
+            text-align: center;
+            padding: 2rem 0;
+            color: #94a3b8;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .success-message {
+            color: #10b981;
+            font-size: 0.875rem;
+        }
+
+        .selection-note {
+            margin-top: 1rem;
+            color: #ef4444;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        /* Билеты */
+        .tickets-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .ticket-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .ticket-item:hover {
+            border-color: #fbbf24;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .ticket-label {
+            font-weight: 500;
+            color: #fcd34d;
+            cursor: pointer;
+        }
+
+        .ticket-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .place-number {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        /* Развлечения */
+        .entertainments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .entertainment-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+
+        .entertainment-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+            gap: 1rem;
+        }
+
+        .entertainment-name {
+            font-weight: 600;
+            color: #fcd34d;
+            margin-bottom: 0.25rem;
+        }
+
+        .entertainment-desc {
+            color: #94a3b8;
+        }
+
+        .entertainment-price {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #fbbf24;
+            white-space: nowrap;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quantity-label {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin: 0;
+        }
+
+        .quantity-input {
+            width: 80px;
+            padding: 0.375rem 0.75rem;
+            background: #0f172a !important;
+            border: 1px solid #334155 !important;
+            border-radius: 0.375rem;
+            color: #fcd34d !important;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        /* Итоговая карточка */
+        .total-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .total-label {
+            font-weight: 700;
+            color: #fbbf24;
+            margin: 0;
+        }
+
+        .total-amount {
+            font-weight: 700;
+            color: #fbbf24;
+            margin: 0;
+        }
+
+        /* Информация о рейсе */
+        .voyage-info-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .voyage-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .voyage-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: #fcd34d;
+        }
+
+        .detail-item strong {
+            font-weight: 600;
+        }
+
+        .place-name {
+            margin-left: 0.25rem;
+            color: #fbbf24;
+        }
+
+        /* Таблицы */
+        .orders-table {
+            width: 100%;
+            color: #fcd34d;
+        }
+
+        .orders-table thead {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-bottom: 2px solid #fbbf24;
+        }
+
+        .orders-table th {
+            padding: 1rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #fbbf24;
+        }
+
+        .orders-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .orders-table tbody tr:hover {
+            background: #0f172a;
+        }
+
+        /* Статус бейджи */
+        .status-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Ссылки действий */
+        .action-link {
+            color: #fbbf24;
+            text-decoration: none;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .action-link:hover {
+            color: #f59e0b;
+        }
+
+        /* Модальные окна */
+        .custom-modal .modal-content {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #fcd34d;
+        }
+
+        .custom-modal .modal-header {
+            border-bottom: 1px solid #334155;
+        }
+
+        .custom-modal .modal-title {
+            color: #fbbf24;
+        }
+
+        .custom-modal .modal-footer {
+            border-top: 1px solid #334155;
+        }
+
+        /* ========== АДАПТИВНОСТЬ ========== */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+                padding: 1rem;
+                margin-top: 1rem;
+                border-radius: 0.5rem;
+                border: 1px solid rgba(251, 191, 36, 0.2);
+            }
+
+            .nav-link {
+                padding: 0.75rem 1rem;
+                border-bottom: 1px solid rgba(251, 191, 36, 0.1);
+            }
+
+            .nav-link:last-child {
+                border-bottom: none;
+            }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            .nav-link:hover,
+            .nav-link.active {
+                background-color: rgba(251, 191, 36, 0.1);
+                border-radius: 0.25rem;
+            }
+
+            .voyage-details {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .logo-title {
+                font-size: 1.1rem;
+                letter-spacing: 1px;
+            }
+
+            .logo-subtitle {
+                font-size: 0.6rem;
+            }
+
+            .btn-login,
+            .btn-logout,
+            .btn-signup,
+            .btn-back {
+                width: 100%;
+                text-align: center;
+            }
+
+            .profile-link {
+                width: 100%;
+                text-align: center;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .section-header {
+                padding: 1rem;
+            }
+
+            .ticket-item,
+            .entertainment-item {
+                padding: 0.875rem;
+            }
+
+            .entertainment-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

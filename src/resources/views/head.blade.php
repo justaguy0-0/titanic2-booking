@@ -24,15 +24,15 @@
             </div>
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-3">Главная</a></li>
-                <li><a href="#" class="nav-link px-3">Путешествие</a></li>
+                <li><a href="{{ route('home') }}" class="nav-link px-3">Главная</a></li>
+                <li><a href="{{ route('voyage') }}" class="nav-link px-3">Путешествие</a></li>
                 <li><a href="#" class="nav-link px-3">Услуги</a></li>
                 <li><a href="#" class="nav-link px-3">Бронирование</a></li>
             </ul>
 
             <div class="col-md-3 text-end pe-3">
                 <span class="me-3">
-                    <a href="profile" class="profile-link">{{ Auth::user()->name }}</a>
+                    <a href="dashboard" class="profile-link">{{ Auth::user()->name }}</a>
                 </span>
                 <form method="POST" action="{{ route('logout') }}" class="d-inline">
                     @csrf
@@ -57,7 +57,7 @@
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="#" class="nav-link px-3">Главная</a></li>
-                <li><a href="#" class="nav-link px-3">Путешествие</a></li>
+                <li><a href="{{ route('shop') }}" class="nav-link px-3">Путешествие</a></li>
                 <li><a href="#" class="nav-link px-3">Услуги</a></li>
                 <li><a href="#" class="nav-link px-3">Бронирование</a></li>
             </ul>

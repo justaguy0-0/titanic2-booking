@@ -1,0 +1,528 @@
+/* Titanic 2 - Общие стили и компоненты */
+
+/* ============================================
+   ЦВЕТОВАЯ ПАЛИТРА (CSS Variables)
+   ============================================ */
+:root {
+    /* Основные цвета бренда */
+    --titanic-gold: #fbbf24;
+    --titanic-gold-light: #fcd34d;
+    --titanic-gold-dark: #f59e0b;
+    --titanic-gold-darker: #d97706;
+
+    /* Фоновые цвета */
+    --titanic-bg-primary: #0f172a;
+    --titanic-bg-secondary: #1e293b;
+    --titanic-bg-tertiary: #334155;
+
+    /* Цвета текста */
+    --titanic-text-primary: #fcd34d;
+    --titanic-text-secondary: #94a3b8;
+
+    /* Цвета для айсбергов/льда */
+    --titanic-ice-blue: #93c5fd;
+    --titanic-ice-light: #bfdbfe;
+
+    /* Акцентные */
+    --titanic-red: #dc2626;
+}
+
+/* ============================================
+   БАЗОВЫЕ СТИЛИ СТРАНИЦЫ
+   ============================================ */
+body {
+    background: var(--titanic-bg-primary);
+    color: var(--titanic-text-primary);
+}
+
+/* ============================================
+   СЕКЦИИ
+   ============================================ */
+
+/* Hero секция с фоновым изображением */
+.hero-section {
+    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8)),
+                url('/images/i.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: var(--titanic-gold);
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    margin-left: -50vw;
+    left: 50%;
+    position: relative;
+}
+
+.hero-section-voyage {
+    background: linear-gradient(rgba(15,23,42,0.85), rgba(30,41,59,0.85)),
+                url('/images/i.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--titanic-gold);
+    min-height: 60vh;
+}
+
+.hero-section-shop {
+    background: linear-gradient(rgba(15,23,42,0.85), rgba(30,41,59,0.85)),
+                url('/images/i.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--titanic-gold);
+    min-height: 70vh;
+}
+
+/* Секция с темным фоном */
+.section-dark {
+    background: var(--titanic-bg-primary);
+    width: 100vw;
+    margin-left: -50vw;
+    left: 50%;
+    position: relative;
+}
+
+/* ============================================
+   ТИПОГРАФИКА
+   ============================================ */
+.titanic-title {
+    font-family: Georgia, serif;
+    color: var(--titanic-gold);
+}
+
+.titanic-subtitle {
+    font-family: Georgia, serif;
+    color: var(--titanic-gold-light);
+    font-style: italic;
+}
+
+.titanic-section-title {
+    color: var(--titanic-gold);
+    font-family: Georgia, serif;
+}
+
+/* ============================================
+   КАРТОЧКИ
+   ============================================ */
+
+/* Карточка сравнения кают */
+.cabin-comparison-card {
+    background: var(--titanic-bg-secondary);
+    border: 2px solid var(--titanic-gold);
+    overflow: hidden;
+}
+
+.cabin-comparison-card h5 {
+    color: var(--titanic-gold);
+}
+
+.cabin-comparison-card p {
+    color: var(--titanic-gold-light);
+}
+
+.cabin-comparison-card .price-tag {
+    color: var(--titanic-gold);
+    font-weight: bold;
+}
+
+.cabin-comparison-card ul {
+    color: var(--titanic-text-secondary);
+}
+
+.cabin-comparison-card .col-md-6:nth-child(2) > div {
+    background: var(--titanic-bg-tertiary);
+}
+
+/* Изображение каюты */
+.cabin-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid var(--titanic-gold);
+}
+
+/* Конкретные изображения кают */
+.cabin-image-rouz {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/rouz.webp');
+}
+
+.cabin-image-cost {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/cabincost.jpg');
+}
+
+.cabin-image-djek {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/djekcabin.jpg');
+}
+
+.cabin-image-chip {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/cabinchip.png');
+}
+
+.cabin-image-lestni {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/lestni.webp');
+}
+
+.cabin-image-film {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/film.jpg');
+}
+
+.cabin-image-restfilm {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/restfilm.webp');
+}
+
+.cabin-image-film2 {
+    background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/film2.jpg');
+}
+
+/* Описание каюты */
+.cabin-description {
+    color: var(--titanic-gold-light);
+    font-size: 0.9rem;
+}
+
+/* Список особенностей каюты */
+.cabin-features {
+    color: var(--titanic-text-secondary);
+    font-size: 0.8rem;
+}
+
+.company-info {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Карточка рейса */
+.flight-card {
+    background: var(--titanic-bg-secondary);
+    border: 1px solid var(--titanic-bg-tertiary);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.flight-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(251, 191, 36, 0.25);
+    border-color: var(--titanic-gold);
+}
+
+.flight-card .card-header {
+    background: linear-gradient(135deg, var(--titanic-bg-secondary), var(--titanic-bg-tertiary));
+    border-bottom: 2px solid var(--titanic-gold);
+}
+
+.flight-card .card-header h5 {
+    color: var(--titanic-gold);
+}
+
+.flight-card .card-header small {
+    color: var(--titanic-gold-light);
+}
+
+.flight-card .card-body {
+    color: var(--titanic-gold-light);
+}
+
+.flight-card .card-footer {
+    background-color: transparent;
+    border-top: 1px solid var(--titanic-bg-tertiary);
+}
+
+/* Карточка развлечений */
+.entertainment-card {
+    background: var(--titanic-bg-secondary);
+    color: var(--titanic-gold-light);
+    border: 1px solid var(--titanic-bg-tertiary);
+}
+
+.entertainment-card h5 {
+    font-weight: bold;
+}
+
+/* ============================================
+   КНОПКИ
+   ============================================ */
+.btn-gold {
+    background: linear-gradient(45deg, var(--titanic-gold), var(--titanic-gold-dark));
+    border: none;
+    color: var(--titanic-bg-secondary);
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-gold:hover {
+    background: linear-gradient(45deg, var(--titanic-gold-dark), var(--titanic-gold-darker));
+    color: var(--titanic-bg-secondary);
+}
+
+/* ============================================
+   МАРШРУТЫ (SVG карта)
+   ============================================ */
+.route-map {
+    height: 500px;
+    background: var(--titanic-bg-secondary);
+    border: 2px solid var(--titanic-gold);
+    border-radius: 10px;
+    position: relative;
+}
+
+.route-map svg {
+    background: var(--titanic-bg-primary);
+}
+
+/* Точки городов */
+.city-dot {
+    fill: var(--titanic-gold);
+    stroke: #fff;
+    stroke-width: 2;
+}
+
+/* Точки айсбергов */
+.iceberg-dot {
+    fill: var(--titanic-ice-blue);
+    stroke: #fff;
+    stroke-width: 2;
+}
+
+/* Линии маршрутов */
+.route-line {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.route-line.active {
+    opacity: 1;
+}
+
+/* ============================================
+   ЭЛЕМЕНТЫ МАРШРУТОВ
+   ============================================ */
+.route-item {
+    background: var(--titanic-bg-secondary);
+    border: 1px solid var(--titanic-bg-tertiary);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.route-item:hover {
+    background: var(--titanic-bg-tertiary);
+    border-color: var(--titanic-gold);
+}
+
+.route-item.active {
+    border-color: var(--titanic-gold);
+    background: var(--titanic-bg-tertiary);
+}
+
+.route-item h6 {
+    color: var(--titanic-gold);
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.2;
+}
+
+.route-item small {
+    color: var(--titanic-text-secondary);
+}
+
+/* ============================================
+   ALERTS (Сообщения)
+   ============================================ */
+.alert-titanic {
+    background: var(--titanic-bg-secondary);
+    border: 1px solid var(--titanic-gold);
+    color: var(--titanic-gold-light);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.titanic-footer {
+    background: var(--titanic-bg-primary);
+    border-top: 2px solid var(--titanic-gold);
+    color: var(--titanic-text-secondary);
+}
+
+.titanic-footer a {
+    color: var(--titanic-gold-light);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.titanic-footer a:hover {
+    color: var(--titanic-gold);
+}
+
+/* ============================================
+   УТИЛИТЫ
+   ============================================ */
+.text-gold {
+    color: var(--titanic-gold) !important;
+}
+
+.text-gold-light {
+    color: var(--titanic-gold-light) !important;
+}
+
+.bg-dark-primary {
+    background: var(--titanic-bg-primary) !important;
+}
+
+.bg-dark-secondary {
+    background: var(--titanic-bg-secondary) !important;
+}
+
+.border-gold {
+    border-color: var(--titanic-gold) !important;
+}
+
+.text-ice-blue {
+    color: var(--titanic-ice-blue) !important;
+}
+
+.text-ice-light {
+    color: var(--titanic-ice-light) !important;
+}
+
+/* ============================================
+   ДОПОЛНИТЕЛЬНЫЕ КОМПОНЕНТЫ
+   ============================================ */
+
+/* Изображения развлечений */
+.entertainment-image {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid var(--titanic-gold);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.entertainment-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+}
+
+/* Карточка ресторана */
+.restaurant-card {
+    transition: transform 0.3s ease;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+}
+
+.restaurant-card h4 {
+    color: var(--titanic-gold);
+}
+
+.restaurant-card .small {
+    color: var(--titanic-gold-light);
+}
+
+.restaurant-card p.small {
+    color: var(--titanic-text-secondary);
+}
+
+.restaurant-image {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid var(--titanic-gold);
+    transition: all 0.3s ease;
+}
+
+.restaurant-card:hover .restaurant-image {
+    box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+}
+
+/* Бейджи */
+.badge-gold {
+    background: var(--titanic-gold);
+    color: var(--titanic-bg-secondary);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+}
+
+.badge-dark {
+    background: var(--titanic-bg-tertiary);
+    color: var(--titanic-gold-light);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+}
+
+.badge-red {
+    background: var(--titanic-red);
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+}
+
+.badge-purple {
+    background: #7c3aed;
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+}
+
+/* Hover эффекты для карточек кают */
+.cabin-comparison-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cabin-comparison-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+}
+
+.cabin-comparison-card:hover .cabin-image {
+    transform: scale(1.05);
+}
+
+/* Информационный блок */
+.info-box {
+    background: var(--titanic-bg-tertiary);
+    border: 1px solid var(--titanic-gold);
+}
+
+.info-box h5 {
+    color: var(--titanic-gold);
+}
+
+.info-box p {
+    color: var(--titanic-gold-light);
+}
+
+/* Медиа-запросы */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 60vh;
+    }
+
+    .display-4 {
+        font-size: 2.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        min-height: 50vh;
+    }
+
+    .display-4 {
+        font-size: 2rem !important;
+    }
+}
+
+/* Убираем горизонтальный скролл */
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}

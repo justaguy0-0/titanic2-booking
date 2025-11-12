@@ -21,68 +21,71 @@
         <div class="row">
             <!-- Левая часть - Карта -->
             <div class="col-lg-7">
-                <div class="route-map mb-4" style="height: 500px; background: #1e293b; border: 2px solid #fbbf24; border-radius: 10px; position: relative;">
-                    <svg width="100%" height="100%" viewBox="0 0 800 500" style="background: #0f172a;">
-                        <!-- Атлантический океан -->
-                        <rect width="800" height="500" fill="#1e293b"/>
-                        
-                        <!-- Маршрутные линии (изначально скрыты) -->
-                        <path id="route1" d="M100,100 Q400,50 700,400" stroke="#fbbf24" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
-                        <path id="route2" d="M150,150 Q400,100 650,350" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
-                        <path id="route3" d="M200,200 Q400,150 600,300" stroke="#d97706" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
-                        <path id="route4" d="M250,250 Q400,200 550,250" stroke="#dc2626" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
+                <div class="route-map mb-4" 
+                     style="height: 500px; 
+                            background: linear-gradient(rgba(15,23,42,0.8), rgba(30,41,59,0.8)), 
+                                        url('/images/country.png') center/cover;
+                            border: 2px solid #fbbf24; 
+                            border-radius: 10px; 
+                            position: relative;">
+                    <svg width="100%" height="100%" viewBox="0 0 800 500" style="background: transparent;">
+                        <!-- Маршрутные линии -->
+                        <path id="route1" d="M180,90 Q350,60 550,50" stroke="#fbbf24" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
+                        <path id="route2" d="M150,110 Q350,100 350,130" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
+                        <path id="route3" d="M200,140 Q350,120 490,45" stroke="#d97706" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
+                        <path id="route4" d="M150,170 Q350,150 350,200" stroke="#dc2626" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
                         
                         <!-- Города отправления (левая сторона) -->
                         <g class="city" data-city="route1" data-name="Титаноград → Айсберг №1912" style="cursor: pointer;">
-                            <circle cx="100" cy="100" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
-                            <text x="120" y="105" fill="#fcd34d" font-size="14" font-weight="bold"> Титаноград</text>
+                            <circle cx="180" cy="90" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
+                            <text x="200" y="95" fill="#fcd34d" font-size="14" font-weight="bold">Титаноград</text>
                         </g>
-                        
+
                         <g class="city" data-city="route2" data-name="Непотопинск → Полярная Обнимашка" style="cursor: pointer;">
-                            <circle cx="150" cy="150" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
-                            <text x="170" y="155" fill="#fcd34d" font-size="14" font-weight="bold"> Непотопинск</text>
+                            <circle cx="150" cy="110" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
+                            <text x="170" y="115" fill="#fcd34d" font-size="14" font-weight="bold">Непотопинск</text>
                         </g>
-                        
+
                         <g class="city" data-city="route3" data-name="Селфи-Харбор → Ледяная Глыба" style="cursor: pointer;">
-                            <circle cx="200" cy="200" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
-                            <text x="220" y="205" fill="#fcd34d" font-size="14" font-weight="bold"> Селфи-Харбор</text>
+                            <circle cx="200" cy="140" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
+                            <text x="220" y="145" fill="#fcd34d" font-size="14" font-weight="bold">Селфи-Харбор</text>
                         </g>
-                        
+
                         <g class="city" data-city="route4" data-name="Вайс-Сити → Полярная Обнимашка" style="cursor: pointer;">
-                            <circle cx="250" cy="250" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
-                            <text x="270" y="255" fill="#fcd34d" font-size="14" font-weight="bold"> Вайс-Сити</text>
+                            <circle cx="150" cy="170" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
+                            <text x="170" y="175" fill="#fcd34d" font-size="14" font-weight="bold">Вайс-Сити</text>
                         </g>
-                        
+
                         <!-- Айсберги назначения (правая сторона) -->
+                        
+                        
                         <g class="iceberg" data-iceberg="route1" style="cursor: pointer;">
-                            <circle cx="700" cy="400" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
-                            <text x="570" y="405" fill="#bfdbfe" font-size="14" font-weight="bold"> Айсберг №1912</text>
+                            <circle cx="550" cy="50" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
+                            <text x="570" y="55" fill="#bfdbfe" font-size="14" font-weight="bold">Айсберг №1912</text>
                         </g>
-                        
+
                         <g class="iceberg" data-iceberg="route2" style="cursor: pointer;">
-                            <circle cx="650" cy="350" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
-                            <text x="470" y="355" fill="#bfdbfe" font-size="14" font-weight="bold"> Полярная Обнимашка</text>
+                            <circle cx="350" cy="130" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
+                            <text x="370" y="135" fill="#bfdbfe" font-size="14" font-weight="bold">Полярная Обнимашка</text>
                         </g>
-                        
+
                         <g class="iceberg" data-iceberg="route3" style="cursor: pointer;">
-                            <circle cx="600" cy="300" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
-                            <text x="450" y="305" fill="#bfdbfe" font-size="14" font-weight="bold"> Ледяная Глыба</text>
+                            <circle cx="490" cy="45" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
+                            <text x="370" y="50" fill="#bfdbfe" font-size="14" font-weight="bold">Ледяная Глыба</text>
                         </g>
-                        
+
                         <g class="iceberg" data-iceberg="route4" style="cursor: pointer;">
-                            <circle cx="550" cy="250" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
-                            <text x="380" y="255" fill="#bfdbfe" font-size="14" font-weight="bold"> Белый Убийца</text>
+                            <circle cx="350" cy="200" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
+                            <text x="370" y="205" fill="#bfdbfe" font-size="14" font-weight="bold">Белый Убийца</text>
                         </g>
                     </svg>
-                    
-                    
                 </div>
             </div>
 
-            
+            <!-- Правая часть - Список маршрутов -->
             <div class="col-lg-5">
+                <!-- Остальной код без изменений -->
                 <div class="routes-list">
-                    
                     <div class="route-item mb-2 p-2 rounded" style="background: #1e293b; border: 1px solid #334155; transition: all 0.3s ease;" data-route="route1">
                         <div class="route-main d-flex justify-content-between align-items-start mb-1">
                             <h6 style="color: #fbbf24; margin: 0; font-size: 0.9rem; line-height: 1.2;"> Титаноград → Айсберг №1912</h6>
@@ -218,108 +221,26 @@
                 <div class="row g-2">
                     <div class="col-3">
                         
-                        <div style="height: 150px; background: url('/images/gallery/cruise-1.jpg') center/cover; border: 1px solid #fbbf24;"></div>
+                        <div style="height: 150px; background: url('/images/1_1.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                     <div class="col-3">
                         
-                        <div style="height: 150px; background: url('/images/gallery/cruise-2.jpg') center/cover; border: 1px solid #fbbf24;"></div>
+                        <div style="height: 150px; background: url('/images/2_1.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                     <div class="col-3">
                         
-                        <div style="height: 150px; background: url('/images/gallery/cruise-3.jpg') center/cover; border: 1px solid #fbbf24;"></div>
+                        <div style="height: 150px; background: url('/images/3.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                     <div class="col-3">
                         
-                        <div style="height: 150px; background: url('/images/gallery/cruise-4.jpg') center/cover; border: 1px solid #fbbf24;"></div>
+                        <div style="height: 150px; background: url('/images/4.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-    
-    <section class="py-5" style="background: #0f172a;">
-        <div class="container">
-            <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ</h2>
-            
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="accordion" id="faqAccordion">
-                        
-                        <div class="accordion-item mb-3" style="background: #1e293b; border: 1px solid #fbbf24;">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background: #1e293b; color: #fbbf24;">
-                                     Что взять с собой в круиз?
-                                </button>
-                            </h3>
-                            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body" style="color: #fcd34d;">
-                                    <strong>Обязательно:</strong> паспорт, медицинская страховка, кредитная карта<br>
-                                    <strong>Одежда:</strong> вечерние наряды для ужинов, спортивная форма, купальник, теплая одежда для палубы<br>
-                                    <strong>Дополнительно:</strong> фотоаппарат, лекарства, адаптеры для розеток
-                                </div>
-                            </div>
-                        </div>
-
-                       
-                        <div class="accordion-item mb-3" style="background: #1e293b; border: 1px solid #fbbf24;">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background: #1e293b; color: #fbbf24;">
-                                     Правила безопасности на борту
-                                </button>
-                            </h3>
-                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body" style="color: #fcd34d;">
-                                    • Обязательное участие в учебной тревоге в первый день<br>
-                                    • Соблюдение правил поведения в общественных зонах<br>
-                                    • Запрещено курить вне специально отведенных мест<br>
-                                    • Дети до 12 лет только в сопровождении взрослых<br>
-                                    • Использование спасательных жилетов по требованию
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="accordion-item mb-3" style="background: #1e293b; border: 1px solid #fbbf24;">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background: #1e293b; color: #fbbf24;">
-                                     Что включено в стоимость?
-                                </button>
-                            </h3>
-                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body" style="color: #fcd34d;">
-                                    <strong>Включено:</strong> проживание в каюте, 3-разовое питание, базовые развлечения, доступ в бассейн и спортзал, детский клуб<br>
-                                    <strong>Дополнительно:</strong> спа-процедуры, премиум алкоголь, экскурсии, специальные ужины
-                                </div>
-                            </div>
-                        </div>
-
-                        
-                        <div class="accordion-item mb-3" style="background: #1e293b; border: 1px solid #fbbf24;">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="background: #1e293b; color: #fbbf24;">
-                                     Можно ли отменить бронирование?
-                                </button>
-                            </h3>
-                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body" style="color: #fcd34d;">
-                                    • За 60+ дней до отправления - полный возврат<br>
-                                    • За 30-59 дней - возврат 50%<br>
-                                    • За 15-29 дней - возврат 25%<br>
-                                    • Менее 15 дней - возврат не предусмотрен<br>
-                                    * Страхование отмены доступно при бронировании
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    
-    <section class="py-5" style="background: #1e293b;">
+<section class="py-5" style="background: #1e293b;">
         <div class="container text-center">
             <h3 style="color: #fbbf24;" class="mb-4">Готовы к незабываемому путешествию?</h3>
             <p style="color: #fcd34d;" class="mb-4">Присоединяйтесь к легенде и станьте частью истории Титаника 2</p>
@@ -327,8 +248,8 @@
                  ВЫБРАТЬ РЕЙС
             </a>
         </div>
-    </section>
-</div>
+</section>
+
 
 <style>
     .btn-gold {

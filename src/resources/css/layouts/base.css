@@ -1,0 +1,47 @@
+/* ========== БАЗОВЫЕ СТИЛИ ========== */
+body {
+    background: #0f172a;
+    min-height: 100vh;
+}
+
+body.auth-bg {
+    background: #1e293b;
+    min-height: 100vh;
+}
+
+main {
+    padding-top: 1rem;
+}
+
+/* Заголовки страниц */
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fbbf24;
+    margin-bottom: 1.5rem;
+}
+
+/* Сообщения */
+.empty-message {
+    text-align: center;
+    padding: 2rem 0;
+    color: #94a3b8;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.success-message {
+    color: #10b981;
+    font-size: 0.875rem;
+}
+
+.selection-note {
+    margin-top: 1rem;
+    color: #ef4444;
+    font-size: 0.875rem;
+    text-align: center;
+}

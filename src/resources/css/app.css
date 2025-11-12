@@ -1,5 +1,17 @@
+/* Font Awesome */
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
+/* Bootstrap CSS */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+/* Кастомные стили */
+@import './layouts/base.css';
+@import './layouts/header.css';
+@import './components/buttons.css';
+@import './components/forms.css';
+@import './components/cards.css';
+
+/* Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

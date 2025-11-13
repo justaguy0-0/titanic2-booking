@@ -4,12 +4,11 @@
 
 @section('main_content')
 <div class="container-fluid px-0">
-    
-    <section class="hero-section text-center py-5 d-flex align-items-center justify-content-center"
-             style="background: linear-gradient(rgba(15,23,42,0.85), rgba(30,41,59,0.85)), url('/images/i.webp'); background-size: cover; background-position: center; background-attachment: fixed; color: #fbbf24; min-height: 60vh;">
+
+    <section class="hero-section text-center py-5 d-flex align-items-center justify-content-center">
         <div>
             <h1 class="display-4 fw-bold mb-3" style="font-family: Georgia, serif;">Легендарный маршрут</h1>
-           
+
         </div>
         </section>
 
@@ -17,16 +16,16 @@
 <section class="py-5" style="background: #0f172a;">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">МАРШРУТЫ ЭКСПЕДИЦИЙ</h2>
-        
+
         <div class="row">
             <!-- Левая часть - Карта -->
             <div class="col-lg-7">
-                <div class="route-map mb-4" 
-                     style="height: 500px; 
-                            background: linear-gradient(rgba(15,23,42,0.8), rgba(30,41,59,0.8)), 
+                <div class="route-map mb-4"
+                     style="height: 500px;
+                            background: linear-gradient(rgba(15,23,42,0.8), rgba(30,41,59,0.8)),
                                         url('/images/country.png') center/cover;
-                            border: 2px solid #fbbf24; 
-                            border-radius: 10px; 
+                            border: 2px solid #fbbf24;
+                            border-radius: 10px;
                             position: relative;">
                     <svg width="100%" height="100%" viewBox="0 0 800 500" style="background: transparent;">
                         <!-- Маршрутные линии -->
@@ -34,7 +33,7 @@
                         <path id="route2" d="M150,110 Q350,100 350,130" stroke="#f59e0b" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
                         <path id="route3" d="M200,140 Q350,120 490,45" stroke="#d97706" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
                         <path id="route4" d="M150,170 Q350,150 350,200" stroke="#dc2626" stroke-width="3" stroke-dasharray="5,5" fill="none" opacity="0" class="route-line"/>
-                        
+
                         <!-- Города отправления (левая сторона) -->
                         <g class="city" data-city="route1" data-name="Титаноград → Айсберг №1912" style="cursor: pointer;">
                             <circle cx="180" cy="90" r="10" fill="#fbbf24" stroke="#fff" stroke-width="2" class="city-dot"/>
@@ -57,8 +56,8 @@
                         </g>
 
                         <!-- Айсберги назначения (правая сторона) -->
-                        
-                        
+
+
                         <g class="iceberg" data-iceberg="route1" style="cursor: pointer;">
                             <circle cx="550" cy="50" r="10" fill="#93c5fd" stroke="#fff" stroke-width="2" class="iceberg-dot"/>
                             <text x="570" y="55" fill="#bfdbfe" font-size="14" font-weight="bold">Айсберг №1912</text>
@@ -160,13 +159,13 @@
 <section class="py-5" style="background: #1e293b;">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">ОТЗЫВЫ ПУТЕШЕСТВЕННИКОВ</h2>
-        
+
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="review-card p-4 rounded h-100" style="background: #0f172a; border: 1px solid #fbbf24;">
                     <div class="review-header mb-3">
                         <div class="d-flex align-items-center">
-                            
+
                             <div class="review-avatar me-3" style="width: 50px; height: 50px; background: url('/images/people1.jpg') center/cover; border-radius: 50%; border: 2px solid #fbbf24;"></div>
                             <div>
                                 <h6 style="color: #fbbf24; margin: 0;">Анна и Михаил</h6>
@@ -178,12 +177,12 @@
                     <div class="rating" style="color: #fbbf24;">⭐⭐⭐⭐⭐</div>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="review-card p-4 rounded h-100" style="background: #0f172a; border: 1px solid #fbbf24;">
                     <div class="review-header mb-3">
                         <div class="d-flex align-items-center">
-                            
+
                             <div class="review-avatar me-3" style="width: 50px; height: 50px; background: url('/images/people2.jpg') center/cover; border-radius: 50%; border: 2px solid #fbbf24;"></div>
                             <div>
                                 <h6 style="color: #fbbf24; margin: 0;">Семья Петровых</h6>
@@ -195,12 +194,12 @@
                     <div class="rating" style="color: #fbbf24;">⭐⭐⭐⭐⭐</div>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="review-card p-4 rounded h-100" style="background: #0f172a; border: 1px solid #fbbf24;">
                     <div class="review-header mb-3">
                         <div class="d-flex align-items-center">
-                            
+
                             <div class="review-avatar me-3" style="width: 50px; height: 50px; background: url('/images/people3.webp') center/cover; border-radius: 50%; border: 2px solid #fbbf24;"></div>
                             <div>
                                 <h6 style="color: #fbbf24; margin: 0;">Олег, бизнесмен</h6>
@@ -214,25 +213,25 @@
             </div>
         </div>
 
-       
+
         <div class="row mt-5">
             <div class="col-12">
                 <h4 class="text-center mb-4" style="color: #fbbf24;">Моменты с прошлых рейсов</h4>
                 <div class="row g-2">
                     <div class="col-3">
-                        
+
                         <div style="height: 150px; background: url('/images/1_1.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                     <div class="col-3">
-                        
+
                         <div style="height: 150px; background: url('/images/2_1.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                     <div class="col-3">
-                        
+
                         <div style="height: 150px; background: url('/images/3.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                     <div class="col-3">
-                        
+
                         <div style="height: 150px; background: url('/images/4.jpeg') center/cover; border: 1px solid #fbbf24;"></div>
                     </div>
                 </div>
@@ -250,65 +249,6 @@
         </div>
 </section>
 
-
-<style>
-    .btn-gold {
-        background: linear-gradient(45deg, #fbbf24, #f59e0b);
-        border: none;
-        color: #1e293b;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-gold:hover {
-        background: linear-gradient(45deg, #f59e0b, #d97706);
-        color: #1e293b;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
-    }
-
-    .accordion-button:not(.collapsed) {
-        background: #334155 !important;
-        color: #fbbf24 !important;
-    }
-
-    .review-card {
-        transition: transform 0.3s ease;
-    }
-
-    .review-card:hover {
-        transform: translateY(-5px);
-    }
-    .btn-gold {
-        background: linear-gradient(45deg, #fbbf24, #f59e0b);
-        border: none;
-        color: #1e293b;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-gold:hover {
-        background: linear-gradient(45deg, #f59e0b, #d97706);
-        color: #1e293b;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
-    }
-
-    .route-item:hover, .route-item.active {
-        border-color: #fbbf24 !important;
-        background: #334155 !important;
-        transform: translateX(5px);
-    }
-
-    .city-dot:hover, .iceberg-dot:hover {
-        r: 12;
-        filter: drop-shadow(0 0 8px currentColor);
-    }
-
-    .route-line {
-        transition: opacity 0.5s ease;
-    }
-</style>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const routeItems = document.querySelectorAll('.route-item');
@@ -322,13 +262,13 @@ document.addEventListener('DOMContentLoaded', function() {
         routeLines.forEach(line => {
             line.style.opacity = '0';
         });
-        
+
         // Показываем выбранный маршрут
         const selectedRoute = document.getElementById(routeId);
         if (selectedRoute) {
             selectedRoute.style.opacity = '1';
         }
-        
+
         // Подсвечиваем активный элемент в списке
         routeItems.forEach(item => {
             item.classList.remove('active');

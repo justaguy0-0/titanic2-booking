@@ -1,4 +1,5 @@
-import './bootstrap';
+/* Bootstrap JS */
+import 'bootstrap';
 
 import Alpine from 'alpinejs';
 

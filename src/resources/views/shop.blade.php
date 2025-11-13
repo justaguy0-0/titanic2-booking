@@ -4,15 +4,7 @@
 <div class="container-fluid px-0">
 
     <!-- Hero -->
-    <section class="hero-section text-center py-5 d-flex align-items-center justify-content-center"
-             style="
-             background: linear-gradient(rgba(15,23,42,0.85), rgba(30,41,59,0.85)), url('/images/i.webp');
-             background-size: cover;
-             background-position: center;
-             background-attachment: fixed;
-             color: #fbbf24;
-             min-height: 70vh;
-             ">
+    <section class="hero-section text-center py-5 d-flex align-items-center justify-content-center">
         <div>
             <h1 class="display-4 fw-bold mb-3" style="font-family: Georgia, serif;">
                 Путешествия на айсберги
@@ -54,9 +46,9 @@
                                         <div class="col-md-6">
                                             <div class="card flight-card h-100 border-0 shadow-lg"
                                                  style="background: #1e293b; border-radius: 12px; overflow: hidden;">
-                                                
+
                                                 <!-- Header -->
-                                                <div class="card-header text-center py-3" 
+                                                <div class="card-header text-center py-3"
                                                     style="background: linear-gradient(135deg, #1e293b, #334155); border-bottom: 2px solid #fbbf24;">
                                                     <h5 class="mb-0" style="color: #fbbf24;">{{ $voyage->name }}</h5>
                                                    <small style="color: #fcd34d;">
@@ -114,34 +106,34 @@
             <div class="col-lg-4">
                 <div class="sticky-top" style="top: 20px;">
                     <div class="card border-0 shadow-lg" style="background: #1e293b; border-radius: 12px;">
-                        <div class="card-header text-center py-3" 
+                        <div class="card-header text-center py-3"
                              style="background: linear-gradient(135deg, #1e293b, #334155); border-bottom: 2px solid #fbbf24;">
                             <h5 class="mb-0" style="color: #fbbf24;">
                                 <i class="fas fa-umbrella-beach me-2"></i>
                                 РАЗВЛЕЧЕНИЯ НА БОРТУ
                             </h5>
                         </div>
-                        
+
                         <div class="card-body p-0">
                             @if($entertainments->count() > 0)
                                 <div class="accordion" id="entertainmentsAccordion">
                                     @foreach($entertainments->chunk(ceil($entertainments->count() / 3)) as $index => $entertainmentChunk)
                                         <div class="accordion-item" style="background: transparent; border: none;">
                                             <h2 class="accordion-header" id="heading{{ $index }}">
-                                                <button class="accordion-button collapsed" 
-                                                        type="button" 
-                                                        data-bs-toggle="collapse" 
-                                                        data-bs-target="#collapse{{ $index }}" 
-                                                        aria-expanded="false" 
+                                                <button class="accordion-button collapsed"
+                                                        type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapse{{ $index }}"
+                                                        aria-expanded="false"
                                                         aria-controls="collapse{{ $index }}"
                                                         style="background: #334155; color: #fbbf24; border: none;">
                                                     Группа развлечений {{ $index + 1 }}
                                                     <i class="fas fa-chevron-down ms-2"></i>
                                                 </button>
                                             </h2>
-                                            <div id="collapse{{ $index }}" 
-                                                 class="accordion-collapse collapse" 
-                                                 aria-labelledby="heading{{ $index }}" 
+                                            <div id="collapse{{ $index }}"
+                                                 class="accordion-collapse collapse"
+                                                 aria-labelledby="heading{{ $index }}"
                                                  data-bs-parent="#entertainmentsAccordion">
                                                 <div class="accordion-body p-2">
                                                     @foreach($entertainmentChunk as $entertainment)
@@ -188,44 +180,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    .flight-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 10px;
-        overflow: hidden;
-        border: 1px solid #334155;
-    }
-    .flight-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(251, 191, 36, 0.25);
-        border-color: #fbbf24;
-    }
-    .btn-gold {
-        background: linear-gradient(45deg, #fbbf24, #f59e0b);
-        border: none;
-        color: #1e293b;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    .btn-gold:hover {
-        background: linear-gradient(45deg, #f59e0b, #d97706);
-        color: #1e293b;
-    }
-    body {
-        background: #0f172a;
-        color: #fcd34d;
-    }
-    .accordion-button:not(.collapsed) {
-        background: #475569 !important;
-        color: #fbbf24 !important;
-    }
-    .accordion-button:focus {
-        box-shadow: 0 0 0 0.25rem rgba(251, 191, 36, 0.25);
-        border-color: #fbbf24;
-    }
-</style>
-
-
-
 @endsection

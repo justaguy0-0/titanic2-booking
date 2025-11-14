@@ -58,9 +58,9 @@
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="{{ route('home') }}" class="nav-link px-3" style="color: #fbbf24;">Главная</a></li>
-                <li><a href="{{ route('shop') }}" class="nav-link px-3" style="color: #fbbf24;">Рейсы</a></li>
-                <li><a href="{{ route('about') }}" class="nav-link px-3" style="color: #fbbf24;">О нас</a></li>
-                <li><a href="{{ route('contacts') }}" class="nav-link px-3" style="color: #fbbf24;">Контакты</a></li>
+                <li><a href="{{ route('voyage') }}" class="nav-link px-3" style="color: #fbbf24;">Рейсы</a></li>
+                <li><a href="#" class="nav-link px-3" style="color: #fbbf24;">О нас</a></li>
+                <li><a href="#" class="nav-link px-3" style="color: #fbbf24;">Контакты</a></li>
             </ul>
 
             <div class="col-md-3 text-end pe-3">
@@ -112,7 +112,7 @@
                             <a href="{{ route('home') }}" class="text-decoration-none" style="color: #fcd34d;">Главная</a>
                         </li>
                         <li class="mb-2">
-                            <a href="{{ route('shop') }}" class="text-decoration-none" style="color: #fcd34d;">Рейсы</a>
+                            <a href="{{ route('voyage') }}" class="text-decoration-none" style="color: #fcd34d;">Рейсы</a>
                         </li>
                         @auth
                             <li class="mb-2">
@@ -120,10 +120,10 @@
                             </li>
                         @else
                             <li class="mb-2">
-                                <a href="{{ route('about') }}" class="text-decoration-none" style="color: #fcd34d;">О нас</a>
+                                <a href="#" class="text-decoration-none" style="color: #fcd34d;">О нас</a>
                             </li>
                             <li class="mb-2">
-                                <a href="{{ route('contacts') }}" class="text-decoration-none" style="color: #fcd34d;">Контакты</a>
+                                <a href="#" class="text-decoration-none" style="color: #fcd34d;">Контакты</a>
                             </li>
                         @endauth
                     </ul>

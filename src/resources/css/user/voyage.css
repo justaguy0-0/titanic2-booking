@@ -1,0 +1,27 @@
+.accordion-button:not(.collapsed) {
+    background: #334155 !important;
+    color: #fbbf24 !important;
+}
+
+.review-card {
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+.route-item:hover, .route-item.active {
+    border-color: #fbbf24 !important;
+    background: #334155 !important;
+    transform: translateX(5px);
+}
+
+.city-dot:hover, .iceberg-dot:hover {
+    r: 12;
+    filter: drop-shadow(0 0 8px currentColor);
+}
+
+.route-line {
+    transition: opacity 0.5s ease;
+}

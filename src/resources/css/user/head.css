@@ -1,0 +1,131 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    background: #0f172a;
+}
+
+/* Стили для ссылок в шапке - ЖЕЛТЫЙ ЦВЕТ */
+header .nav-link {
+    color: #fbbf24 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+header .nav-link:hover {
+    color: #fcd34d !important;
+    border-bottom: 2px solid #fcd34d;
+    padding-bottom: 0.25rem;
+}
+
+.btn-login {
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.btn-login:hover {
+    background-color: #fbbf24;
+    color: #1e293b;
+}
+
+.btn-signup {
+    background-color: #fbbf24;
+    color: #1e293b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.btn-signup:hover {
+    background-color: #f59e0b;
+    color: #1e293b;
+}
+
+.btn-logout {
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.btn-logout:hover {
+    background-color: #fbbf24;
+    color: #1e293b;
+}
+
+.btn-gold {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    border: none;
+    color: #1e293b;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    background: linear-gradient(45deg, #f59e0b, #d97706);
+    color: #1e293b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
+}
+
+.profile-link {
+    color: #fbbf24 !important;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+.profile-link:hover {
+    color: #fcd34d !important;
+    border-bottom: 2px solid #fcd34d;
+    padding-bottom: 0.25rem;
+}
+
+/* Фон для страниц login/register/password */
+body.auth-bg {
+    background: #1e293b;
+    min-height: 100vh;
+}
+
+/* Стили подвала */
+.footer-section a:hover {
+    color: #fbbf24 !important;
+    text-decoration: underline !important;
+}
+
+.social-links a:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+    color: #fbbf24 !important;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8)),
+    url('../images/i.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fbbf24;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    width: 100vw; /* Важно! */
+    margin-left: -50vw; /* Важно! */
+    left: 50%;
+    position: relative;
+}

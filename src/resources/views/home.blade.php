@@ -2,25 +2,12 @@
 
 @section('main_content')
 
-<section class="hero-section text-center py-5" style="
-    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8)), 
-                url('/images/i.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: #fbbf24;
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    width: 100vw; /* Важно! */
-    margin-left: -50vw; /* Важно! */
-    left: 50%;
-    position: relative;">
+<section class="hero-section text-center py-5">
     <div class="container">
         <h1 class="display-4 fw-bold mb-3" style="font-family: Georgia, serif; color: #fbbf24;">ТИТАНИК 2</h1>
         <p class="lead mb-4" style="font-family: Georgia, serif; color: #fcd34d; font-style: italic;">Легенда возвращается в будущее</p>
-        
-        
+
+
         <div class="company-info mb-4" style="max-width: 800px; margin: 0 auto;">
             <p class="fs-5 mb-3" style="color: #fcd34d;">
                 Откройте для себя новый уровень морских путешествий - с возможностью вернуться домой.
@@ -38,12 +25,12 @@
     position: relative;">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">ЛЕГЕНДА И СОВРЕМЕННОСТЬ</h2>
-           
+
         </div>
     </section>
 </div>
         <div class="row g-4">
-            
+
             <div class="col-md-6">
                 <div class="cabin-comparison-card rounded" style="background: #1e293b; border: 2px solid #fbbf24; overflow: hidden;">
                     <div class="row g-0">
@@ -71,7 +58,7 @@
                 </div>
             </div>
 
-            
+
             <div class="col-md-6">
                 <div class="cabin-comparison-card rounded" style="background: #1e293b; border: 2px solid #fbbf24; overflow: hidden;">
                     <div class="row g-0">
@@ -100,9 +87,9 @@
             </div>
         </div>
 
-      
+
         <div class="row g-4 mt-2">
-            
+
             <div class="col-md-6">
                 <div class="cabin-comparison-card rounded" style="background: #1e293b; border: 2px solid #fbbf24; overflow: hidden;">
                     <div class="row g-0">
@@ -130,7 +117,7 @@
                 </div>
             </div>
 
-            
+
             <div class="col-md-6">
                 <div class="cabin-comparison-card rounded" style="background: #1e293b; border: 2px solid #fbbf24; overflow: hidden;">
                     <div class="row g-0">
@@ -159,13 +146,13 @@
             </div>
         </div>
 
-        
+
         <div class="row mt-5">
             <div class="col-12 text-center">
                 <div class="p-4 rounded" style="background: #334155; border: 1px solid #fbbf24;">
                     <h5 style="color: #fbbf24;"> Сохраняя дух, внедряя инновации</h5>
                     <p style="color: #fcd34d;">
-                        Мы бережно воссоздали атмосферу оригинала, но добавили современный комфорт и технологии. 
+                        Мы бережно воссоздали атмосферу оригинала, но добавили современный комфорт и технологии.
                         От классических интерьеров до умных кают - каждая деталь продумана для вашего удовольствия.
                     </p>
                 </div>
@@ -173,12 +160,12 @@
         </div>
     </div>
 </section>
-    
+
     <section class="py-5" style="background: #0f172a;">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">Возможности круиза</h2>
-        
-      
+
+
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6">
                 <div class="entertainment-image rounded" style="height: 300px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/rest.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
@@ -196,7 +183,7 @@
             </div>
         </div>
 
-       
+
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6 order-md-2">
                 <div class="entertainment-image rounded" style="height: 300px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/spa.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
@@ -214,7 +201,7 @@
             </div>
         </div>
 
-       
+
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6">
                 <div class="entertainment-image rounded" style="height: 300px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/mus.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
@@ -232,7 +219,7 @@
             </div>
         </div>
 
-        
+
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6 order-md-2">
                 <div class="entertainment-image rounded" style="height: 300px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/child.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
@@ -251,7 +238,7 @@
             </div>
         </div>
 
-        
+
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6">
                 <div class="entertainment-image rounded" style="height: 300px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/akro.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
@@ -270,7 +257,7 @@
             </div>
         </div>
 
-        
+
         <div class="row align-items-center g-4">
             <div class="col-md-6 order-md-2">
                 <div class="entertainment-image rounded" style="height: 300px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/dance.webp'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
@@ -288,9 +275,9 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row align-items-center g-4">
-            <div class="col-md-6">  
+            <div class="col-md-6">
                 <div class="entertainment-image rounded" style="height: 300px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/ioga.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
             </div>
             <div class="col-md-6 ">
@@ -312,16 +299,16 @@
 <section class="py-5" style="background: #1e293b;">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">РЕСТОРАНЫ И ПИТАНИЕ</h2>
-        
+
         <div class="row g-4">
-            
+
             <div class="col-md-4">
                 <div class="restaurant-card text-center">
                     <div class="restaurant-image rounded mb-3" style="height: 250px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/rest1.webp'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
                     <h4 style="color: #fbbf24;">"Палуба Нептуна"</h4>
                     <p style="color: #fcd34d;" class="small">Ресторан под открытым небом</p>
                     <p style="color: #94a3b8;" class="small">
-                        Романтические ужины при свечах с панорамным видом на океан. 
+                        Романтические ужины при свечах с панорамным видом на океан.
                         Свежие морепродукты и средиземноморская кухня.
                     </p>
                     <div class="mt-3">
@@ -331,14 +318,14 @@
                 </div>
             </div>
 
-           
+
             <div class="col-md-4">
                 <div class="restaurant-card text-center">
                     <div class="restaurant-image rounded mb-3" style="height: 250px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/rest2.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
                     <h4 style="color: #fbbf24;">"Гранд Салон"</h4>
                     <p style="color: #fcd34d;" class="small">Премиум ресторан</p>
                     <p style="color: #94a3b8;" class="small">
-                        Роскошный интерьер в стиле ар-деко. Европейская кухня от шеф-повара с мишленовскими звездами. 
+                        Роскошный интерьер в стиле ар-деко. Европейская кухня от шеф-повара с мишленовскими звездами.
                         Винная карта премиум-класса.
                     </p>
                     <div class="mt-3">
@@ -348,14 +335,14 @@
                 </div>
             </div>
 
-           
+
             <div class="col-md-4">
                 <div class="restaurant-card text-center">
                     <div class="restaurant-image rounded mb-3" style="height: 250px; background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('/images/Rest3_new.jpg'); background-size: cover; background-position: center; border: 2px solid #fbbf24;"></div>
                     <h4 style="color: #fbbf24;">"Океанский Фуршет"</h4>
                     <p style="color: #fcd34d;" class="small">Общая столовая</p>
                     <p style="color: #94a3b8;" class="small">
-                        3-разовое питание по системе "все включено". Широкий выбор блюд международной кухни, 
+                        3-разовое питание по системе "все включено". Широкий выбор блюд международной кухни,
                         свежие салаты, десерты и напитки.
                     </p>
                     <div class="mt-3">
@@ -369,127 +356,5 @@
     </div>
 </section>
 </div>
-
-
-<style>
-    .btn-gold {
-        background: linear-gradient(45deg, #fbbf24, #f59e0b);
-        border: none;
-        color: #1e293b;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    .restaurant-card {
-        transition: transform 0.3s ease;
-    }
-    
-    .restaurant-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    .restaurant-image {
-        transition: all 0.3s ease;
-    }
-    
-    .restaurant-card:hover .restaurant-image {
-        box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-    }
-    
-    .btn-gold:hover {
-        background: linear-gradient(45deg, #f59e0b, #d97706);
-        color: #1e293b;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
-    }
-    .entertainment-image {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .entertainment-image:hover {
-        transform: scale(1.02);
-        box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-    }
-    
-    .badge {
-        font-size: 0.8rem;
-        padding: 0.4rem 0.8rem;
-        border-radius: 20px;
-    }
-    .cabin-comparison-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .cabin-comparison-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-    }
-    
-    .cabin-image {
-        transition: all 0.3s ease;
-    }
-    
-    .cabin-comparison-card:hover .cabin-image {
-        transform: scale(1.05);
-    }
-    .btn-gold {
-        background: linear-gradient(45deg, #fbbf24, #f59e0b);
-        border: none;
-        color: #1e293b;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    
-    .btn-gold:hover {
-        background: linear-gradient(45deg, #f59e0b, #d97706);
-        color: #1e293b;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
-    }
-
-    body {
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow-x: hidden; /* Убираем горизонтальный скролл */
-    }
-    
-    .btn-gold {
-        background: linear-gradient(45deg, #fbbf24, #f59e0b);
-        border: none;
-        color: #1e293b;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    
-    .btn-gold:hover {
-        background: linear-gradient(45deg, #f59e0b, #d97706);
-        color: #1e293b;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
-    }
-
-    
-    @media (max-width: 768px) {
-        .hero-section {
-            min-height: 60vh;
-        }
-        
-        .display-4 {
-            font-size: 2.5rem !important;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .hero-section {
-            min-height: 50vh;
-        }
-        
-        .display-4 {
-            font-size: 2rem !important;
-        }
-    }
-</style>
 @endsection
 

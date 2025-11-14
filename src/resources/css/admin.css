@@ -4,11 +4,7 @@
 /* Bootstrap CSS */
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-@import 'user/head.css';
-@import 'user/home.css';
-@import 'user/voyage.css';
-@import 'user/shop.css';
-@import 'user/dashboard.css';
+@import 'admin/head.css';
 
 @tailwind base;
 @tailwind components;

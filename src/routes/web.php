@@ -31,7 +31,7 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
 Route::middleware('auth')->group(function () {
     
-    Route::get('/shop/voyage/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.voyage');
+    Route::get('/shop/select-tickets/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.select-tickets');
     Route::post('/shop/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
 
     

@@ -1,7 +1,4 @@
-.accordion-button:not(.collapsed) {
-    background: #334155 !important;
-    color: #fbbf24 !important;
-}
+/* .accordion-button стили удалены - используются из head.css */
 
 .review-card {
     transition: transform 0.3s ease;

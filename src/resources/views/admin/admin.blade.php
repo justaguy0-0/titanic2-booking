@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Админ-панель')</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- Стили из app.css и скрипты из app.js --}}
+    @vite(['resources/css/admin.css', 'resources/js/app.js'])
 
     {{-- Дополнительные стили --}}
     @stack('styles')

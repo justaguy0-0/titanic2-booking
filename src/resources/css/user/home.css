@@ -1,0 +1,270 @@
+/* ============================================
+   HOME PAGE - СТИЛИ
+   ============================================ */
+
+/* Hero секция */
+.hero-title {
+    font-family: Georgia, serif;
+    color: #fbbf24;
+}
+
+.hero-subtitle {
+    font-family: Georgia, serif;
+    color: #fcd34d;
+    font-style: italic;
+}
+
+.company-info {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.company-text {
+    color: #fcd34d;
+}
+
+/* Секции */
+.section-dark {
+    background: #0f172a;
+    width: 100vw;
+    margin-left: -50vw;
+    left: 50%;
+    position: relative;
+}
+
+.section-title {
+    color: #fbbf24;
+    font-family: Georgia, serif;
+}
+
+/* Карточки сравнения кают */
+.cabin-comparison-card {
+    background: #1e293b;
+    border: 2px solid #fbbf24;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cabin-comparison-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+}
+
+.cabin-year {
+    color: #fbbf24;
+}
+
+.cabin-modern {
+    background: #334155;
+}
+
+.cabin-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #fbbf24;
+    transition: all 0.3s ease;
+}
+
+.cabin-comparison-card:hover .cabin-image {
+    transform: scale(1.05);
+}
+
+.cabin-description {
+    color: #fcd34d;
+    font-size: 0.9rem;
+}
+
+.price-tag {
+    color: #fbbf24;
+    font-weight: bold;
+}
+
+.cabin-features {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+/* Специфичные изображения кают */
+.cabin-image-rouz {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rouz.webp');
+}
+
+.cabin-image-cost {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabincost.jpg');
+}
+
+.cabin-image-djek {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/djekcabin.jpg');
+}
+
+.cabin-image-chip {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabinchip.png');
+}
+
+.cabin-image-lestni {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/lestni.webp');
+}
+
+.cabin-image-film {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/film.jpg');
+}
+
+.cabin-image-restfilm {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/restfilm.webp');
+}
+
+.cabin-image-film2 {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/film2.jpg');
+}
+
+/* Информационный блок */
+.info-box {
+    background: #334155;
+    border: 1px solid #fbbf24;
+}
+
+.info-box-title {
+    color: #fbbf24;
+}
+
+.info-box-text {
+    color: #fcd34d;
+}
+
+/* Развлечения */
+.entertainment-title {
+    color: #fbbf24;
+}
+
+.entertainment-text {
+    color: #fcd34d;
+}
+
+.entertainment-image {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #fbbf24;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.entertainment-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+}
+
+.entertainment-image-rest {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rest.jpg');
+}
+
+.entertainment-image-spa {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/spa.jpg');
+}
+
+.entertainment-image-mus {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/mus.jpg');
+}
+
+.entertainment-image-child {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/child.jpg');
+}
+
+.entertainment-image-akro {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/akro.jpg');
+}
+
+.entertainment-image-dance {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/dance.webp');
+}
+
+.entertainment-image-ioga {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/ioga.jpg');
+}
+
+/* Бейджи */
+.badge-gold {
+    background: #fbbf24;
+    color: #1e293b;
+}
+
+.badge-dark {
+    background: #334155;
+    color: #fcd34d;
+}
+
+.badge-red {
+    background: #dc2626;
+    color: white;
+}
+
+.badge-purple {
+    background: #7c3aed;
+    color: white;
+}
+
+/* Рестораны */
+.restaurant-card {
+    transition: transform 0.3s ease;
+}
+
+.restaurant-card:hover {
+    transform: translateY(-5px);
+}
+
+.restaurant-title {
+    color: #fbbf24;
+}
+
+.restaurant-subtitle {
+    color: #fcd34d;
+}
+
+.restaurant-description {
+    color: #94a3b8;
+}
+
+.restaurant-image {
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #fbbf24;
+    transition: all 0.3s ease;
+}
+
+.restaurant-card:hover .restaurant-image {
+    box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
+}
+
+.restaurant-image-1 {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rest1.webp');
+}
+
+.restaurant-image-2 {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rest2.jpg');
+}
+
+.restaurant-image-3 {
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/Rest3_new.jpg');
+}
+
+/* Media queries */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 60vh;
+    }
+
+    .display-4 {
+        font-size: 2.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        min-height: 50vh;
+    }
+
+    .display-4 {
+        font-size: 2rem !important;
+    }
+}

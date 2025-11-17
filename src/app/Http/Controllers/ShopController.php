@@ -42,7 +42,7 @@ class ShopController extends Controller
 
         $entertainments = Entertainment::all();
 
-        return view('shop.voyage', compact('voyage', 'tickets', 'entertainments'));
+        return view('shop.select-tickets', compact('voyage', 'tickets', 'entertainments'));
     }
 
     /**

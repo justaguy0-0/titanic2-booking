@@ -1,4 +1,8 @@
 Titanic2 Booking
 
 Проект на Laravel + Docker.
-Добавил также phpMyAdmin и Breeze
+Laravel-код находится в папке src/.
+Docker-конфиги — в корне (docker-compose.yaml, nginx/, dockerfiles/).
+
+Быстрый старт
+[Пока нет :\]

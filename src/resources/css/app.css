@@ -4,14 +4,13 @@
 /* Bootstrap CSS */
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-/* Кастомные стили */
-@import './layouts/base.css';
-@import './layouts/header.css';
-@import './components/buttons.css';
-@import './components/forms.css';
-@import './components/cards.css';
+@import 'user/head.css';
+@import 'user/home.css';
+@import 'user/voyage.css';
+@import 'user/shop.css';
+@import 'user/select-tickets.css';
+@import 'user/dashboard.css';
 
-/* Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

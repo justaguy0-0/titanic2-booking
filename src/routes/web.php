@@ -15,29 +15,36 @@ use App\Models\Place;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', [ShopController::class, 'index'])->name('shop');
+Route::get('/', function () {
+    return view('home'); 
+})->name('home');
+
+
 
 Route::get('/voyage', function () {
     return view('voyage');
-});
+})->name('voyage');
+
+
+Route::get('/shop', [ShopController::class, 'index'])->name('shop');
+
 
 Route::middleware('auth')->group(function () {
-
-    // Магазин — выбор билетов и покупка
-    Route::get('/shop/voyage/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.voyage');
+    
+    Route::get('/shop/select-tickets/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.select-tickets');
     Route::post('/shop/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
 
-    // Профиль
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Заказы
+   
     Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
     Route::get('/profile/orders/{order}', [ProfileController::class, 'showOrder'])->name('profile.orders.show');
     Route::patch('/profile/orders/{order}/cancel', [ProfileController::class, 'cancelOrder'])->name('profile.orders.cancel');
 
-    // Дашборд
+   
     Route::get('/dashboard', fn() => view('dashboard'))
         ->name('dashboard');
 });
@@ -53,5 +60,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('order-items', OrderItemController::class);
     Route::resource('payments', PaymentController::class);
 });
+
 
 require __DIR__.'/auth.php';

@@ -11,7 +11,6 @@ use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\CabinTypeController;
 use App\Http\Controllers\Admin\OrderItemController;
 use App\Http\Controllers\Admin\PaymentController;
-use App\Models\Place;
 use Illuminate\Support\Facades\Route;
 
 
@@ -30,11 +29,13 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
 
 Route::middleware('auth')->group(function () {
-    
+
     Route::get('/shop/select-tickets/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.select-tickets');
     Route::post('/shop/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
+    Route::get('/shop/payment', [ShopController::class, 'showPayment'])->name('shop.payment');
+    Route::post('/shop/process-payment', [ShopController::class, 'processPayment'])->name('shop.process-payment');
 
-    
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

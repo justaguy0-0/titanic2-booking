@@ -22,6 +22,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: invert(1);"></button>
                 </div>
             @endif
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show select-tickets-alert" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Ошибки валидации:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: invert(1);"></button>
+                </div>
+            @endif
 
             {{-- Информация о рейсе --}}
             <div class="voyage-info-card mb-4">
@@ -221,42 +233,64 @@
                     {{-- РАЗВЛЕЧЕНИЯ И ИТОГО --}}
                     <div class="col-lg-5">
                         {{-- РАЗВЛЕЧЕНИЯ --}}
-                        <div class="section-card mb-4">
+                        <div class="section-card mb-4 entertainment-card-select">
                             <div class="section-header p-3">
                                 <h5 class="mb-0">
                                     <i class="fas fa-umbrella-beach me-2"></i>Дополнительные развлечения
                                 </h5>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-2">
                                 @if($entertainments->count() > 0)
-                                    <div class="entertainments-list">
-                                        @foreach($entertainments as $ent)
-                                            <div class="entertainment-item">
-                                                <div class="entertainment-info d-flex justify-content-between align-items-start mb-3">
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="entertainment-name mb-1">
-                                                            <i class="fas fa-star me-2"></i>{{ $ent->name }}
-                                                        </h6>
-                                                        <small class="entertainment-desc">
-                                                            {{ $ent->description ?? 'Дополнительная услуга' }}
-                                                        </small>
+                                    <div class="accordion" id="entertainmentsAccordionSelect">
+                                        @foreach($entertainments->chunk(ceil($entertainments->count() / 3)) as $index => $entertainmentChunk)
+                                            <div class="accordion-item entertainment-accordion-item">
+                                                <h2 class="accordion-header" id="headingSelect{{ $index }}">
+                                                    <button class="accordion-button collapsed entertainment-accordion-button"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseSelect{{ $index }}"
+                                                            aria-expanded="false"
+                                                            aria-controls="collapseSelect{{ $index }}">
+                                                        Группа развлечений {{ $index + 1 }}
+                                                        <i class="fas fa-chevron-down ms-2"></i>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseSelect{{ $index }}"
+                                                     class="accordion-collapse collapse"
+                                                     aria-labelledby="headingSelect{{ $index }}"
+                                                     data-bs-parent="#entertainmentsAccordionSelect">
+                                                    <div class="accordion-body p-2">
+                                                        @foreach($entertainmentChunk as $ent)
+                                                            <div class="entertainment-item mb-3">
+                                                                <div class="entertainment-info d-flex justify-content-between align-items-start mb-2">
+                                                                    <div class="flex-grow-1">
+                                                                        <h6 class="entertainment-name mb-1">
+                                                                            <i class="fas fa-star me-2"></i>{{ $ent->name }}
+                                                                        </h6>
+                                                                        <small class="entertainment-desc">
+                                                                            {{ $ent->description ?? 'Дополнительная услуга' }}
+                                                                        </small>
+                                                                    </div>
+                                                                    <div class="entertainment-price ms-3">
+                                                                        {{ number_format($ent->price, 0) }} ₽
+                                                                    </div>
+                                                                </div>
+                                                                <div class="quantity-control d-flex align-items-center">
+                                                                    <label class="quantity-label me-3">
+                                                                        Количество:
+                                                                    </label>
+                                                                    <input type="hidden" name="entertainments[{{ $loop->parent->index * ceil($entertainments->count() / 3) + $loop->index }}][id]" value="{{ $ent->id }}">
+                                                                    <input type="number"
+                                                                           name="entertainments[{{ $loop->parent->index * ceil($entertainments->count() / 3) + $loop->index }}][quantity]"
+                                                                           value="0"
+                                                                           min="0"
+                                                                           max="10"
+                                                                           class="quantity-input form-control"
+                                                                           data-price="{{ $ent->price }}">
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                    <div class="entertainment-price ms-3">
-                                                        {{ number_format($ent->price, 0) }} ₽
-                                                    </div>
-                                                </div>
-                                                <div class="quantity-control d-flex align-items-center">
-                                                    <label class="quantity-label me-3">
-                                                        Количество:
-                                                    </label>
-                                                    <input type="hidden" name="entertainments[{{ $loop->index }}][id]" value="{{ $ent->id }}">
-                                                    <input type="number"
-                                                           name="entertainments[{{ $loop->index }}][quantity]"
-                                                           value="0"
-                                                           min="0"
-                                                           max="10"
-                                                           class="quantity-input form-control"
-                                                           data-price="{{ $ent->price }}">
                                                 </div>
                                             </div>
                                         @endforeach

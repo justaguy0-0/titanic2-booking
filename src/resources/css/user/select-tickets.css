@@ -109,6 +109,36 @@
     border-radius: 0 0 8px 8px;
     border: 2px solid #475569;
     border-top: none;
+    position: relative;
+    min-height: 300px;
+}
+
+/* Фоновые изображения палуб */
+.first-class .deck-body {
+    background:
+        linear-gradient(rgba(30, 41, 59, 0.75), rgba(30, 41, 59, 0.75)),
+        url('../../../public/images/decks/first-class-deck.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.business-class .deck-body {
+    background:
+        linear-gradient(rgba(30, 41, 59, 0.75), rgba(30, 41, 59, 0.75)),
+        url('../../../public/images/decks/business-class-deck.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.economy-class .deck-body {
+    background:
+        linear-gradient(rgba(30, 41, 59, 0.75), rgba(30, 41, 59, 0.75)),
+        url('../../../public/images/decks/economy-class-deck.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .seats-grid {
@@ -129,65 +159,163 @@
     grid-template-columns: repeat(8, 1fr);
 }
 
+/* Стили мест (кресел) */
 .seat {
+    position: relative;
     aspect-ratio: 1;
-    min-height: 50px;
+    min-height: 60px;
+    min-width: 60px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.seat-inner {
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #334155;
-    border: 2px solid #475569;
-    border-radius: 8px;
-    cursor: pointer;
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    border: 3px solid #64748b;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
     transition: all 0.3s ease;
 }
 
+/* Эффект "кресла" */
+.seat-inner::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 25%;
+    background: rgba(100, 116, 139, 0.4);
+    border-radius: 8px 8px 0 0;
+}
+
+/* Эффект "подлокотники" */
+.seat-inner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    height: 60%;
+    border-left: 2px solid rgba(100, 116, 139, 0.3);
+    border-right: 2px solid rgba(100, 116, 139, 0.3);
+    pointer-events: none;
+}
+
 .seat-number {
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 700;
     color: #fcd34d;
-    margin-bottom: 0.2rem;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.seat-price {
-    font-size: 0.75rem;
-    color: #94a3b8;
+/* Tooltip с ценой при наведении */
+.seat::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: #1e293b;
+    color: #fbbf24;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 2px solid #fbbf24;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
 }
 
-.seat:hover {
+.seat::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    border: 8px solid transparent;
+    border-top-color: #fbbf24;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 99;
+}
+
+/* Наведение */
+.seat.available:hover {
+    transform: translateY(-5px) scale(1.05);
+}
+
+.seat.available:hover .seat-inner {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
     border-color: #fbbf24;
+    box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
 }
 
-.seat.selected {
-    background: #fbbf24;
+.seat.available:hover::after,
+.seat.available:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+/* Выбранное место */
+.seat.selected .seat-inner {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
     border-color: #fbbf24;
+    box-shadow: 0 8px 25px rgba(251, 191, 36, 0.6);
 }
 
 .seat.selected .seat-number {
     color: #1e293b;
-    font-weight: 700;
+    font-weight: 800;
 }
 
-.seat.selected .seat-price {
-    color: #1e293b;
+.seat.selected {
+    animation: seatPulse 1s ease-in-out;
 }
 
-.seat.booked {
-    background: #475569;
-    border-color: #64748b;
+@keyframes seatPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Забронированное место */
+.seat.booked .seat-inner {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    border-color: #475569;
+    opacity: 0.4;
     cursor: not-allowed;
-    opacity: 0.5;
+}
+
+.seat.booked .seat-number {
+    color: #64748b;
 }
 
 .seat.booked:hover {
     transform: none;
-    box-shadow: none;
 }
 
-.seat-icon {
-    font-size: 1.2rem;
-    margin-bottom: 0.2rem;
+.seat.booked:hover .seat-inner {
+    box-shadow: none;
+    border-color: #475569;
+}
+
+/* Скрываем tooltip для забронированных */
+.seat.booked::after,
+.seat.booked::before {
+    display: none;
 }
 
 /* Легенда */

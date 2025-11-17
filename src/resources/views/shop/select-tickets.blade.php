@@ -101,20 +101,22 @@
 
                                         {{-- Первый класс --}}
                                         @if($ticketsByType->has('Первый класс'))
-                                            <div class="deck-section">
+                                            <div class="deck-section first-class">
                                                 <div class="deck-header">
                                                     <i class="fas fa-crown me-2"></i>Первый Класс - Люкс Палуба
                                                 </div>
                                                 <div class="deck-body">
                                                     <div class="seats-grid first-class">
                                                         @foreach($ticketsByType->get('Первый класс') as $ticket)
-                                                            <div class="seat"
+                                                            <div class="seat available"
                                                                  data-ticket-id="{{ $ticket->id }}"
                                                                  data-price="{{ $ticket->price }}"
-                                                                 data-type="first">
-                                                                <div class="seat-icon">👑</div>
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'A'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
+                                                                 data-place="{{ $ticket->place_number ?? 'A'.$loop->iteration }}"
+                                                                 data-type="first"
+                                                                 title="Место {{ $ticket->place_number ?? 'A'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
+                                                                <div class="seat-inner">
+                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'A'.$loop->iteration }}</div>
+                                                                </div>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -124,20 +126,22 @@
 
                                         {{-- Бизнес класс --}}
                                         @if($ticketsByType->has('Бизнес класс'))
-                                            <div class="deck-section">
+                                            <div class="deck-section business-class">
                                                 <div class="deck-header">
                                                     <i class="fas fa-gem me-2"></i>Бизнес Класс - Средняя Палуба
                                                 </div>
                                                 <div class="deck-body">
                                                     <div class="seats-grid business-class">
                                                         @foreach($ticketsByType->get('Бизнес класс') as $ticket)
-                                                            <div class="seat"
+                                                            <div class="seat available"
                                                                  data-ticket-id="{{ $ticket->id }}"
                                                                  data-price="{{ $ticket->price }}"
-                                                                 data-type="business">
-                                                                <div class="seat-icon">💎</div>
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'B'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
+                                                                 data-place="{{ $ticket->place_number ?? 'B'.$loop->iteration }}"
+                                                                 data-type="business"
+                                                                 title="Место {{ $ticket->place_number ?? 'B'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
+                                                                <div class="seat-inner">
+                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'B'.$loop->iteration }}</div>
+                                                                </div>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -147,20 +151,22 @@
 
                                         {{-- Эконом класс --}}
                                         @if($ticketsByType->has('Эконом класс'))
-                                            <div class="deck-section">
+                                            <div class="deck-section economy-class">
                                                 <div class="deck-header">
                                                     <i class="fas fa-ship me-2"></i>Эконом Класс - Нижняя Палуба
                                                 </div>
                                                 <div class="deck-body">
                                                     <div class="seats-grid economy-class">
                                                         @foreach($ticketsByType->get('Эконом класс') as $ticket)
-                                                            <div class="seat"
+                                                            <div class="seat available"
                                                                  data-ticket-id="{{ $ticket->id }}"
                                                                  data-price="{{ $ticket->price }}"
-                                                                 data-type="economy">
-                                                                <div class="seat-icon">🛏️</div>
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'C'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
+                                                                 data-place="{{ $ticket->place_number ?? 'C'.$loop->iteration }}"
+                                                                 data-type="economy"
+                                                                 title="Место {{ $ticket->place_number ?? 'C'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
+                                                                <div class="seat-inner">
+                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'C'.$loop->iteration }}</div>
+                                                                </div>
                                                             </div>
                                                         @endforeach
                                                     </div>
@@ -177,12 +183,15 @@
                                                 <div class="deck-body">
                                                     <div class="seats-grid business-class">
                                                         @foreach($tickets->whereNull('type')->merge($tickets->where('type', '')) as $ticket)
-                                                            <div class="seat"
+                                                            <div class="seat available"
                                                                  data-ticket-id="{{ $ticket->id }}"
                                                                  data-price="{{ $ticket->price }}"
-                                                                 data-type="standard">
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'S'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
+                                                                 data-place="{{ $ticket->place_number ?? 'S'.$loop->iteration }}"
+                                                                 data-type="standard"
+                                                                 title="Место {{ $ticket->place_number ?? 'S'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
+                                                                <div class="seat-inner">
+                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'S'.$loop->iteration }}</div>
+                                                                </div>
                                                             </div>
                                                         @endforeach
                                                     </div>

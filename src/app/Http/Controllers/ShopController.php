@@ -36,13 +36,27 @@ class ShopController extends Controller
         $voyage = Voyage::with(['departurePlace', 'arrivalPlace'])
             ->findOrFail($voyageId);
 
+        // Получаем все доступные билеты для view (для скрытых чекбоксов)
         $tickets = Ticket::where('voyages_id', $voyageId)
             ->where('status', 'Доступно')
             ->get();
 
+        // Группируем билеты по типам кают с использованием eager loading
+        $availableCabinTypes = \App\Models\CabinType::whereHas('tickets', function ($query) use ($voyageId) {
+                $query->where('voyages_id', $voyageId)
+                      ->where('status', 'Доступно');
+            })
+            ->with(['tickets' => function ($query) use ($voyageId) {
+                $query->where('voyages_id', $voyageId)
+                      ->where('status', 'Доступно')
+                      ->orderBy('number');
+            }])
+            ->orderBy('id')
+            ->get();
+
         $entertainments = Entertainment::all();
 
-        return view('shop.select-tickets', compact('voyage', 'tickets', 'entertainments'));
+        return view('shop.select-tickets', compact('voyage', 'tickets', 'availableCabinTypes', 'entertainments'));
     }
 
     /**

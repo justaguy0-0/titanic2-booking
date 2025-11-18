@@ -77,172 +77,152 @@
                 @csrf
                 <input type="hidden" name="voyage_id" value="{{ $voyage->id }}">
 
+                {{-- БИЛЕТЫ - СХЕМА КОРАБЛЯ - НА ВСЮ ШИРИНУ --}}
                 <div class="row g-4">
+                    <div class="col-12">
+                        @if($tickets->count() > 0)
+                            <div class="ship-layout">
 
-                    {{-- БИЛЕТЫ - СХЕМА КОРАБЛЯ --}}
-                    <div class="col-lg-7">
-                        <div class="section-card">
-                            <div class="section-header p-3">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-ship me-2"></i>Выберите место на корабле
-                                </h5>
-                            </div>
-                            <div class="card-body p-3">
-                                @if($tickets->count() > 0)
-                                    <div class="ship-layout">
-                                        <h3 class="ship-title">
-                                            <i class="fas fa-anchor me-2"></i>ТИТАНИК 2
-                                        </h3>
+                                @php
+                                    // Группируем билеты по типу
+                                    $ticketsByType = $tickets->groupBy('type');
+                                @endphp
 
+
+                                {{-- Переключатель этажей --}}
+                                <div class="deck-selector">
+
+                                    @forelse($availableCabinTypes as $cabinType)
                                         @php
-                                            // Группируем билеты по типу
-                                            $ticketsByType = $tickets->groupBy('type');
+                                            $deckKey = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'first-class',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'business-class',
+                                                'Третий класс', 'Эконом класс', 'Эконом-класс' => 'economy-class',
+                                                default => 'economy-class'
+                                            };
+
+                                            $icon = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'fa-crown',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'fa-gem',
+                                                default => 'fa-ship'
+                                            };
+
+                                            $deckName = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'Верхняя палуба',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'Средняя палуба',
+                                                default => 'Нижняя палуба'
+                                            };
                                         @endphp
 
-                                        {{-- Первый класс --}}
-                                        @if($ticketsByType->has('Первый класс'))
-                                            <div class="deck-section first-class">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-crown me-2"></i>Первый Класс - Люкс Палуба
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid first-class">
-                                                        @foreach($ticketsByType->get('Первый класс') as $ticket)
-                                                            <div class="seat available"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-place="{{ $ticket->place_number ?? 'A'.$loop->iteration }}"
-                                                                 data-type="first"
-                                                                 title="Место {{ $ticket->place_number ?? 'A'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
-                                                                <div class="seat-inner">
-                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'A'.$loop->iteration }}</div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                        <button type="button"
+                                                class="deck-button {{ $loop->first ? 'active' : '' }}"
+                                                data-deck="{{ $deckKey }}">
+                                            <i class="fas {{ $icon }}"></i>
+                                            <span>{{ $cabinType->name }}</span>
+                                            <small>{{ $deckName }}</small>
+                                        </button>
 
-                                        {{-- Бизнес класс --}}
-                                        @if($ticketsByType->has('Бизнес класс'))
-                                            <div class="deck-section business-class">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-gem me-2"></i>Бизнес Класс - Средняя Палуба
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid business-class">
-                                                        @foreach($ticketsByType->get('Бизнес класс') as $ticket)
-                                                            <div class="seat available"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-place="{{ $ticket->place_number ?? 'B'.$loop->iteration }}"
-                                                                 data-type="business"
-                                                                 title="Место {{ $ticket->place_number ?? 'B'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
-                                                                <div class="seat-inner">
-                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'B'.$loop->iteration }}</div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                    @empty
+                                        <div class="text-center py-5">
+                                            <i class="fas fa-exclamation-triangle fa-3x mb-3 text-muted"></i>
+                                            <p class="text-muted">Нет доступных мест на этот рейс</p>
+                                        </div>
+                                    @endforelse
 
-                                        {{-- Эконом класс --}}
-                                        @if($ticketsByType->has('Эконом класс'))
-                                            <div class="deck-section economy-class">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-ship me-2"></i>Эконом Класс - Нижняя Палуба
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid economy-class">
-                                                        @foreach($ticketsByType->get('Эконом класс') as $ticket)
-                                                            <div class="seat available"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-place="{{ $ticket->place_number ?? 'C'.$loop->iteration }}"
-                                                                 data-type="economy"
-                                                                 title="Место {{ $ticket->place_number ?? 'C'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
-                                                                <div class="seat-inner">
-                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'C'.$loop->iteration }}</div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                </div>
 
-                                        {{-- Если есть билеты без типа --}}
-                                        @if($ticketsByType->has(null) || $ticketsByType->has(''))
-                                            <div class="deck-section">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-chair me-2"></i>Стандартные Места
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid business-class">
-                                                        @foreach($tickets->whereNull('type')->merge($tickets->where('type', '')) as $ticket)
-                                                            <div class="seat available"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-place="{{ $ticket->place_number ?? 'S'.$loop->iteration }}"
-                                                                 data-type="standard"
-                                                                 title="Место {{ $ticket->place_number ?? 'S'.$loop->iteration }} - {{ number_format($ticket->price, 0) }}₽">
-                                                                <div class="seat-inner">
-                                                                    <div class="seat-number">{{ $ticket->place_number ?? 'S'.$loop->iteration }}</div>
-                                                                </div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                {{-- Контейнер палуб --}}
+                                <div class="decks-container">
+                                    @forelse($availableCabinTypes as $cabinType)
+                                        @php
+                                            $deckKey = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'first-class',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'business-class',
+                                                default => 'economy-class'
+                                            };
 
-                                        {{-- Легенда --}}
-                                        <div class="ship-legend">
-                                            <div class="legend-item">
-                                                <div class="legend-box available"></div>
-                                                <span>Доступно</span>
+                                            $gridClass = match($deckKey) {
+                                                'first-class' => 'first-class',
+                                                'business-class' => 'business-class',
+                                                default => 'economy-class'
+                                            };
+                                        @endphp
+
+                                        <div class="deck-section {{ $deckKey }}"
+                                            data-deck="{{ $deckKey }}"
+                                            style="display: {{ $loop->first ? 'block' : 'none' }};">
+
+                                            <div class="deck-header">
+                                                <i class="fas {{ $loop->first ? 'fa-crown' : ($deckKey === 'business-class' ? 'fa-gem' : 'fa-ship') }} me-2"></i>
+                                                {{ $cabinType->name }} — {{ $cabinType->description }}
                                             </div>
-                                            <div class="legend-item">
-                                                <div class="legend-box selected"></div>
-                                                <span>Выбрано</span>
-                                            </div>
-                                            <div class="legend-item">
-                                                <div class="legend-box booked"></div>
-                                                <span>Занято</span>
+
+                                            <div class="deck-body"
+                                                style="background-image: url('/images/decks/{{ $deckKey }}-deck.png');">
+                                                <div class="seats-grid {{ $gridClass }}">
+                                                    @foreach($cabinType->tickets as $ticket)
+                                                        <div class="seat available"
+                                                            data-ticket-id="{{ $ticket->id }}"
+                                                            data-price="{{ $ticket->price }}"
+                                                            data-place="{{ $ticket->number }}"
+                                                            title="Место {{ $ticket->number }} — {{ number_format($ticket->price, 0) }} ₽">
+                                                            <div class="seat-inner">
+                                                                <div class="seat-number">{{ $ticket->number }}</div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @empty
+                                        <!-- Нет доступных кают -->
+                                    @endforelse
+                                </div>
 
-                                    {{-- Скрытые чекбоксы для формы --}}
-                                    @foreach($tickets as $ticket)
-                                        <input type="checkbox"
-                                               class="d-none ticket-checkbox"
-                                               name="tickets[]"
-                                               value="{{ $ticket->id }}"
-                                               id="ticket-{{ $ticket->id }}"
-                                               data-price="{{ $ticket->price }}">
-                                    @endforeach
-
-                                    <div class="selection-note mt-3 text-center">
-                                        <i class="fas fa-info-circle me-1"></i>Нажмите на место, чтобы выбрать его
+                                {{-- Легенда --}}
+                                <div class="ship-legend">
+                                    <div class="legend-item">
+                                        <div class="legend-box available"></div>
+                                        <span>Доступно</span>
                                     </div>
-                                @else
-                                    <p class="empty-message text-center py-5">
-                                        <i class="fas fa-sad-tear fa-3x mb-3 d-block"></i>
-                                        К сожалению, билеты на этот рейс закончились.
-                                    </p>
-                                @endif
+                                    <div class="legend-item">
+                                        <div class="legend-box selected"></div>
+                                        <span>Выбрано</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-box booked"></div>
+                                        <span>Занято</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    {{-- РАЗВЛЕЧЕНИЯ И ИТОГО --}}
-                    <div class="col-lg-5">
-                        {{-- РАЗВЛЕЧЕНИЯ --}}
-                        <div class="section-card mb-4 entertainment-card-select">
+                            {{-- Скрытые чекбоксы для формы --}}
+                            @foreach($tickets as $ticket)
+                                <input type="checkbox"
+                                       class="d-none ticket-checkbox"
+                                       name="tickets[]"
+                                       value="{{ $ticket->id }}"
+                                       id="ticket-{{ $ticket->id }}"
+                                       data-price="{{ $ticket->price }}">
+                            @endforeach
+
+                            <div class="selection-note mt-3 text-center">
+                                <i class="fas fa-info-circle me-1"></i>Нажмите на место, чтобы выбрать его
+                            </div>
+                        @else
+                            <p class="empty-message text-center py-5">
+                                <i class="fas fa-sad-tear fa-3x mb-3 d-block"></i>
+                                К сожалению, билеты на этот рейс закончились.
+                            </p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- РАЗВЛЕЧЕНИЯ И ИТОГО - ДВЕ КОЛОНКИ --}}
+                <div class="row g-4 mt-4">
+                    {{-- РАЗВЛЕЧЕНИЯ --}}
+                    <div class="col-lg-8">
+                        <div class="section-card entertainment-card-select">
                             <div class="section-header p-3">
                                 <h5 class="mb-0">
                                     <i class="fas fa-umbrella-beach me-2"></i>Дополнительные развлечения
@@ -312,8 +292,10 @@
                                 @endif
                             </div>
                         </div>
+                    </div>
 
-                        {{-- ИТОГО --}}
+                    {{-- ИТОГО --}}
+                    <div class="col-lg-4">
                         <div class="total-card">
                             <div class="card-body p-4">
                                 <div class="total-row d-flex justify-content-between align-items-center mb-4">
@@ -345,6 +327,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submit-btn');
     const form = document.getElementById('purchase-form');
     const seats = document.querySelectorAll('.seat');
+
+    // Переключение этажей
+    const deckButtons = document.querySelectorAll('.deck-button');
+    const deckSections = document.querySelectorAll('.deck-section[data-deck]');
+
+    deckButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetDeck = this.dataset.deck;
+
+            // Убираем активный класс со всех кнопок
+            deckButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Добавляем активный класс к нажатой кнопке
+            this.classList.add('active');
+
+            // Скрываем все палубы и показываем выбранную
+            deckSections.forEach(section => {
+                if (section.dataset.deck === targetDeck) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+    });
 
     function updateTotal() {
         let total = 0;

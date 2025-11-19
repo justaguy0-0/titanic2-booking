@@ -10,9 +10,43 @@ use Illuminate\Validation\Rule;
 
 class PaymentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $payments = Payment::with('order')->latest()->paginate(20);
+        $query = Payment::with('order');
+
+        // === Сортировка ===
+        $sortField = $request->get('sort', 'id');
+        $sortDirection = $request->get('direction', 'desc');
+
+        $allowedSorts = [
+            'id',
+            'order_id',     // по номеру заказа
+            'amount',
+            'provider',
+            'status',
+            'created_at',
+            'updated_at',
+        ];
+
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'id';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        // Простые поля
+        if (in_array($sortField, ['id', 'amount', 'provider', 'status', 'created_at', 'updated_at'])) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        // Сортировка по номеру заказа
+        if ($sortField === 'order_id') {
+            $query->orderBy('order_id', $sortDirection === 'asc' ? 'asc' : 'desc');
+        }
+
+        $payments = $query->paginate(20)->appends($request->query());
+
         return view('admin.payments.index', compact('payments'));
     }
 

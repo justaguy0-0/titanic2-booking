@@ -17,7 +17,6 @@
                 {{ session('success') }}
             </div>
         @endif
-
         @if(session('error'))
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                 {{ session('error') }}
@@ -28,52 +27,118 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Рейс</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Тип каюты</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Номер</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Заказ</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
+                    @php
+                        $currentSort = request('sort', 'id');
+                        $currentDir = request('direction', 'desc');
+                        $nextDir = $currentDir === 'asc' ? 'desc' : 'asc';
+
+                        $sortUrl = fn($field) => request()->fullUrlWithQuery([
+                            'sort' => $field,
+                            'direction' => $currentSort === $field ? $nextDir : 'asc'
+                        ]);
+
+                        $sortIcon = function($field) use ($currentSort, $currentDir) {
+                            if ($currentSort !== $field) return '';
+                            return $currentDir === 'asc' ? '↑' : '↓';
+                        };
+                    @endphp
+
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <a href="{{ $sortUrl('id') }}" class="hover:text-gray-900 flex items-center gap-1">
+                            ID <span class="text-gray-400">{{ $sortIcon('id') }}</span>
+                        </a>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Рейс
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Тип каюты
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <a href="{{ $sortUrl('number') }}" class="hover:text-gray-900 flex items-center gap-1">
+                            Номер <span class="text-gray-400">{{ $sortIcon('number') }}</span>
+                        </a>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <a href="{{ $sortUrl('price') }}" class="hover:text-gray-900 flex items-center gap-1">
+                            Цена <span class="text-gray-400">{{ $sortIcon('price') }}</span>
+                        </a>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <a href="{{ $sortUrl('status') }}" class="hover:text-gray-900 flex items-center gap-1">
+                            Статус <span class="text-gray-400">{{ $sortIcon('status') }}</span>
+                        </a>
+                    </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Заказ
+                    </th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Действия
+                    </th>
                 </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($tickets as $ticket)
-                    <tr class="hover:bg-gray-50 transition">
+                    @php
+                        $isSold = $ticket->status === 'Продано';
+                        $isBooked = $ticket->status === 'Забронировано';
+                        $rowClass = $isSold ? 'bg-red-50' : ($isBooked ? 'bg-yellow-50' : '');
+                    @endphp
+                    <tr class="{{ $rowClass }} hover:bg-gray-50 transition">
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $ticket->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $ticket->voyage->name ?? 'N/A' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ticket->cabinType->name ?? 'N/A' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ticket->number }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ number_format($ticket->price, 2, ',', ' ') }} ₽</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $ticket->status }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <a href="{{ route('admin.voyages.show', $ticket->voyages_id) }}" class="text-blue-600 hover:underline">
+                                {{ $ticket->voyage->name ?? '—' }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ $ticket->cabinType->name ?? '—' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700">
+                            {{ $ticket->number }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                            {{ number_format($ticket->price, 0, '', ' ') }} ₽
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                @if($isSold) bg-red-100 text-red-800
+                                @elseif($isBooked) bg-yellow-100 text-yellow-800
+                                @else bg-green-100 text-green-800 @endif">
+                                {{ $ticket->status }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
                             @if($ticket->orderItems->isNotEmpty())
                                 <a href="{{ route('admin.orders.show', $ticket->orderItems->first()->order_id) }}"
-                                   class="text-blue-600 hover:text-blue-900">
+                                   class="text-blue-600 hover:underline font-medium">
                                     #{{ $ticket->orderItems->first()->order_id }}
                                 </a>
                             @else
-                                -
+                                <span class="text-gray-400">—</span>
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <a href="{{ route('admin.tickets.edit', $ticket) }}"
-                               class="text-blue-600 hover:text-blue-900 mr-3">Редактировать</a>
-                            <form action="{{ route('admin.tickets.destroy', $ticket) }}"
-                                  method="POST"
-                                  class="inline"
-                                  onsubmit="return confirm('Вы уверены, что хотите удалить билет {{ $ticket->number }}? {{ $ticket->orderItems->isNotEmpty() ? 'Билет связан с заказом #' . $ticket->orderItems->first()->order_id . '!' : '' }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>
-                            </form>
+                               class="text-blue-600 hover:text-blue-900 mr-4">Редактировать</a>
+
+                            @if($ticket->orderItems->isEmpty())
+                                <form action="{{ route('admin.tickets.destroy', $ticket) }}" method="POST" class="inline"
+                                      onsubmit="return confirm('Удалить билет {{ $ticket->number }}?')">
+                                    @csrf @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>
+                                </form>
+                            @else
+                                <span class="text-gray-400" title="Нельзя удалить — билет в заказе">
+                                    Удалить
+                                </span>
+                            @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
                         <td colspan="8" class="px-6 py-4 text-center text-gray-500">
-                            Нет билетов. <a href="{{ route('admin.tickets.create') }}" class="text-blue-600">Добавить первый?</a>
+                            Нет билетов. <a href="{{ route('admin.tickets.create') }}" class="text-blue-600 hover:underline">Добавить первый?</a>
                         </td>
                     </tr>
                 @endforelse
@@ -82,7 +147,7 @@
         </div>
 
         <div class="mt-6">
-            {{ $tickets->links() }}
+            {{ $tickets->appends(request()->query())->links() }}
         </div>
     </div>
 @endsection

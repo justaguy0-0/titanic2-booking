@@ -78,12 +78,16 @@
             </div>
 
             <div class="mb-6">
-                <label for="travel_time" class="block text-sm font-medium text-gray-700 mb-2">Время в пути (часы) <span class="text-red-500">*</span></label>
+                <label for="travel_time" class="block text-sm font-medium text-gray-700 mb-2">
+                    Время в пути (часы) <span class="text-red-500">*</span>
+                    <span class="text-xs text-gray-500 font-normal">(автозаполняется)</span>
+                </label>
                 <input type="number" name="travel_time" id="travel_time" value="{{ old('travel_time') }}"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('travel_time') border-red-500 @enderror"
-                       required>
+                       required readonly>
+                <p class="text-xs text-gray-500 mt-1">Вычисляется автоматически по датам отправления и прибытия</p>
                 @error('travel_time')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -105,6 +109,46 @@
                     Отмена
                 </a>
             </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const departureInput = document.getElementById('departure_date');
+                    const arrivalInput = document.getElementById('arrival_date');
+                    const travelTimeInput = document.getElementById('travel_time');
+
+                    function calculateTravelTime() {
+                        if (!departureInput.value || !arrivalInput.value) {
+                            travelTimeInput.value = '';
+                            return;
+                        }
+
+                        const departure = new Date(departureInput.value);
+                        const arrival = new Date(arrivalInput.value);
+
+                        // Проверка: прибытие должно быть позже отправления
+                        if (arrival <= departure) {
+                            travelTimeInput.value = '';
+                            return;
+                        }
+
+                        // Разница в миллисекундах → часы → округляем до целого вверх
+                        const diffMs = arrival - departure;
+                        const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
+
+                        travelTimeInput.value = diffHours;
+                    }
+
+                    // Обновляем при изменении любого из полей
+                    departureInput.addEventListener('change', calculateTravelTime);
+                    arrivalInput.addEventListener('change', calculateTravelTime);
+
+                    // При загрузке страницы (если old() вернул значения после ошибки валидации)
+                    if (departureInput.value && arrivalInput.value) {
+                        calculateTravelTime();
+                    }
+                });
+            </script>
+
         </form>
     </div>
 </div>

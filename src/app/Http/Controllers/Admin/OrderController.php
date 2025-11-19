@@ -12,9 +12,44 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with(['user', 'orderItems.ticket.voyage'])->paginate(10);
+        $query = Order::with(['user', 'orderItems.ticket.voyage']);
+
+        // === Сортировка ===
+        $sortField = $request->get('sort', 'id');
+        $sortDirection = $request->get('direction', 'desc');
+
+        $allowedSorts = [
+            'id',
+            'total_price',
+            'status',
+            'created_at',
+            'updated_at',
+            'user_email',  // сортировка по email пользователя
+        ];
+
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'id';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        // Простые поля
+        if (in_array($sortField, ['id', 'total_price', 'status', 'created_at', 'updated_at'])) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        // Сортировка по email пользователя
+        if ($sortField === 'user_email') {
+            $query->join('users', 'orders.user_id', '=', 'users.id')
+                ->orderBy('users.email', $sortDirection)
+                ->select('orders.*'); // Важно! Иначе дубли полей
+        }
+
+        $orders = $query->paginate(15)->appends($request->query());
+
         return view('admin.orders.index', compact('orders'));
     }
 

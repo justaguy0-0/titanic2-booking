@@ -11,9 +11,52 @@ use Illuminate\Http\Request;
 
 class OrderItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orderItems = OrderItem::with(['order.user', 'ticket.voyage', 'entertainment'])->paginate(10);
+        $query = OrderItem::with(['order.user', 'ticket.voyage', 'entertainment']);
+
+        // === Сортировка ===
+        $sortField = $request->get('sort', 'id');
+        $sortDirection = $request->get('direction', 'desc');
+
+        $allowedSorts = [
+            'id',
+            'order_id',
+            'type',
+            'total_price',     // price * quantity
+            'created_at',
+            'item_name',       // название билета или развлечения
+        ];
+
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'id';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        // Простые поля
+        if (in_array($sortField, ['id', 'order_id', 'type', 'created_at'])) {
+            $query->orderBy($sortField, $sortDirection);
+        }
+
+        // Итоговая цена (price * quantity)
+        elseif ($sortField === 'total_price') {
+            $query->orderByRaw("(price * quantity) {$sortDirection}");
+        }
+
+        // Сортировка по названию элемента (билет или развлечение)
+        elseif ($sortField === 'item_name') {
+            $query->select('order_items.*')
+                ->leftJoin('tickets', 'order_items.ticket_id', '=', 'tickets.id')
+                ->leftJoin('entertainments', 'order_items.entertainment_id', '=', 'entertainments.id')
+                ->orderByRaw("
+                  COALESCE(tickets.number, entertainments.name) {$sortDirection}
+              ");
+        }
+
+        $orderItems = $query->paginate(15)->appends($request->query());
+
         return view('admin.order-items.index', compact('orderItems'));
     }
 

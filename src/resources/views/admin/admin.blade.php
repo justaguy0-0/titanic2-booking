@@ -71,11 +71,6 @@
                 <a href="{{ route('admin.payments.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-credit-card mr-2"></i> Платежи
                 </a>
-            </div>
-
-            {{-- Развлечения --}}
-            <div>
-                <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Развлечения</div>
                 <a href="{{ route('admin.entertainments.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
                     <i class="fas fa-masks-theater mr-2"></i> Развлечения
                 </a>

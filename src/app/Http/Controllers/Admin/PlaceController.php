@@ -13,7 +13,30 @@ class PlaceController extends Controller
     public function index(Request $request)
     {
         $type = $request->query('type', 'departure');
-        $places = Place::where('type', $type)->paginate(10);
+
+        // Проверка типа
+        if (!in_array($type, ['departure', 'arrival'])) {
+            $type = 'departure';
+        }
+
+        $query = Place::where('type', $type);
+
+        // === Сортировка ===
+        $sortField = $request->get('sort', 'id');
+        $sortDirection = $request->get('direction', 'desc');
+
+        $allowedSorts = ['id', 'name', 'type', 'created_at'];
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'id';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        $query->orderBy($sortField, $sortDirection);
+
+        $places = $query->paginate(15)->appends($request->query());
+
         return view('admin.places.index', compact('places', 'type'));
     }
 

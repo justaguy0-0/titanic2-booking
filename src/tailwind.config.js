@@ -16,7 +16,6 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
-            // ← ПЕРЕНОСИМ свои цвета в extend, а не перезаписываем всё!
             colors: {
                 'custom-amber': {
                     300: '#fcd34d',
@@ -30,7 +29,6 @@ export default {
                 },
             },
         },
-        // ← УДАЛЯЕМ полную перезапись colors, оставляем только extend выше
     },
 
     safelist: [
@@ -45,9 +43,10 @@ export default {
             pattern: /border-(red|yellow|green|blue|purple|orange)-(400|500)/,
         },
 
-        // Ховеры для кнопок
+        // Ховеры для кнопок - ОБНОВЛЕНО: добавляем variants
         {
-            pattern: /hover:bg-(blue|green|purple|orange|red|yellow|gray)-(500|600|700)/,
+            pattern: /bg-(blue|green|purple|orange|red|yellow|gray)-(500|600|700)/,
+            variants: ['hover'], // ← ДОБАВЬТЕ ЭТУ СТРОКУ
         },
 
         // Градиенты в карточках

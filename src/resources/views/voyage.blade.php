@@ -5,17 +5,9 @@
 @section('main_content')
 <div class="container-fluid px-0">
 
-    <section class="hero-section text-center py-5 d-flex align-items-center justify-content-center">
-        <div>
-            <h1 class="display-4 fw-bold mb-3" style="font-family: Georgia, serif;">Легендарный маршрут</h1>
-
-        </div>
-        </section>
-
 <!-- Секция маршрутов -->
 <section class="py-5" style="background: #0f172a;">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">МАРШРУТЫ ЭКСПЕДИЦИЙ</h2>
 
         <div class="row">
             <!-- Левая часть - Карта -->

@@ -22,6 +22,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: invert(1);"></button>
                 </div>
             @endif
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show select-tickets-alert" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Ошибки валидации:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" style="filter: invert(1);"></button>
+                </div>
+            @endif
 
             {{-- Информация о рейсе --}}
             <div class="voyage-info-card mb-4">
@@ -65,198 +77,218 @@
                 @csrf
                 <input type="hidden" name="voyage_id" value="{{ $voyage->id }}">
 
+                {{-- БИЛЕТЫ - СХЕМА КОРАБЛЯ - НА ВСЮ ШИРИНУ --}}
                 <div class="row g-4">
+                    <div class="col-12">
+                        @if($tickets->count() > 0)
+                            <div class="ship-layout">
 
-                    {{-- БИЛЕТЫ - СХЕМА КОРАБЛЯ --}}
-                    <div class="col-lg-7">
-                        <div class="section-card">
-                            <div class="section-header p-3">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-ship me-2"></i>Выберите место на корабле
-                                </h5>
-                            </div>
-                            <div class="card-body p-3">
-                                @if($tickets->count() > 0)
-                                    <div class="ship-layout">
-                                        <h3 class="ship-title">
-                                            <i class="fas fa-anchor me-2"></i>ТИТАНИК 2
-                                        </h3>
+                                @php
+                                    // Группируем билеты по типу
+                                    $ticketsByType = $tickets->groupBy('type');
+                                @endphp
 
+
+                                {{-- Переключатель этажей --}}
+                                <div class="deck-selector">
+
+                                    @forelse($availableCabinTypes as $cabinType)
                                         @php
-                                            // Группируем билеты по типу
-                                            $ticketsByType = $tickets->groupBy('type');
+                                            $deckKey = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'first-class',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'business-class',
+                                                'Третий класс', 'Эконом класс', 'Эконом-класс' => 'economy-class',
+                                                default => 'economy-class'
+                                            };
+
+                                            $icon = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'fa-crown',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'fa-gem',
+                                                default => 'fa-ship'
+                                            };
+
+                                            $deckName = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'Верхняя палуба',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'Средняя палуба',
+                                                default => 'Нижняя палуба'
+                                            };
                                         @endphp
 
-                                        {{-- Первый класс --}}
-                                        @if($ticketsByType->has('Первый класс'))
-                                            <div class="deck-section">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-crown me-2"></i>Первый Класс - Люкс Палуба
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid first-class">
-                                                        @foreach($ticketsByType->get('Первый класс') as $ticket)
-                                                            <div class="seat"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-type="first">
-                                                                <div class="seat-icon">👑</div>
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'A'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                        <button type="button"
+                                                class="deck-button {{ $loop->first ? 'active' : '' }}"
+                                                data-deck="{{ $deckKey }}">
+                                            <i class="fas {{ $icon }}"></i>
+                                            <span>{{ $cabinType->name }}</span>
+                                            <small>{{ $deckName }}</small>
+                                        </button>
 
-                                        {{-- Бизнес класс --}}
-                                        @if($ticketsByType->has('Бизнес класс'))
-                                            <div class="deck-section">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-gem me-2"></i>Бизнес Класс - Средняя Палуба
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid business-class">
-                                                        @foreach($ticketsByType->get('Бизнес класс') as $ticket)
-                                                            <div class="seat"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-type="business">
-                                                                <div class="seat-icon">💎</div>
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'B'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                    @empty
+                                        <div class="text-center py-5">
+                                            <i class="fas fa-exclamation-triangle fa-3x mb-3 text-muted"></i>
+                                            <p class="text-muted">Нет доступных мест на этот рейс</p>
+                                        </div>
+                                    @endforelse
 
-                                        {{-- Эконом класс --}}
-                                        @if($ticketsByType->has('Эконом класс'))
-                                            <div class="deck-section">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-ship me-2"></i>Эконом Класс - Нижняя Палуба
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid economy-class">
-                                                        @foreach($ticketsByType->get('Эконом класс') as $ticket)
-                                                            <div class="seat"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-type="economy">
-                                                                <div class="seat-icon">🛏️</div>
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'C'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                </div>
 
-                                        {{-- Если есть билеты без типа --}}
-                                        @if($ticketsByType->has(null) || $ticketsByType->has(''))
-                                            <div class="deck-section">
-                                                <div class="deck-header">
-                                                    <i class="fas fa-chair me-2"></i>Стандартные Места
-                                                </div>
-                                                <div class="deck-body">
-                                                    <div class="seats-grid business-class">
-                                                        @foreach($tickets->whereNull('type')->merge($tickets->where('type', '')) as $ticket)
-                                                            <div class="seat"
-                                                                 data-ticket-id="{{ $ticket->id }}"
-                                                                 data-price="{{ $ticket->price }}"
-                                                                 data-type="standard">
-                                                                <div class="seat-number">{{ $ticket->place_number ?? 'S'.$loop->iteration }}</div>
-                                                                <div class="seat-price">{{ number_format($ticket->price, 0) }}₽</div>
-                                                            </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
+                                {{-- Контейнер палуб --}}
+                                <div class="decks-container">
+                                    @forelse($availableCabinTypes as $cabinType)
+                                        @php
+                                            $deckKey = match(trim($cabinType->name)) {
+                                                'Первый класс' => 'first-class',
+                                                'Второй класс', 'Бизнес класс', 'Бизнес-класс' => 'business-class',
+                                                default => 'economy-class'
+                                            };
 
-                                        {{-- Легенда --}}
-                                        <div class="ship-legend">
-                                            <div class="legend-item">
-                                                <div class="legend-box available"></div>
-                                                <span>Доступно</span>
+                                            $gridClass = match($deckKey) {
+                                                'first-class' => 'first-class',
+                                                'business-class' => 'business-class',
+                                                default => 'economy-class'
+                                            };
+                                        @endphp
+
+                                        <div class="deck-section {{ $deckKey }}"
+                                            data-deck="{{ $deckKey }}"
+                                            style="display: {{ $loop->first ? 'block' : 'none' }};">
+
+                                            <div class="deck-header">
+                                                <i class="fas {{ $loop->first ? 'fa-crown' : ($deckKey === 'business-class' ? 'fa-gem' : 'fa-ship') }} me-2"></i>
+                                                {{ $cabinType->name }} — {{ $cabinType->description }}
                                             </div>
-                                            <div class="legend-item">
-                                                <div class="legend-box selected"></div>
-                                                <span>Выбрано</span>
-                                            </div>
-                                            <div class="legend-item">
-                                                <div class="legend-box booked"></div>
-                                                <span>Занято</span>
+
+                                            <div class="deck-body"
+                                                style="background-image: url('/images/decks/{{ $deckKey }}-deck.png');">
+                                                <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
+                                                    @foreach($cabinType->tickets as $ticket)
+                                                        @php
+                                                            $isBooked = $ticket->status === 'Забронирован';
+                                                            $seatClass = $isBooked ? 'seat booked' : 'seat available';
+                                                            // Добавляем класс размера в зависимости от типа палубы
+                                                            $seatClass .= ' ' . $deckKey . '-seat';
+                                                            $tooltipText = $isBooked
+                                                                ? "Место {$ticket->number} — Забронировано"
+                                                                : number_format($ticket->price, 0, '', ' ') . " ₽";
+                                                            // Порядковый индекс места в рамках этого класса каюты (начиная с 0)
+                                                            $seatIndex = $loop->index;
+                                                        @endphp
+                                                        <div class="{{ $seatClass }}"
+                                                            data-ticket-id="{{ $ticket->id }}"
+                                                            data-price="{{ $ticket->price }}"
+                                                            data-place="{{ $ticket->number }}"
+                                                            data-seat-index="{{ $seatIndex }}"
+                                                            title="{{ $tooltipText }}">
+                                                        </div>
+                                                    @endforeach
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @empty
+                                        <!-- Нет доступных кают -->
+                                    @endforelse
+                                </div>
 
-                                    {{-- Скрытые чекбоксы для формы --}}
-                                    @foreach($tickets as $ticket)
-                                        <input type="checkbox"
-                                               class="d-none ticket-checkbox"
-                                               name="tickets[]"
-                                               value="{{ $ticket->id }}"
-                                               id="ticket-{{ $ticket->id }}"
-                                               data-price="{{ $ticket->price }}">
-                                    @endforeach
-
-                                    <div class="selection-note mt-3 text-center">
-                                        <i class="fas fa-info-circle me-1"></i>Нажмите на место, чтобы выбрать его
+                                {{-- Легенда --}}
+                                <div class="ship-legend">
+                                    <div class="legend-item">
+                                        <div class="legend-box available"></div>
+                                        <span>Доступно</span>
                                     </div>
-                                @else
-                                    <p class="empty-message text-center py-5">
-                                        <i class="fas fa-sad-tear fa-3x mb-3 d-block"></i>
-                                        К сожалению, билеты на этот рейс закончились.
-                                    </p>
-                                @endif
+                                    <div class="legend-item">
+                                        <div class="legend-box selected"></div>
+                                        <span>Выбрано</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-box booked"></div>
+                                        <span>Забронировано</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    {{-- РАЗВЛЕЧЕНИЯ И ИТОГО --}}
-                    <div class="col-lg-5">
-                        {{-- РАЗВЛЕЧЕНИЯ --}}
-                        <div class="section-card mb-4">
+                            {{-- Скрытые чекбоксы для формы --}}
+                            @foreach($tickets as $ticket)
+                                <input type="checkbox"
+                                       class="d-none ticket-checkbox"
+                                       name="tickets[]"
+                                       value="{{ $ticket->id }}"
+                                       id="ticket-{{ $ticket->id }}"
+                                       data-price="{{ $ticket->price }}">
+                            @endforeach
+
+                            <div class="selection-note mt-3 text-center">
+                                <i class="fas fa-info-circle me-1"></i>Нажмите на квадрат, чтобы выбрать место
+                            </div>
+                        @else
+                            <p class="empty-message text-center py-5">
+                                <i class="fas fa-sad-tear fa-3x mb-3 d-block"></i>
+                                К сожалению, билеты на этот рейс закончились.
+                            </p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- РАЗВЛЕЧЕНИЯ И ИТОГО - ДВЕ КОЛОНКИ --}}
+                <div class="row g-4 mt-4">
+                    {{-- РАЗВЛЕЧЕНИЯ --}}
+                    <div class="col-lg-8">
+                        <div class="section-card entertainment-card-select">
                             <div class="section-header p-3">
                                 <h5 class="mb-0">
                                     <i class="fas fa-umbrella-beach me-2"></i>Дополнительные развлечения
                                 </h5>
                             </div>
-                            <div class="card-body p-4">
+                            <div class="card-body p-2">
                                 @if($entertainments->count() > 0)
-                                    <div class="entertainments-list">
-                                        @foreach($entertainments as $ent)
-                                            <div class="entertainment-item">
-                                                <div class="entertainment-info d-flex justify-content-between align-items-start mb-3">
-                                                    <div class="flex-grow-1">
-                                                        <h6 class="entertainment-name mb-1">
-                                                            <i class="fas fa-star me-2"></i>{{ $ent->name }}
-                                                        </h6>
-                                                        <small class="entertainment-desc">
-                                                            {{ $ent->description ?? 'Дополнительная услуга' }}
-                                                        </small>
+                                    <div class="accordion" id="entertainmentsAccordionSelect">
+                                        @foreach($entertainments->chunk(ceil($entertainments->count() / 3)) as $index => $entertainmentChunk)
+                                            <div class="accordion-item entertainment-accordion-item">
+                                                <h2 class="accordion-header" id="headingSelect{{ $index }}">
+                                                    <button class="accordion-button collapsed entertainment-accordion-button"
+                                                            type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapseSelect{{ $index }}"
+                                                            aria-expanded="false"
+                                                            aria-controls="collapseSelect{{ $index }}">
+                                                        Группа развлечений {{ $index + 1 }}
+                                                        <i class="fas fa-chevron-down ms-2"></i>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapseSelect{{ $index }}"
+                                                     class="accordion-collapse collapse"
+                                                     aria-labelledby="headingSelect{{ $index }}"
+                                                     data-bs-parent="#entertainmentsAccordionSelect">
+                                                    <div class="accordion-body p-2">
+                                                        @foreach($entertainmentChunk as $ent)
+                                                            <div class="entertainment-item mb-3">
+                                                                <div class="entertainment-info d-flex justify-content-between align-items-start mb-2">
+                                                                    <div class="flex-grow-1">
+                                                                        <h6 class="entertainment-name mb-1">
+                                                                            <i class="fas fa-star me-2"></i>{{ $ent->name }}
+                                                                        </h6>
+                                                                        <small class="entertainment-desc">
+                                                                            {{ $ent->description ?? 'Дополнительная услуга' }}
+                                                                        </small>
+                                                                    </div>
+                                                                    <div class="entertainment-price ms-3">
+                                                                        {{ number_format($ent->price, 0) }} ₽
+                                                                    </div>
+                                                                </div>
+                                                                <div class="quantity-control d-flex align-items-center">
+                                                                    <label class="quantity-label me-3">
+                                                                        Количество:
+                                                                    </label>
+                                                                    <input type="hidden" name="entertainments[{{ $loop->parent->index * ceil($entertainments->count() / 3) + $loop->index }}][id]" value="{{ $ent->id }}">
+                                                                    <input type="number"
+                                                                           name="entertainments[{{ $loop->parent->index * ceil($entertainments->count() / 3) + $loop->index }}][quantity]"
+                                                                           value="0"
+                                                                           min="0"
+                                                                           max="10"
+                                                                           class="quantity-input form-control"
+                                                                           data-price="{{ $ent->price }}">
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                    <div class="entertainment-price ms-3">
-                                                        {{ number_format($ent->price, 0) }} ₽
-                                                    </div>
-                                                </div>
-                                                <div class="quantity-control d-flex align-items-center">
-                                                    <label class="quantity-label me-3">
-                                                        Количество:
-                                                    </label>
-                                                    <input type="hidden" name="entertainments[{{ $loop->index }}][id]" value="{{ $ent->id }}">
-                                                    <input type="number"
-                                                           name="entertainments[{{ $loop->index }}][quantity]"
-                                                           value="0"
-                                                           min="0"
-                                                           max="10"
-                                                           class="quantity-input form-control"
-                                                           data-price="{{ $ent->price }}">
                                                 </div>
                                             </div>
                                         @endforeach
@@ -269,8 +301,10 @@
                                 @endif
                             </div>
                         </div>
+                    </div>
 
-                        {{-- ИТОГО --}}
+                    {{-- ИТОГО --}}
+                    <div class="col-lg-4">
                         <div class="total-card">
                             <div class="card-body p-4">
                                 <div class="total-row d-flex justify-content-between align-items-center mb-4">
@@ -302,6 +336,31 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submit-btn');
     const form = document.getElementById('purchase-form');
     const seats = document.querySelectorAll('.seat');
+
+    // Переключение этажей
+    const deckButtons = document.querySelectorAll('.deck-button');
+    const deckSections = document.querySelectorAll('.deck-section[data-deck]');
+
+    deckButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetDeck = this.dataset.deck;
+
+            // Убираем активный класс со всех кнопок
+            deckButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Добавляем активный класс к нажатой кнопке
+            this.classList.add('active');
+
+            // Скрываем все палубы и показываем выбранную
+            deckSections.forEach(section => {
+                if (section.dataset.deck === targetDeck) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = 'none';
+                }
+            });
+        });
+    });
 
     function updateTotal() {
         let total = 0;
@@ -394,6 +453,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     updateTotal();
+});
+</script>
+
+{{-- Подключение конфигурации позиций мест --}}
+<script src="{{ asset('js/seat-positions.js') }}"></script>
+<script>
+// Применяем позиции к местам после загрузки DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Для каждой палубы применяем позиции
+    const deckContainers = document.querySelectorAll('.seats-container[data-deck-type]');
+
+    deckContainers.forEach(container => {
+        const deckType = container.dataset.deckType;
+        const seats = container.querySelectorAll('.seat[data-seat-index]');
+
+        // Получаем позиции для этого типа палубы
+        const positions = seatPositions[deckType];
+
+        if (!positions) {
+            console.warn('Позиции не найдены для палубы:', deckType);
+            return;
+        }
+
+        seats.forEach(seat => {
+            const seatIndex = parseInt(seat.dataset.seatIndex);
+            const position = positions[seatIndex];
+
+            if (position) {
+                // Применяем позицию
+                seat.style.position = 'absolute';
+                seat.style.top = position.top + '%';
+                seat.style.left = position.left + '%';
+                seat.style.transform = 'translate(-50%, -50%)'; // Центрируем относительно координат
+            } else {
+                console.warn('Позиция не найдена для места', seatIndex, 'на палубе', deckType);
+            }
+        });
+    });
 });
 </script>
 @endsection

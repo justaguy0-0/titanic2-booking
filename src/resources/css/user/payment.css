@@ -1,0 +1,327 @@
+/* ============================================
+   PAYMENT PAGE - СТРАНИЦА ОПЛАТЫ
+   ============================================ */
+
+/* Контейнер страницы */
+.payment-container {
+    background: #0f172a;
+    min-height: 100vh;
+}
+
+/* Заголовок страницы */
+.payment-header {
+    background: #1e293b;
+    border-radius: 12px;
+    border: 2px solid #fbbf24;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.payment-title {
+    color: #fbbf24;
+    font-family: Georgia, serif;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.payment-subtitle {
+    color: #fcd34d;
+    font-size: 1.1rem;
+}
+
+/* Информационные карточки */
+.payment-card {
+    background: #1e293b;
+    border-radius: 12px;
+    border: 2px solid #334155;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.payment-card:hover {
+    border-color: #fbbf24;
+}
+
+.payment-card-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-bottom: 2px solid #fbbf24;
+    padding: 1.5rem;
+    border-radius: 10px 10px 0 0;
+}
+
+.payment-card-title {
+    color: #fbbf24;
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.payment-card-body {
+    padding: 1.5rem;
+}
+
+/* Информация о рейсе */
+.voyage-info-item {
+    display: flex;
+    align-items: start;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background: #0f172a;
+    border-radius: 8px;
+    border-left: 4px solid #fbbf24;
+}
+
+.voyage-info-item:last-child {
+    margin-bottom: 0;
+}
+
+.voyage-info-label {
+    color: #fbbf24;
+    font-weight: 600;
+    min-width: 140px;
+    display: inline-block;
+}
+
+.voyage-info-value {
+    color: #fcd34d;
+    flex: 1;
+}
+
+/* Таблица билетов и развлечений */
+.order-table {
+    width: 100%;
+    margin: 0;
+}
+
+.order-table thead {
+    background: #0f172a;
+}
+
+.order-table thead th {
+    color: #fbbf24;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+    border-bottom: 2px solid #fbbf24;
+    font-size: 0.9rem;
+}
+
+.order-table tbody tr {
+    border-bottom: 1px solid #334155;
+    transition: all 0.3s ease;
+}
+
+.order-table tbody tr:hover {
+    background: rgba(251, 191, 36, 0.05);
+}
+
+.order-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.order-table tbody td {
+    color: #fcd34d;
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.item-name {
+    color: #fcd34d;
+    font-weight: 600;
+}
+
+.item-type {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    display: block;
+    margin-top: 0.2rem;
+}
+
+.item-price {
+    color: #fbbf24;
+    font-weight: 600;
+    text-align: right;
+}
+
+.item-quantity {
+    color: #94a3b8;
+    text-align: center;
+}
+
+/* Итоговая сумма */
+.total-section {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 12px;
+    border: 3px solid #fbbf24;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.total-label {
+    color: #fcd34d;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.total-amount {
+    color: #fbbf24;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Кнопки действий */
+.payment-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-pay {
+    flex: 1;
+    background: #fbbf24;
+    color: #1e293b;
+    border: none;
+    border-radius: 8px;
+    padding: 1.2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-pay:hover {
+    background: #f59e0b;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+.btn-pay:active {
+    transform: translateY(0);
+}
+
+.btn-cancel {
+    background: transparent;
+    color: #94a3b8;
+    border: 2px solid #475569;
+    border-radius: 8px;
+    padding: 1.2rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-cancel:hover {
+    background: #475569;
+    color: #fcd34d;
+    border-color: #fbbf24;
+}
+
+/* Сообщения */
+.payment-alert {
+    background: #1e293b;
+    border: 2px solid #fbbf24;
+    color: #fcd34d;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-alert.alert-danger {
+    border-color: #ef4444;
+    color: #fca5a5;
+}
+
+.payment-alert.alert-success {
+    border-color: #10b981;
+    color: #6ee7b7;
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #94a3b8;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Иконки */
+.payment-icon {
+    color: #fbbf24;
+    margin-right: 0.5rem;
+}
+
+/* Адаптивность */
+@media (max-width: 991px) {
+    .payment-title {
+        font-size: 2rem;
+    }
+
+    .total-amount {
+        font-size: 2rem;
+    }
+
+    .payment-actions {
+        flex-direction: column;
+    }
+
+    .order-table {
+        font-size: 0.9rem;
+    }
+
+    .order-table thead th,
+    .order-table tbody td {
+        padding: 0.7rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .payment-title {
+        font-size: 1.5rem;
+    }
+
+    .total-amount {
+        font-size: 1.5rem;
+    }
+
+    /* Делаем таблицу более компактной на мобильных */
+    .order-table {
+        font-size: 0.8rem;
+    }
+
+    .voyage-info-item {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .voyage-info-label {
+        min-width: auto;
+    }
+}

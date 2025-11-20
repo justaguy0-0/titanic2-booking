@@ -4,13 +4,30 @@
 
 /* Фоны и контейнеры */
 .shop-container {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    min-height: 100vh;
 }
 
-.shop-hero-title {
-    font-family: Georgia, serif;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+/* Компактный заголовок страницы */
+.shop-page-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 16px;
+    border: 2px solid #fbbf24;
+    box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
+    padding: 2rem;
     animation: fadeInDown 0.8s ease-out;
+}
+
+.shop-page-title {
+    color: #fbbf24;
+    font-family: Georgia, serif;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 0.5rem;
+}
+
+.shop-page-subtitle {
+    color: #fcd34d;
+    font-size: 1.1rem;
+    font-weight: 300;
 }
 
 @keyframes fadeInDown {

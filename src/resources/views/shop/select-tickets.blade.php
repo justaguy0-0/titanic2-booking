@@ -159,16 +159,25 @@
 
                                             <div class="deck-body"
                                                 style="background-image: url('/images/decks/{{ $deckKey }}-deck.png');">
-                                                <div class="seats-grid {{ $gridClass }}">
+                                                <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
                                                     @foreach($cabinType->tickets as $ticket)
-                                                        <div class="seat available"
+                                                        @php
+                                                            $isBooked = $ticket->status === 'Забронирован';
+                                                            $seatClass = $isBooked ? 'seat booked' : 'seat available';
+                                                            // Добавляем класс размера в зависимости от типа палубы
+                                                            $seatClass .= ' ' . $deckKey . '-seat';
+                                                            $tooltipText = $isBooked
+                                                                ? "Место {$ticket->number} — Забронировано"
+                                                                : number_format($ticket->price, 0, '', ' ') . " ₽";
+                                                            // Порядковый индекс места в рамках этого класса каюты (начиная с 0)
+                                                            $seatIndex = $loop->index;
+                                                        @endphp
+                                                        <div class="{{ $seatClass }}"
                                                             data-ticket-id="{{ $ticket->id }}"
                                                             data-price="{{ $ticket->price }}"
                                                             data-place="{{ $ticket->number }}"
-                                                            title="Место {{ $ticket->number }} — {{ number_format($ticket->price, 0) }} ₽">
-                                                            <div class="seat-inner">
-                                                                <div class="seat-number">{{ $ticket->number }}</div>
-                                                            </div>
+                                                            data-seat-index="{{ $seatIndex }}"
+                                                            title="{{ $tooltipText }}">
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -191,7 +200,7 @@
                                     </div>
                                     <div class="legend-item">
                                         <div class="legend-box booked"></div>
-                                        <span>Занято</span>
+                                        <span>Забронировано</span>
                                     </div>
                                 </div>
                             </div>
@@ -207,7 +216,7 @@
                             @endforeach
 
                             <div class="selection-note mt-3 text-center">
-                                <i class="fas fa-info-circle me-1"></i>Нажмите на место, чтобы выбрать его
+                                <i class="fas fa-info-circle me-1"></i>Нажмите на квадрат, чтобы выбрать место
                             </div>
                         @else
                             <p class="empty-message text-center py-5">
@@ -444,6 +453,44 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     updateTotal();
+});
+</script>
+
+{{-- Подключение конфигурации позиций мест --}}
+<script src="{{ asset('js/seat-positions.js') }}"></script>
+<script>
+// Применяем позиции к местам после загрузки DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // Для каждой палубы применяем позиции
+    const deckContainers = document.querySelectorAll('.seats-container[data-deck-type]');
+
+    deckContainers.forEach(container => {
+        const deckType = container.dataset.deckType;
+        const seats = container.querySelectorAll('.seat[data-seat-index]');
+
+        // Получаем позиции для этого типа палубы
+        const positions = seatPositions[deckType];
+
+        if (!positions) {
+            console.warn('Позиции не найдены для палубы:', deckType);
+            return;
+        }
+
+        seats.forEach(seat => {
+            const seatIndex = parseInt(seat.dataset.seatIndex);
+            const position = positions[seatIndex];
+
+            if (position) {
+                // Применяем позицию
+                seat.style.position = 'absolute';
+                seat.style.top = position.top + '%';
+                seat.style.left = position.left + '%';
+                seat.style.transform = 'translate(-50%, -50%)'; // Центрируем относительно координат
+            } else {
+                console.warn('Позиция не найдена для места', seatIndex, 'на палубе', deckType);
+            }
+        });
+    });
 });
 </script>
 @endsection

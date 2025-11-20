@@ -1,7 +1,5 @@
 @extends('admin.admin')
-
 @section('title', 'Места')
-
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
@@ -13,7 +11,6 @@
                 + Добавить место
             </a>
         </div>
-
         <div class="tabs mb-6 border-b border-gray-200">
             <a href="{{ route('admin.places.index', ['type' => 'departure']) }}"
                class="px-6 py-3 font-medium border-b-2 {{ $type === 'departure' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-600 hover:text-gray-900' }}">
@@ -24,7 +21,6 @@
                 Прибытия
             </a>
         </div>
-
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
                 {{ session('success') }}
@@ -35,7 +31,6 @@
                 {{ session('error') }}
             </div>
         @endif
-
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -44,18 +39,15 @@
                         $currentSort = request('sort', 'id');
                         $currentDir = request('direction', 'desc');
                         $nextDir = $currentDir === 'asc' ? 'desc' : 'asc';
-
                         $sortUrl = function($field) use ($currentSort, $nextDir, $type) {
                             $dir = $currentSort === $field ? $nextDir : 'asc';
                             return route('admin.places.index', ['type' => $type, 'sort' => $field, 'direction' => $dir]);
                         };
-
                         $sortIcon = function($field) use ($currentSort, $currentDir) {
                             if ($currentSort !== $field) return '';
                             return $currentDir === 'asc' ? '↑' : '↓';
                         };
                     @endphp
-
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('id') }}" class="hover:text-gray-900 flex items-center gap-1">
                             ID <span class="text-gray-400 text-lg">{{ $sortIcon('id') }}</span>
@@ -95,15 +87,21 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $place->created_at->format('d.m.Y H:i') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+
+                        {{-- Действия только иконки --}}
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                             <a href="{{ route('admin.places.edit', $place) }}"
-                               class="text-blue-600 hover:text-blue-900 mr-4">Редактировать</a>
+                               class="text-gray-600 hover:text-indigo-600" title="Редактировать">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
                             <form action="{{ route('admin.places.destroy', $place) }}" method="POST" class="inline"
                                   onsubmit="return confirm('Удалить место «{{ addslashes($place->name) }}»?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>
+                                <button type="submit" class="text-gray-600 hover:text-red-600" title="Удалить">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -120,7 +118,6 @@
                 </tbody>
             </table>
         </div>
-
         <div class="mt-6">
             {{ $places->appends(request()->query())->links() }}
         </div>

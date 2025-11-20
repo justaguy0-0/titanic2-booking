@@ -37,7 +37,7 @@ class DashboardController extends Controller
         $totalTicketsSold = Order::where('orders.created_at', '>=', $lastMonth)
             ->where('orders.status', '!=', 'cancelled')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
-            ->where('order_items.type', 'ticket')
+            ->where('order_items.item_type', 'ticket')
             ->sum('order_items.quantity');
 
         $newUsersCount = User::where('created_at', '>=', $lastMonth)->count();

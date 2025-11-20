@@ -95,4 +95,17 @@ class TicketController extends Controller
         $ticket->delete();
         return redirect()->route('admin.tickets.index')->with('success', 'Билет успешно удалён.');
     }
+
+    public function show(Ticket $ticket)
+    {
+        // Загружаем связанные данные
+        $ticket->load([
+            'voyage.departurePlace',
+            'voyage.arrivalPlace',
+            'cabinType',
+            'orderItems.order.user'
+        ]);
+
+        return view('admin.tickets.show', compact('ticket'));
+    }
 }

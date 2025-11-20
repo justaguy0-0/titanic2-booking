@@ -22,7 +22,7 @@ class OrderItemController extends Controller
         $allowedSorts = [
             'id',
             'order_id',
-            'type',
+            'item_type',
             'total_price',     // price * quantity
             'created_at',
             'item_name',       // название билета или развлечения
@@ -36,7 +36,7 @@ class OrderItemController extends Controller
         }
 
         // Простые поля
-        if (in_array($sortField, ['id', 'order_id', 'type', 'created_at'])) {
+        if (in_array($sortField, ['id', 'order_id', 'item_type', 'created_at'])) {
             $query->orderBy($sortField, $sortDirection);
         }
 
@@ -72,14 +72,14 @@ class OrderItemController extends Controller
     {
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
-            'type' => 'required|in:ticket,entertainment',
-            'ticket_id' => 'required_if:type,ticket|nullable|exists:tickets,id',
-            'entertainment_id' => 'required_if:type,entertainment|nullable|exists:entertainments,id',
-            'quantity' => 'required_if:type,entertainment|nullable|integer|min:1',
+            'item_type' => 'required|in:ticket,entertainment',
+            'ticket_id' => 'required_if:item_type,ticket|nullable|exists:tickets,id',
+            'entertainment_id' => 'required_if:item_type,entertainment|nullable|exists:entertainments,id',
+            'quantity' => 'required_if:item_type,entertainment|nullable|integer|min:1',
         ]);
 
         // Проверка: билет уже в заказе?
-        if ($validated['type'] === 'ticket') {
+        if ($validated['item_type'] === 'ticket') {
             $exists = OrderItem::where('order_id', $validated['order_id'])
                 ->where('ticket_id', $validated['ticket_id'])
                 ->exists();
@@ -91,7 +91,7 @@ class OrderItemController extends Controller
         $price = 0;
         $ticket = null;
 
-        if ($validated['type'] === 'ticket') {
+        if ($validated['item_type'] === 'ticket') {
             $ticket = Ticket::findOrFail($validated['ticket_id']);
             if ($ticket->status !== 'Доступно') {
                 return back()->withErrors(['ticket_id' => "Билет {$ticket->number} недоступен."]);
@@ -105,9 +105,9 @@ class OrderItemController extends Controller
 
         OrderItem::create([
             'order_id' => $validated['order_id'],
-            'ticket_id' => $validated['type'] === 'ticket' ? $validated['ticket_id'] : null,
-            'entertainment_id' => $validated['type'] === 'entertainment' ? $validated['entertainment_id'] : null,
-            'type' => $validated['type'],
+            'ticket_id' => $validated['item_type'] === 'ticket' ? $validated['ticket_id'] : null,
+            'entertainment_id' => $validated['item_type'] === 'entertainment' ? $validated['entertainment_id'] : null,
+            'item_type' => $validated['item_type'],
             'price' => $price,
             'quantity' => $validated['quantity'] ?? 1,
         ]);
@@ -133,20 +133,20 @@ class OrderItemController extends Controller
     {
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
-            'type' => 'required|in:ticket,entertainment',
-            'ticket_id' => 'required_if:type,ticket|nullable|exists:tickets,id',
-            'entertainment_id' => 'required_if:type,entertainment|nullable|exists:entertainments,id',
-            'quantity' => 'required_if:type,entertainment|nullable|integer|min:1',
+            'item_type' => 'required|in:ticket,entertainment',
+            'ticket_id' => 'required_if:item_type,ticket|nullable|exists:tickets,id',
+            'entertainment_id' => 'required_if:item_type,entertainment|nullable|exists:entertainments,id',
+            'quantity' => 'required_if:item_type,entertainment|nullable|integer|min:1',
         ]);
 
         $oldOrderId = $orderItem->order_id;
-        $oldType = $orderItem->type;
+        $oldType = $orderItem->item_type;
         $oldTicket = $orderItem->ticket;
 
         $price = 0;
         $newTicket = null;
 
-        if ($validated['type'] === 'ticket') {
+        if ($validated['item_type'] === 'ticket') {
             $newTicket = Ticket::findOrFail($validated['ticket_id']);
             if ($newTicket->status !== 'Доступно' && $newTicket->id !== $orderItem->ticket_id) {
                 return back()->withErrors(['ticket_id' => "Билет {$newTicket->number} недоступен."]);
@@ -168,9 +168,9 @@ class OrderItemController extends Controller
 
         $orderItem->update([
             'order_id' => $validated['order_id'],
-            'ticket_id' => $validated['type'] === 'ticket' ? $validated['ticket_id'] : null,
-            'entertainment_id' => $validated['type'] === 'entertainment' ? $validated['entertainment_id'] : null,
-            'type' => $validated['type'],
+            'ticket_id' => $validated['item_type'] === 'ticket' ? $validated['ticket_id'] : null,
+            'entertainment_id' => $validated['item_type'] === 'entertainment' ? $validated['entertainment_id'] : null,
+            'item_type' => $validated['item_type'],
             'price' => $price,
             'quantity' => $validated['quantity'] ?? 1,
         ]);
@@ -188,7 +188,7 @@ class OrderItemController extends Controller
         try {
             $order = $orderItem->order;
 
-            if ($orderItem->type === 'ticket' && $orderItem->ticket) {
+            if ($orderItem->item_type === 'ticket' && $orderItem->ticket) {
                 $orderItem->ticket->update(['status' => 'Доступно']);
             }
 

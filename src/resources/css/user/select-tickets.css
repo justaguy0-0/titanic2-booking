@@ -621,8 +621,6 @@
     opacity: 1 !important;
 }
 
-/* Адаптивность */
-/* Планшеты (до 1200px) */
 @media (max-width: 1200px) {
     /* Уменьшаем размеры квадратов */
     .seat.first-class-seat {
@@ -739,4 +737,5 @@
         font-size: 0.75rem;
         padding: 0.4rem 0.8rem;
     }
+
 }

@@ -406,9 +406,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        seat.addEventListener('click', function() {
+        seat.addEventListener('click', function(e) {
             const ticketId = this.dataset.ticketId;
             const checkbox = document.getElementById('ticket-' + ticketId);
+
+            console.log('Клик по билету:', ticketId, 'Трапеция:', this.classList.contains('trapezoid-left') || this.classList.contains('trapezoid-right'));
 
             if (checkbox) {
                 // Переключаем состояние чекбокса
@@ -423,6 +425,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Обновляем итоговую сумму
                 updateTotal();
+            } else {
+                console.error('Чекбокс не найден для билета:', ticketId);
             }
         });
     });

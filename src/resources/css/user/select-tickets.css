@@ -1,14 +1,9 @@
-/* ============================================
-   SELECT TICKETS PAGE - ВЫБОР БИЛЕТОВ
-   ============================================ */
 
-/* Контейнер страницы */
 .select-tickets-container {
     background: #0f172a;
     min-height: 100vh;
 }
 
-/* Информация о рейсе */
 .voyage-info-card {
     background: #1e293b;
     border-radius: 12px;
@@ -89,8 +84,6 @@
     margin-bottom: 0.8rem;
 }
 
-/* Переключатель этажей */
-/* Переключатель этажей - КОМПАКТНАЯ ВЕРСИЯ */
 .deck-selector {
     display: flex;
     justify-content: center;
@@ -260,14 +253,8 @@
     cursor: pointer;
     border-radius: 0.3vw;
     color: #fbbf24;
+    transition: all 0.3s ease;
 }
-
-/* Показываем номер места для отладки */
-/* .seat::before {
-    content: attr(data-place);
-    position: relative;
-    z-index: 10;
-} */
 
 /* Размеры для первого класса */
 .seat.first-class-seat {
@@ -346,11 +333,13 @@
     background: rgba(251, 191, 36, 0.4);
 }
 
-/* Выбранное место - золотая рамка */
+/* Выбранное место - яркое выделение */
 .seat.selected {
-    border: 0.25vw solid #fbbf24;
-    background: rgba(251, 191, 36, 0.3);
-    box-shadow: 0 0 1.5vw rgba(251, 191, 36, 0.6);
+    border: 0.4vw solid #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.7) !important;
+    box-shadow: 0 0 2vw rgba(251, 191, 36, 1),
+                inset 0 0 1vw rgba(251, 191, 36, 0.5) !important;
+    z-index: 100 !important;
 }
 
 /* Забронированное место - серая рамка */
@@ -360,26 +349,22 @@
     cursor: not-allowed;
 }
 
-/* Tooltip для показа цены при наведении */
+/* Цена внутри билета при наведении - ДЛЯ ВСЕХ БИЛЕТОВ */
 .seat.available::after {
     content: attr(title);
     position: absolute;
-    bottom: 100%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    background: rgba(30, 41, 59, 0.95);
+    transform: translate(-50%, -50%);
     color: #fbbf24;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    border: 1px solid rgba(251, 191, 36, 0.5);
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    white-space: nowrap;
+    text-align: center;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s ease;
-    z-index: 100;
-    margin-bottom: 8px;
+    z-index: 10;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
 
 .seat.available:hover::after {
@@ -411,19 +396,20 @@
 }
 
 .legend-box.available {
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.8);
 }
 
 .legend-box.selected {
-    background: transparent;
+    background: rgba(251, 191, 36, 0.7);
     border-color: #fbbf24;
-    box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+    box-shadow: 0 0 8px rgba(251, 191, 36, 1),
+                inset 0 0 4px rgba(251, 191, 36, 0.5);
 }
 
 .legend-box.booked {
-    background: transparent;
-    border-color: rgba(100, 116, 139, 0.5);
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.8);
 }
 
 /* Билеты (старый список - скрываем) */

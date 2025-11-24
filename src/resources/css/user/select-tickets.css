@@ -259,38 +259,78 @@
     position: relative;
     cursor: pointer;
     border-radius: 0.3vw;
-    /* ОТЛАДКА: Показываем номер места */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1vw;
-    font-weight: bold;
     color: #fbbf24;
 }
 
 /* Показываем номер места для отладки */
-.seat::before {
+/* .seat::before {
     content: attr(data-place);
     position: relative;
     z-index: 10;
-}
+} */
 
 /* Размеры для первого класса */
 .seat.first-class-seat {
-    width: 9.4%;
+    width: 11.2%;
     aspect-ratio: 113 / 126; /* Сохраняем пропорции 113px x 126px */
 }
 
 /* Размеры для второго класса */
 .seat.business-class-seat {
-    width: 5.8%;
-    aspect-ratio: 70 / 118; /* Сохраняем пропорции 70px x 118px */
+    width: 7.2%;
+    aspect-ratio: 70 / 115; /* Сохраняем пропорции 70px x 118px */
 }
 
 /* Размеры для третьего класса */
 .seat.economy-class-seat {
-    width: 3.75%;
-    aspect-ratio: 1 / 1; /* Квадрат 45px x 45px */
+    width: 3%;
+    aspect-ratio: 1 / 2.2; /* Квадрат 45px x 45px */
+}
+
+/* ТРАПЕЦИИ для третьего класса - УВЕЛИЧЕННЫЙ РАЗМЕР */
+.seat.economy-class-seat.trapezoid-left,
+.seat.economy-class-seat.trapezoid-right {
+    width: 13%; /* Увеличиваем размер для трапеций третьего класса */
+    aspect-ratio: 1.15 / 1; /* Делаем чуть выше */
+}
+
+.seat.business-class-seat.trapezoid-left,
+.seat.business-class-seat.trapezoid-right {
+    width: 12%;
+    aspect-ratio: 1 / 1; /* Делаем чуть выше */
+}
+
+/* СПЕЦИАЛЬНАЯ ФОРМА - ТРАПЕЦИЯ ТИП 1 (левая сторона под углом) */
+.seat.trapezoid-left {
+    clip-path: polygon(0% 0%, 92% 30%, 92% 100%, 0% 100%);
+    /* Правая сторона вертикальная, левая под углом */
+}
+
+/* СПЕЦИАЛЬНАЯ ФОРМА - ТРАПЕЦИЯ ТИП 2 (правая сторона под углом) */
+.seat.trapezoid-right {
+    clip-path: polygon(0% 0%, 92% 0%, 92% 70%, 0% 100%);
+    /* Левая сторона вертикальная, правая под углом */
+}
+
+/* Общие стили для обеих трапеций */
+.seat.trapezoid-left.available,
+.seat.trapezoid-right.available {
+    border-color: rgba(245, 158, 11, 0.9) !important;
+    background: rgba(245, 158, 11, 0.25) !important;
+}
+
+.seat.trapezoid-left.available:hover,
+.seat.trapezoid-right.available:hover {
+    border-color: #f59e0b !important;
+    background: rgba(245, 158, 11, 0.5) !important;
+    box-shadow: 0 0 1.5vw rgba(245, 158, 11, 0.6);
+}
+
+.seat.trapezoid-left.selected,
+.seat.trapezoid-right.selected {
+    border-color: #f59e0b !important;
+    background: rgba(245, 158, 11, 0.4) !important;
+    box-shadow: 0 0 2vw rgba(245, 158, 11, 0.7);
 }
 
 /* Доступное место - пустой квадрат с тонкой рамкой */

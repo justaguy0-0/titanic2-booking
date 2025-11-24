@@ -490,6 +490,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 seat.style.top = position.top + '%';
                 seat.style.left = position.left + '%';
                 seat.style.transform = 'translate(-50%, -50%)'; // Центрируем относительно координат
+
+                // Если место должно быть трапецией, добавляем специальный класс
+                if (position.isTrapezoid) {
+                    if (position.isTrapezoid === 'left') {
+                        seat.classList.add('trapezoid-left');
+                    } else if (position.isTrapezoid === 'right') {
+                        seat.classList.add('trapezoid-right');
+                    }
+                }
             } else {
                 console.warn('Позиция не найдена для места', seatIndex, 'на палубе', deckType);
             }

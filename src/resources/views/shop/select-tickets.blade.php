@@ -157,10 +157,13 @@
                                                 {{ $cabinType->name }} — {{ $cabinType->description }}
                                             </div>
 
-                                            <div class="deck-body"
-                                                style="background-image: url('/images/decks/{{ $deckKey }}-deck.png');">
-                                                <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
-                                                    @foreach($cabinType->tickets as $ticket)
+                                            <div class="deck-body">
+                                                <div class="deck-image-wrapper">
+                                                    <img src="/images/decks/{{ $deckKey }}-deck.png?v={{ time() }}"
+                                                         alt="{{ $cabinType->name }}"
+                                                         class="deck-image">
+                                                    <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
+                                                        @foreach($cabinType->tickets as $ticket)
                                                         @php
                                                             $isBooked = $ticket->status === 'Забронирован';
                                                             $seatClass = $isBooked ? 'seat booked' : 'seat available';
@@ -179,7 +182,8 @@
                                                             data-seat-index="{{ $seatIndex }}"
                                                             title="{{ $tooltipText }}">
                                                         </div>
-                                                    @endforeach
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

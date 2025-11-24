@@ -75,7 +75,7 @@
 
 /* Схема корабля */
 .ship-layout {
-    background: #1e293b;
+    background: transparent;
     border-radius: 12px;
     padding: 1rem;
     border: 2px solid #fbbf24;
@@ -216,114 +216,107 @@
 }
 
 .deck-body {
-    padding: 1.5rem 3rem;
+    padding: 0;
     border-radius: 0 0 8px 8px;
     border: 2px solid #475569;
     border-top: none;
-    position: relative;
-    min-height: 250px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    width: 100%;
+    background: transparent; /* Прозрачный фон */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Фоновые изображения палуб */
-.first-class .deck-body {
-    background-image: url('../../images/decks/first-class-deck.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
-    padding: 2rem;
+/* Wrapper для изображения - привязываем к нему билеты */
+.deck-image-wrapper {
+    position: relative; /* Билеты позиционируются относительно wrapper */
+    display: inline-block; /* Подстраивается под размер изображения */
+    width: 100%;
+    overflow: hidden; /* Обрезаем всё, что выходит за пределы изображения */
 }
 
-.business-class .deck-body {
-    background-image: url('../../images/decks/business-class-deck.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
-    padding: 2rem;
-}
-
-.economy-class .deck-body {
-    background-image: url('../../images/decks/economy-class-deck.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
-    padding: 2rem;
+/* Изображение палубы */
+.deck-image {
+    width: 100%;
+    height: auto; /* Сохраняем пропорции */
+    display: block;
+    background: transparent; /* Прозрачный фон */
 }
 
 .seats-container {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    min-height: 400px;
     z-index: 1;
     background: transparent;
-}
-
-.seats-container.first-class {
-    min-height: 400px;
-}
-
-.seats-container.business-class {
-    min-height: 450px;
-}
-
-.seats-container.economy-class {
-    min-height: 500px;
 }
 
 /* Стили мест - простой квадрат с рамкой */
 .seat {
     position: relative;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 0.3vw;
+    /* ОТЛАДКА: Показываем номер места */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1vw;
+    font-weight: bold;
+    color: #fbbf24;
+}
+
+/* Показываем номер места для отладки */
+.seat::before {
+    content: attr(data-place);
+    position: relative;
+    z-index: 10;
 }
 
 /* Размеры для первого класса */
 .seat.first-class-seat {
-    width: 70px;
-    height: 70px;
+    width: 9.4%;
+    aspect-ratio: 113 / 126; /* Сохраняем пропорции 113px x 126px */
 }
 
 /* Размеры для второго класса */
 .seat.business-class-seat {
-    width: 55px;
-    height: 55px;
+    width: 5.8%;
+    aspect-ratio: 70 / 118; /* Сохраняем пропорции 70px x 118px */
 }
 
 /* Размеры для третьего класса */
 .seat.economy-class-seat {
-    width: 45px;
-    height: 45px;
+    width: 3.75%;
+    aspect-ratio: 1 / 1; /* Квадрат 45px x 45px */
 }
 
 /* Доступное место - пустой квадрат с тонкой рамкой */
 .seat.available {
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: transparent;
+    border: 0.25vw solid rgba(251, 191, 36, 0.8); /* ОТЛАДКА: Яркая рамка */
+    background: rgba(251, 191, 36, 0.2); /* ОТЛАДКА: Полупрозрачный фон */
 }
 
 /* При наведении - золотая рамка */
 .seat.available:hover {
     border-color: #fbbf24;
-    box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 1vw rgba(251, 191, 36, 0.5);
+    background: rgba(251, 191, 36, 0.4);
 }
 
 /* Выбранное место - золотая рамка */
 .seat.selected {
-    border: 3px solid #fbbf24;
-    background: transparent;
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+    border: 0.25vw solid #fbbf24;
+    background: rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 1.5vw rgba(251, 191, 36, 0.6);
 }
 
 /* Забронированное место - серая рамка */
 .seat.booked {
-    border: 2px solid rgba(100, 116, 139, 0.5);
-    background: transparent;
+    border: 0.25vw solid rgba(239, 68, 68, 0.8); /* ОТЛАДКА: Красная рамка */
+    background: rgba(239, 68, 68, 0.2); /* ОТЛАДКА: Красный фон */
     cursor: not-allowed;
 }
 
@@ -622,34 +615,7 @@
 }
 
 @media (max-width: 1200px) {
-    /* Уменьшаем размеры квадратов */
-    .seat.first-class-seat {
-        width: 60px;
-        height: 60px;
-    }
-
-    .seat.business-class-seat {
-        width: 48px;
-        height: 48px;
-    }
-
-    .seat.economy-class-seat {
-        width: 40px;
-        height: 40px;
-    }
-
-    /* Уменьшаем отступы палуб */
-    .first-class .deck-body {
-        padding: 2rem;
-    }
-
-    .business-class .deck-body {
-        padding: 3rem;
-    }
-
-    .economy-class .deck-body {
-        padding: 4rem;
-    }
+    /* Размеры автоматически масштабируются через % */
 }
 
 /* Планшеты маленькие (до 991px) */
@@ -661,81 +627,13 @@
     .total-amount {
         font-size: 1.5rem;
     }
-
-    /* Еще меньше квадраты */
-    .seat.first-class-seat {
-        width: 50px;
-        height: 50px;
-    }
-
-    .seat.business-class-seat {
-        width: 42px;
-        height: 42px;
-    }
-
-    .seat.economy-class-seat {
-        width: 35px;
-        height: 35px;
-    }
-
-    /* Уменьшаем отступы */
-    .first-class .deck-body {
-        padding: 1.5rem;
-    }
-
-    .business-class .deck-body {
-        padding: 2.5rem;
-    }
-
-    .economy-class .deck-body {
-        padding: 3.5rem;
-    }
-
-    /* Добавляем скролл для контейнера палубы на маленьких экранах */
-    .deck-body {
-        overflow-x: auto;
-        overflow-y: auto;
-    }
-
-    .seats-container {
-        min-width: 600px; /* Минимальная ширина чтобы места не слипались */
-    }
 }
 
 /* Мобильные (до 768px) */
 @media (max-width: 768px) {
-    /* Минимальные размеры квадратов */
-    .seat.first-class-seat {
-        width: 40px;
-        height: 40px;
-    }
-
-    .seat.business-class-seat {
-        width: 35px;
-        height: 35px;
-    }
-
-    .seat.economy-class-seat {
-        width: 30px;
-        height: 30px;
-    }
-
-    /* Минимальные отступы */
-    .first-class .deck-body,
-    .business-class .deck-body,
-    .economy-class .deck-body {
-        padding: 1rem;
-    }
-
-    /* Гарантируем скролл на мобильных */
-    .seats-container {
-        min-width: 500px;
-    }
-
     /* Уменьшаем размер tooltip */
     .seat.available::after {
         font-size: 0.75rem;
         padding: 0.4rem 0.8rem;
     }
-
 }

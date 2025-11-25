@@ -153,10 +153,9 @@
     </div>
 </section>
 
-    <section class="py-5" style="background: #0f172a;">
+<section class="py-5" style="background: #0f172a;">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold section-title">Возможности круиза</h2>
-
 
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6">
@@ -166,7 +165,7 @@
                 <h3 class="entertainment-title">Вечерний ужин на палубе</h3>
                 <p class="entertainment-text">Роскошный ужин при свечах с видом на океан. Шеф-повар мирового класса.</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    $150 на человека
+                    {{ $prices['Вечерний ужин на палубе'] }} руб.
                 </div>
                 <div class="mt-3">
                     <span class="badge badge-gold">18:00-23:00</span>
@@ -175,16 +174,15 @@
             </div>
         </div>
 
-
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6 order-md-2">
                 <div class="entertainment-image entertainment-image-spa rounded"></div>
             </div>
             <div class="col-md-6 order-md-1">
-                <h3 class="entertainment-title"> Спа-процедуры</h3>
+                <h3 class="entertainment-title">Спа-процедуры</h3>
                 <p class="entertainment-text">Премиум спа-комплекс с талассотерапией, массажем и косметическими процедурами.</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    от $200
+                    {{ $prices['Спа-процедуры'] }} руб.
                 </div>
                 <div class="mt-3">
                     <span class="badge badge-gold">09:00-21:00</span>
@@ -192,7 +190,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6">
@@ -202,7 +199,7 @@
                 <h3 class="entertainment-title">Концерт оркестра</h3>
                 <p class="entertainment-text">Живая музыка в исполнении симфонического оркестра. Классические и современные произведения.</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    Включено в стоимость
+                    @if($prices['Концерт оркестра'] == 0)Включено в стоимость@else{{ $prices['Концерт оркестра'] }} руб.@endif
                 </div>
                 <div class="mt-3">
                     <span class="badge badge-gold">20:00-22:00</span>
@@ -210,7 +207,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6 order-md-2">
@@ -220,7 +216,7 @@
                 <h3 class="entertainment-title">Детский клуб "Морские приключения"</h3>
                 <p class="entertainment-text">Анимационная программа, мастер-классы, игры и развлечения для детей всех возрастов под присмотром профессиональных воспитателей.</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    Бесплатно для детей
+                    @if($prices['Детский клуб "Морские приключения"'] == 0)Бесплатно для детей@else{{ $prices['Детский клуб "Морские приключения"'] }} руб.@endif
                 </div>
                 <div class="mt-3">
                     <span class="badge badge-gold">10:00-18:00</span>
@@ -230,16 +226,15 @@
             </div>
         </div>
 
-
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6">
                 <div class="entertainment-image entertainment-image-akro rounded"></div>
             </div>
             <div class="col-md-6">
-                <h3 class="entertainment-title"> Шоу воздушных акробатов</h3>
+                <h3 class="entertainment-title">Шоу воздушных акробатов</h3>
                 <p class="entertainment-text">Захватывающее представление профессиональных акробатов под куполом главного атриума. Огни, музыка и невероятные трюки.</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    $50 на человека
+                    {{ $prices['Шоу воздушных акробатов'] }} руб.
                 </div>
                 <div class="mt-3">
                     <span class="badge badge-gold">21:00</span>
@@ -249,7 +244,6 @@
             </div>
         </div>
 
-
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6 order-md-2">
                 <div class="entertainment-image entertainment-image-dance rounded"></div>
@@ -258,7 +252,7 @@
                 <h3 class="entertainment-title">Танцевальный вечер в бальном зале</h3>
                 <p class="entertainment-text">Роскошный бал в стиле 20-х годов. Живой джаз-бэнд, профессиональные танцоры и уроки исторических танцев.</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    $75 на человека
+                    {{ $prices['Танцевальный вечер в бальном зале'] }} руб.
                 </div>
                 <div class="mt-3">
                     <span class="badge badge-gold">19:00-01:00</span>
@@ -276,7 +270,7 @@
                 <h3 class="entertainment-title">Йога для самых здоровых</h3>
                 <p class="entertainment-text">Дневные занятия на свежем воздухе. Под шум волн.</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    $375 на человека(абонимент)
+                    {{ $prices['Йога для самых здоровых'] }} руб.
                 </div>
                 <div class="mt-3">
                     <span class="badge badge-gold">9:00-10:30</span>
@@ -287,7 +281,6 @@
         </div>
     </div>
 </section>
-
 <section class="py-5" style="background: #1e293b;">
     <div class="container">
         <h2 class="text-center mb-5 fw-bold section-title">РЕСТОРАНЫ И ПИТАНИЕ</h2>
@@ -349,4 +342,3 @@
 </section>
 </div>
 @endsection
-

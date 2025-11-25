@@ -216,7 +216,7 @@ class ShopController extends Controller
                     'price' => $ticket->price,
                 ]);
 
-                $ticket->update(['status' => 'Забронирован']);
+                $ticket->update(['status' => 'Забронировано']);
             }
 
             // Добавляем развлечения в заказ

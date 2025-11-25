@@ -110,7 +110,7 @@
     min-width: auto;
     position: relative;
     overflow: hidden;
-    /* ВАЖНО: убираем возможные свойства, которые могут скрывать кнопки */
+ 
     opacity: 1 !important;
     visibility: visible !important;
     z-index: 10;
@@ -173,7 +173,6 @@
     pointer-events: none;
 }
 
-/* Контейнер палуб */
 .decks-container {
     position: relative;
     min-height: 250px;
@@ -185,7 +184,6 @@
     width: 100%;
 }
 
-/* Адаптивность для мобильных */
 @media (max-width: 768px) {
     .deck-selector {
         flex-direction: column;
@@ -214,27 +212,25 @@
     border: 2px solid #475569;
     border-top: none;
     width: 100%;
-    background: transparent; /* Прозрачный фон */
+    background: transparent;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Wrapper для изображения - привязываем к нему билеты */
 .deck-image-wrapper {
-    position: relative; /* Билеты позиционируются относительно wrapper */
-    display: inline-block; /* Подстраивается под размер изображения */
+    position: relative;
+    display: inline-block;
     width: 100%;
-    overflow: hidden; /* Обрезаем всё, что выходит за пределы изображения */
+    overflow: hidden;
 }
 
-/* Изображение палубы */
 .deck-image {
     width: 100%;
-    height: auto; /* Сохраняем пропорции */
+    height: auto;
     display: block;
-    background: transparent; /* Прозрачный фон */
+    background: transparent;
 }
 
 .seats-container {
@@ -247,7 +243,6 @@
     background: transparent;
 }
 
-/* Стили мест - простой квадрат с рамкой */
 .seat {
     position: relative;
     cursor: pointer;
@@ -256,84 +251,84 @@
     transition: all 0.3s ease;
 }
 
-/* Размеры для первого класса */
 .seat.first-class-seat {
     width: 11.2%;
-    aspect-ratio: 113 / 126; /* Сохраняем пропорции 113px x 126px */
+    aspect-ratio: 113 / 126;
 }
 
-/* Размеры для второго класса */
 .seat.business-class-seat {
     width: 7.2%;
-    aspect-ratio: 70 / 115; /* Сохраняем пропорции 70px x 118px */
+    aspect-ratio: 70 / 115;
 }
 
-/* Размеры для третьего класса */
 .seat.economy-class-seat {
     width: 3%;
-    aspect-ratio: 1 / 2.2; /* Квадрат 45px x 45px */
+    aspect-ratio: 1 / 2.2;
 }
 
-/* ТРАПЕЦИИ для третьего класса - УВЕЛИЧЕННЫЙ РАЗМЕР */
 .seat.economy-class-seat.trapezoid-left,
 .seat.economy-class-seat.trapezoid-right {
-    width: 13%; /* Увеличиваем размер для трапеций третьего класса */
-    aspect-ratio: 1.15 / 1; /* Делаем чуть выше */
+    width: 13%;
+    aspect-ratio: 1.15 / 1;
 }
 
 .seat.business-class-seat.trapezoid-left,
 .seat.business-class-seat.trapezoid-right {
     width: 12%;
-    aspect-ratio: 1 / 1; /* Делаем чуть выше */
+    aspect-ratio: 1 / 1;
 }
 
-/* СПЕЦИАЛЬНАЯ ФОРМА - ТРАПЕЦИЯ ТИП 1 (левая сторона под углом) */
 .seat.trapezoid-left {
     clip-path: polygon(0% 0%, 92% 30%, 92% 100%, 0% 100%);
-    /* Правая сторона вертикальная, левая под углом */
 }
 
-/* СПЕЦИАЛЬНАЯ ФОРМА - ТРАПЕЦИЯ ТИП 2 (правая сторона под углом) */
+
 .seat.trapezoid-right {
     clip-path: polygon(0% 0%, 92% 0%, 92% 70%, 0% 100%);
-    /* Левая сторона вертикальная, правая под углом */
 }
 
-/* Общие стили для обеих трапеций */
 .seat.trapezoid-left.available,
 .seat.trapezoid-right.available {
-    border-color: rgba(245, 158, 11, 0.9) !important;
-    background: rgba(245, 158, 11, 0.25) !important;
+    border-color: rgba(251, 191, 36, 0.8) !important;
+    background: rgba(251, 191, 36, 0.2) !important;
 }
 
 .seat.trapezoid-left.available:hover,
 .seat.trapezoid-right.available:hover {
-    border-color: #f59e0b !important;
-    background: rgba(245, 158, 11, 0.5) !important;
-    box-shadow: 0 0 1.5vw rgba(245, 158, 11, 0.6);
+    border-color: #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.4) !important;
+    box-shadow: 0 0 1vw rgba(251, 191, 36, 0.5);
 }
 
 .seat.trapezoid-left.selected,
 .seat.trapezoid-right.selected {
-    border-color: #f59e0b !important;
-    background: rgba(245, 158, 11, 0.4) !important;
-    box-shadow: 0 0 2vw rgba(245, 158, 11, 0.7);
+    border: 0.4vw solid #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.7) !important;
+    box-shadow: 0 0 2vw rgba(251, 191, 36, 1),
+                inset 0 0 1vw rgba(251, 191, 36, 0.5) !important;
+    z-index: 100 !important;
 }
 
-/* Доступное место - пустой квадрат с тонкой рамкой */
+/* Забронированные трапециевидные места */
+.seat.trapezoid-left.booked,
+.seat.trapezoid-right.booked {
+    border-color: rgba(239, 68, 68, 0.8) !important;
+    background: rgba(239, 68, 68, 0.2) !important;
+    cursor: not-allowed;
+}
+
 .seat.available {
-    border: 0.25vw solid rgba(251, 191, 36, 0.8); /* ОТЛАДКА: Яркая рамка */
-    background: rgba(251, 191, 36, 0.2); /* ОТЛАДКА: Полупрозрачный фон */
+    border: 0.25vw solid rgba(251, 191, 36, 0.8);
+    background: rgba(251, 191, 36, 0.2);
 }
 
-/* При наведении - золотая рамка */
+
 .seat.available:hover {
     border-color: #fbbf24;
     box-shadow: 0 0 1vw rgba(251, 191, 36, 0.5);
     background: rgba(251, 191, 36, 0.4);
 }
 
-/* Выбранное место - яркое выделение */
 .seat.selected {
     border: 0.4vw solid #fbbf24 !important;
     background: rgba(251, 191, 36, 0.7) !important;
@@ -342,14 +337,12 @@
     z-index: 100 !important;
 }
 
-/* Забронированное место - серая рамка */
 .seat.booked {
-    border: 0.25vw solid rgba(239, 68, 68, 0.8); /* ОТЛАДКА: Красная рамка */
-    background: rgba(239, 68, 68, 0.2); /* ОТЛАДКА: Красный фон */
+    border: 0.25vw solid rgba(239, 68, 68, 0.8);
+    background: rgba(239, 68, 68, 0.2);
     cursor: not-allowed;
 }
 
-/* Цена внутри билета при наведении - ДЛЯ ВСЕХ БИЛЕТОВ */
 .seat.available::after {
     content: attr(title);
     position: absolute;
@@ -371,7 +364,6 @@
     opacity: 1;
 }
 
-/* Легенда */
 .ship-legend {
     display: flex;
     justify-content: center;
@@ -412,12 +404,11 @@
     border-color: rgba(239, 68, 68, 0.8);
 }
 
-/* Билеты (старый список - скрываем) */
 .ticket-item {
     border-bottom: 1px solid #334155;
     padding: 1rem 0;
     transition: all 0.3s ease;
-    display: none; /* Скрываем старый список */
+    display: none;
 }
 
 .ticket-item:hover {
@@ -513,7 +504,6 @@
     transition: all 0.3s ease;
 }
 
-/* Убираем стрелки у input type="number" */
 .quantity-input::-webkit-outer-spin-button,
 .quantity-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -531,7 +521,6 @@
     background: #3f4a5e !important;
 }
 
-/* Блок итого */
 .total-card {
     background: #1e293b;
     border-radius: 12px;
@@ -550,7 +539,6 @@
     font-weight: 700;
 }
 
-/* Кнопка отправки */
 .btn-submit {
     background: #475569;
     border: none;
@@ -578,7 +566,6 @@
     cursor: not-allowed;
 }
 
-/* Сообщения */
 .select-tickets-alert {
     background: #1e293b;
     border: 2px solid #fbbf24;
@@ -591,7 +578,6 @@
     font-style: italic;
 }
 
-/* Accordion стили для развлечений (как на странице shop) */
 #entertainmentsAccordionSelect .entertainment-accordion-item {
     background: transparent !important;
     border: none !important;
@@ -644,7 +630,6 @@
     /* Размеры автоматически масштабируются через % */
 }
 
-/* Планшеты маленькие (до 991px) */
 @media (max-width: 991px) {
     .voyage-title {
         font-size: 1.5rem;
@@ -655,9 +640,7 @@
     }
 }
 
-/* Мобильные (до 768px) */
 @media (max-width: 768px) {
-    /* Уменьшаем размер tooltip */
     .seat.available::after {
         font-size: 0.75rem;
         padding: 0.4rem 0.8rem;

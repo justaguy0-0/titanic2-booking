@@ -165,7 +165,8 @@
                                                     <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
                                                         @foreach($cabinType->tickets as $ticket)
                                                         @php
-                                                            $isBooked = $ticket->status === 'Забронировано';
+                                                            // Проверяем оба варианта написания статуса для совместимости
+                                                            $isBooked = in_array($ticket->status, ['Забронировано', 'Забронирован']);
                                                             $seatClass = $isBooked ? 'seat booked' : 'seat available';
                                                             // Добавляем класс размера в зависимости от типа палубы
                                                             $seatClass .= ' ' . $deckKey . '-seat';

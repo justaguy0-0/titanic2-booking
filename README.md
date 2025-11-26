@@ -4,4 +4,4 @@ Titanic2 Booking
 Laravel-код находится в папке src/.
 Docker-конфиги — в корне (docker-compose.yaml, nginx/, dockerfiles/).
 
-Ветка test для тестовых изменений
+Ветка tanya для команды

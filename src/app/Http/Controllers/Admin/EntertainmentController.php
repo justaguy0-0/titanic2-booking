@@ -9,9 +9,30 @@ use PharIo\Manifest\ElementCollection;
 
 class EntertainmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $entertainments = Entertainment::paginate(10);
+        $query = Entertainment::query()->withCount('orderItems');
+
+        // === Сортировка ===
+        $sortField = $request->get('sort', 'id');
+        $sortDirection = $request->get('direction', 'desc');
+
+        $allowedSorts = ['id', 'name', 'price', 'created_at', 'updated_at', 'order_items_count'];
+
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'id';
+            $sortDirection = 'desc';
+        }
+
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        // ← ИСПРАВЛЕНО: правильный orderBy
+        $query->orderBy($sortField, $sortDirection);
+
+        $entertainments = $query->paginate(15)->appends($request->query());
+
         return view('admin.entertainments.index', compact('entertainments'));
     }
 

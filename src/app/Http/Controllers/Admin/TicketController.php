@@ -10,9 +10,28 @@ use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tickets = Ticket::with(['voyage', 'cabinType', 'orderItems'])->paginate(10);
+        $query = Ticket::with(['voyage', 'cabinType', 'orderItems.order']);
+
+        // === Сортировка (только по полям tickets) ===
+        $sortField = $request->get('sort', 'id');
+        $sortDirection = $request->get('direction', 'desc');
+
+        // Разрешённые поля — только из таблицы tickets
+        $allowedSorts = ['id', 'number', 'price', 'status', 'created_at', 'updated_at'];
+
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'id';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        $query->orderBy($sortField, $sortDirection);
+
+        $tickets = $query->paginate(15)->appends($request->query());
+
         return view('admin.tickets.index', compact('tickets'));
     }
 

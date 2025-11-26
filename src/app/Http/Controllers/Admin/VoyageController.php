@@ -9,14 +9,82 @@ use Illuminate\Http\Request;
 
 class VoyageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Изменено: Загружаем новые relations (Place с типами)
-        $voyages = Voyage::with(['departurePlace', 'arrivalPlace'])
-            ->orderBy('departure_date', 'desc')
-            ->paginate(10);
+        // Базовый query с подсчетом билетов
+        $query = Voyage::with(['departurePlace', 'arrivalPlace'])
+            ->withCount([
+                'tickets',
+                'tickets as available_tickets_count' => function ($query) {
+                    $query->where('status', 'Доступно');
+                }
+            ]);
 
-        return view('admin.voyages.index', compact('voyages'));
+        // Фильтрация по месту отправления
+        if ($request->filled('departure_place')) {
+            $query->where('departure_place_id', $request->departure_place);
+        }
+
+        // Фильтрация по месту прибытия
+        if ($request->filled('arrival_place')) {
+            $query->where('arrival_place_id', $request->arrival_place);
+        }
+
+        // Фильтрация по статусу рейса
+        if ($request->filled('status')) {
+            $now = now();
+            switch ($request->status) {
+                case 'upcoming':
+                    $query->where('departure_date', '>', $now);
+                    break;
+                case 'in_progress':
+                    $query->where('departure_date', '<=', $now)
+                        ->where('arrival_date', '>=', $now);
+                    break;
+                case 'completed':
+                    $query->where('arrival_date', '<', $now);
+                    break;
+            }
+        }
+
+        // Фильтрация по диапазону дат
+        if ($request->filled('date_from')) {
+            $query->where('departure_date', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->where('departure_date', '<=', $request->date_to . ' 23:59:59');
+        }
+
+        // Сортировка
+        $sortField = $request->get('sort', 'departure_date');
+        $sortDirection = $request->get('direction', 'desc');
+
+        // Валидация поля сортировки (защита от SQL injection)
+        $allowedSorts = ['id', 'name', 'departure_date', 'arrival_date', 'base_price'];
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'departure_date';
+        }
+
+        // Валидация направления
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'desc';
+        }
+
+        $query->orderBy($sortField, $sortDirection);
+
+        // Пагинация с сохранением всех параметров
+        $voyages = $query->paginate(15)->appends($request->except('page'));
+
+        // Данные для фильтров
+        $departurePlaces = Place::where('type', 'departure')->orderBy('name')->get();
+        $arrivalPlaces = Place::where('type', 'arrival')->orderBy('name')->get();
+
+        return view('admin.voyages.index', compact(
+            'voyages',
+            'departurePlaces',
+            'arrivalPlaces'
+        ));
     }
 
     public function create()
@@ -53,7 +121,8 @@ class VoyageController extends Controller
 
     public function show(Voyage $voyage)
     {
-        $voyage->load(['departurePlace', 'arrivalPlace']);
+        $voyage->load(['departurePlace', 'arrivalPlace', 'tickets']);
+
         return view('admin.voyages.show', compact('voyage'));
     }
 
@@ -91,6 +160,7 @@ class VoyageController extends Controller
 
     public function destroy(Voyage $voyage)
     {
+        // Проверка: нельзя удалить рейс, который уже начался
         if ($voyage->departure_date && $voyage->departure_date->isPast()) {
             return redirect()
                 ->back()

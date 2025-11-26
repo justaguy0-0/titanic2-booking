@@ -9,6 +9,7 @@
 @import 'user/voyage.css';
 @import 'user/shop.css';
 @import 'user/select-tickets.css';
+@import 'user/payment.css';
 @import 'user/dashboard.css';
 
 @tailwind base;

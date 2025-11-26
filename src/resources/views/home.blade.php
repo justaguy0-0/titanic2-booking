@@ -37,7 +37,7 @@
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
                                 <div class="cabin-image cabin-image-cost mb-3"></div>
-                                <p class="cabin-description">Президентский люкс</p>
+                                <p class="cabin-description">Первый класс</p>
                                 <div class="price-tag mb-2">650.000 руб.</div>
                                 <ul class="list-unstyled cabin-features">
                                     <li>• Панорамные окна</li>

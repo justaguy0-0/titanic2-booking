@@ -8,9 +8,25 @@ use Illuminate\Http\Request;
 
 class CabinTypeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cabinTypes = CabinType::orderBy('name')->paginate(10);
+        $query = CabinType::query();
+
+        $sortField = $request->get('sort', 'name');
+        $sortDirection = $request->get('direction', 'asc');
+
+        $allowedSorts = ['id', 'name', 'created_at', 'updated_at'];
+        if (!in_array($sortField, $allowedSorts)) {
+            $sortField = 'name';
+        }
+        if (!in_array($sortDirection, ['asc', 'desc'])) {
+            $sortDirection = 'asc';
+        }
+
+        $query->orderBy($sortField, $sortDirection);
+
+        $cabinTypes = $query->paginate(15)->appends($request->query());
+
         return view('admin.cabin-types.index', compact('cabinTypes'));
     }
 

@@ -16,7 +16,6 @@ class CabinTypeFactory extends Factory
                 'Первый класс',
                 'Второй класс',
                 'Третий класс',
-                'Люкс',
             ]),
             'description' => $this->faker->sentence(),
         ];

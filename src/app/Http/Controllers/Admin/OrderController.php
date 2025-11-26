@@ -45,7 +45,6 @@ class OrderController extends Controller
             'total_price' => $validated['total_price'],
         ]);
 
-        // === БИЛЕТЫ ===
         if (!empty($validated['tickets'])) {
             foreach ($validated['tickets'] as $ticketId) {
                 $ticket = Ticket::findOrFail($ticketId);
@@ -62,7 +61,6 @@ class OrderController extends Controller
             }
         }
 
-        // === РАЗВЛЕЧЕНИЯ ===
         if (!empty($validated['entertainments'])) {
             foreach ($validated['entertainments'] as $item) {
                 $ent = Entertainment::findOrFail($item['id']);
@@ -91,7 +89,6 @@ class OrderController extends Controller
         $tickets = Ticket::where('status', 'Доступно')->with('voyage')->get();
         $entertainments = Entertainment::all();
 
-        // ← КЛЮЧЕВОЕ: Подготовка данных для чекбоксов
         $existingEntertainments = $order->orderItems
             ->where('type', 'entertainment')
             ->pluck('quantity', 'entertainment_id')
@@ -119,14 +116,12 @@ class OrderController extends Controller
             'total_price' => 'required|numeric|min:0',
         ]);
 
-        // === ОБНОВЛЯЕМ ЗАКАЗ ===
         $order->update([
             'user_id' => $validated['user_id'],
             'status' => $validated['status'],
             'total_price' => $validated['total_price'], // ← из формы
         ]);
 
-        // === БИЛЕТЫ ===
         $newTicketIds = $validated['tickets'] ?? [];
 
         $order->orderItems()
@@ -160,7 +155,6 @@ class OrderController extends Controller
             }
         }
 
-        // === РАЗВЛЕЧЕНИЯ ===
         $newEntIds = collect($validated['entertainments'] ?? [])->pluck('id')->toArray();
 
         $order->orderItems()
@@ -183,7 +177,6 @@ class OrderController extends Controller
             );
         }
 
-        // ← УБРАЛ refreshTotalPrice() — сумма из формы!
         return redirect()->route('admin.orders.edit', $order)->with('success', 'Заказ обновлён.');
     }
 

@@ -23,7 +23,6 @@ class OrderItem extends Model
         'price' => 'decimal:2',
     ];
 
-    // === Связи ===
     public function order()
     {
         return $this->belongsTo(Order::class);
@@ -39,7 +38,6 @@ class OrderItem extends Model
         return $this->belongsTo(Entertainment::class);
     }
 
-    // === Удобно: получить сам предмет ===
     public function getItemAttribute()
     {
         return $this->item_type === 'ticket' ? $this->ticket : $this->entertainment;

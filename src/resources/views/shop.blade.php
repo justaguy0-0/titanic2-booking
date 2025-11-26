@@ -4,17 +4,9 @@
 <div class="container-fluid px-0">
 
     <!-- Hero -->
-    <section class="hero-section text-center py-5 d-flex align-items-center justify-content-center"
-             style="
-             background: linear-gradient(rgba(15,23,42,0.85), rgba(30,41,59,0.85)), url('/images/i.webp');
-             background-size: cover;
-             background-position: center;
-             background-attachment: fixed;
-             color: #fbbf24;
-             min-height: 70vh;
-             ">
+    <section class="hero-section text-center py-5 d-flex align-items-center justify-content-center">
         <div>
-            <h1 class="display-4 fw-bold mb-3" style="font-family: Georgia, serif;">
+            <h1 class="display-4 fw-bold mb-3 shop-hero-title">
                 Путешествия на айсберги
             </h1>
             <p class="lead mb-0 text-light">
@@ -24,16 +16,16 @@
     </section>
 
     <!-- Контент -->
-    <div class="container py-5" style="background: #0f172a;">
+    <div class="container py-5 shop-container">
 
         {{-- Сообщения --}}
         @if (session('success'))
-            <div class="alert alert-success mb-4 text-center" style="background: #1e293b; border: 1px solid #fbbf24; color: #fcd34d;">
+            <div class="alert alert-success mb-4 text-center shop-alert">
                 {{ session('success') }}
             </div>
         @endif
         @if (session('error'))
-            <div class="alert alert-danger mb-4 text-center" style="background: #1e293b; border: 1px solid #fbbf24; color: #fcd34d;">
+            <div class="alert alert-danger mb-4 text-center shop-alert">
                 {{ session('error') }}
             </div>
         @endif
@@ -41,7 +33,7 @@
         <div class="row">
             <!-- Левая колонка - Рейсы -->
             <div class="col-lg-8">
-                <h2 class="text-center mb-5 fw-bold" style="color: #fbbf24; font-family: Georgia, serif;">
+                <h2 class="text-center mb-5 fw-bold shop-section-title">
                     ДОСТУПНЫЕ РЕЙСЫ
                 </h2>
 
@@ -52,48 +44,62 @@
                                 <div class="row g-4">
                                     @foreach($voyagePair as $voyage)
                                         <div class="col-md-6">
-                                            <div class="card flight-card h-100 border-0 shadow-lg"
-                                                 style="background: #1e293b; border-radius: 12px; overflow: hidden;">
-                                                
+                                            <div class="card flight-card h-100 border-0 shadow-lg">
+
                                                 <!-- Header -->
-                                                <div class="card-header text-center py-3" 
-                                                    style="background: linear-gradient(135deg, #1e293b, #334155); border-bottom: 2px solid #fbbf24;">
-                                                    <h5 class="mb-0" style="color: #fbbf24;">{{ $voyage->name }}</h5>
-                                                   <small style="color: #fcd34d;">
+                                                <div class="card-header flight-card-header text-center py-3">
+                                                    <h5 class="mb-0 flight-card-title">{{ $voyage->name }}</h5>
+                                                   <small class="flight-card-route">
                                                         {{ $voyage->departurePlace->name }} → {{ $voyage->arrivalPlace->name }}
                                                     </small>
                                                 </div>
 
                                                 <!-- Body -->
-                                                <div class="card-body text-center" style="color: #fcd34d;">
-                                                    <div class="mb-3">
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <div>
-                                                                <small class="text-muted">Отправление</small>
-                                                                <p class="mb-0 fw-bold">
-                                                                    {{ \Carbon\Carbon::parse($voyage->departure_date)->format('d.m.Y H:i') }}
-                                                                </p>
+                                                <div class="card-body flight-card-body text-center">
+                                                    <div class="mb-4">
+                                                        <div class="d-flex justify-content-around align-items-stretch gap-3">
+                                                            <div class="flight-date-container flex-fill">
+                                                                <div class="flight-date-label d-block mb-2">
+                                                                    <i class="fas fa-ship me-1"></i> Отправление
+                                                                </div>
+                                                                <div class="flight-date-value">
+                                                                    {{ \Carbon\Carbon::parse($voyage->departure_date)->format('d.m.Y') }}
+                                                                </div>
+                                                                <div class="flight-date-value" style="font-size: 0.9rem;">
+                                                                    {{ \Carbon\Carbon::parse($voyage->departure_date)->format('H:i') }}
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <small class="text-muted">Прибытие</small>
-                                                                <p class="mb-0 fw-bold">
-                                                                    {{ \Carbon\Carbon::parse($voyage->arrival_date)->format('d.m.Y H:i') }}
-                                                                </p>
+                                                            <div class="flight-date-container flex-fill">
+                                                                <div class="flight-date-label d-block mb-2">
+                                                                    <i class="fas fa-anchor me-1"></i> Прибытие
+                                                                </div>
+                                                                <div class="flight-date-value">
+                                                                    {{ \Carbon\Carbon::parse($voyage->arrival_date)->format('d.m.Y') }}
+                                                                </div>
+                                                                <div class="flight-date-value" style="font-size: 0.9rem;">
+                                                                    {{ \Carbon\Carbon::parse($voyage->arrival_date)->format('H:i') }}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <p class="fw-semibold mb-1">Длительность: {{ $voyage->travel_time }} ч</p>
-                                                    <h4 class="fw-bold text-warning">
+                                                    <div class="mb-3">
+                                                        <span class="flight-duration">
+                                                            <i class="fas fa-clock me-2"></i>
+                                                            Длительность: {{ $voyage->travel_time }} ч
+                                                        </span>
+                                                    </div>
+                                                    <h4 class="fw-bold flight-price mb-0">
                                                         {{ number_format($voyage->base_price, 0) }} ₽
                                                     </h4>
                                                 </div>
 
                                                 <!-- Footer -->
-                                                <div class="card-footer bg-transparent text-center"
-                                                     style="border-top: 1px solid #334155;">
-                                                    <a href="{{ route('shop.voyage', $voyage->id) }}"
-                                                       class="btn btn-gold btn-sm fw-bold w-100">
+                                                <div class="card-footer flight-card-footer text-center">
+                                                    <a href="{{ route('shop.select-tickets', $voyage->id) }}"
+                                                       class="btn btn-gold fw-bold w-100 py-3">
+                                                        <i class="fas fa-anchor me-2"></i>
                                                         ВЫБРАТЬ РЕЙС
+                                                        <i class="fas fa-chevron-right ms-2"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -113,42 +119,39 @@
             <!-- Правая колонка - Развлечения -->
             <div class="col-lg-4">
                 <div class="sticky-top" style="top: 20px;">
-                    <div class="card border-0 shadow-lg" style="background: #1e293b; border-radius: 12px;">
-                        <div class="card-header text-center py-3" 
-                             style="background: linear-gradient(135deg, #1e293b, #334155); border-bottom: 2px solid #fbbf24;">
-                            <h5 class="mb-0" style="color: #fbbf24;">
+                    <div class="card entertainment-card border-0 shadow-lg">
+                        <div class="card-header entertainment-card-header text-center py-3">
+                            <h5 class="mb-0 entertainment-card-title">
                                 <i class="fas fa-umbrella-beach me-2"></i>
                                 РАЗВЛЕЧЕНИЯ НА БОРТУ
                             </h5>
                         </div>
-                        
+
                         <div class="card-body p-0">
                             @if($entertainments->count() > 0)
                                 <div class="accordion" id="entertainmentsAccordion">
                                     @foreach($entertainments->chunk(ceil($entertainments->count() / 3)) as $index => $entertainmentChunk)
-                                        <div class="accordion-item" style="background: transparent; border: none;">
+                                        <div class="accordion-item entertainment-accordion-item">
                                             <h2 class="accordion-header" id="heading{{ $index }}">
-                                                <button class="accordion-button collapsed" 
-                                                        type="button" 
-                                                        data-bs-toggle="collapse" 
-                                                        data-bs-target="#collapse{{ $index }}" 
-                                                        aria-expanded="false" 
-                                                        aria-controls="collapse{{ $index }}"
-                                                        style="background: #334155; color: #fbbf24; border: none;">
+                                                <button class="accordion-button collapsed entertainment-accordion-button"
+                                                        type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapse{{ $index }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse{{ $index }}">
                                                     Группа развлечений {{ $index + 1 }}
                                                     <i class="fas fa-chevron-down ms-2"></i>
                                                 </button>
                                             </h2>
-                                            <div id="collapse{{ $index }}" 
-                                                 class="accordion-collapse collapse" 
-                                                 aria-labelledby="heading{{ $index }}" 
+                                            <div id="collapse{{ $index }}"
+                                                 class="accordion-collapse collapse"
+                                                 aria-labelledby="heading{{ $index }}"
                                                  data-bs-parent="#entertainmentsAccordion">
                                                 <div class="accordion-body p-2">
                                                     @foreach($entertainmentChunk as $entertainment)
-                                                        <div class="d-flex justify-content-between align-items-center py-2 px-3 mb-2 rounded"
-                                                             style="background: rgba(251, 191, 36, 0.1); border-left: 3px solid #fbbf24;">
+                                                        <div class="entertainment-item d-flex justify-content-between align-items-center py-2 px-3 mb-2 rounded">
                                                             <div>
-                                                                <h6 class="mb-1 fw-bold" style="color: #fcd34d;">
+                                                                <h6 class="mb-1 fw-bold entertainment-name">
                                                                     {{ $entertainment->name }}
                                                                 </h6>
                                                                 <small class="text-muted">
@@ -156,7 +159,7 @@
                                                                 </small>
                                                             </div>
                                                             <div class="text-end">
-                                                                <span class="fw-bold text-warning">
+                                                                <span class="fw-bold entertainment-price">
                                                                     {{ number_format($entertainment->price, 0) }} ₽
                                                                 </span>
                                                             </div>
@@ -175,8 +178,7 @@
                             @endif
                         </div>
 
-                        <div class="card-footer text-center py-3"
-                             style="background: #334155; border-top: 1px solid #fbbf24;">
+                        <div class="card-footer entertainment-card-footer text-center py-3">
                             <small class="text-muted">
                                 <i class="fas fa-info-circle me-1"></i>
                                 Выберите развлечения при бронировании рейса
@@ -188,44 +190,4 @@
         </div>
     </div>
 </div>
-
-<style>
-    .flight-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 10px;
-        overflow: hidden;
-        border: 1px solid #334155;
-    }
-    .flight-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(251, 191, 36, 0.25);
-        border-color: #fbbf24;
-    }
-    .btn-gold {
-        background: linear-gradient(45deg, #fbbf24, #f59e0b);
-        border: none;
-        color: #1e293b;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    .btn-gold:hover {
-        background: linear-gradient(45deg, #f59e0b, #d97706);
-        color: #1e293b;
-    }
-    body {
-        background: #0f172a;
-        color: #fcd34d;
-    }
-    .accordion-button:not(.collapsed) {
-        background: #475569 !important;
-        color: #fbbf24 !important;
-    }
-    .accordion-button:focus {
-        box-shadow: 0 0 0 0.25rem rgba(251, 191, 36, 0.25);
-        border-color: #fbbf24;
-    }
-</style>
-
-
-
 @endsection

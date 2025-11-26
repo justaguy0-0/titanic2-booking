@@ -44,6 +44,13 @@ services:
       - ./src:/var/www/laravel
     tty: true
 
+  main:
+    container_name: main
+    build:
+      context: .
+      target: development
+    command: npm run dev
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     restart: always

@@ -110,7 +110,6 @@ class OrderItemController extends Controller
             }
             $price = $newTicket->price;
 
-            // Освобождаем старый билет, если он был и отличается
             if ($oldTicket && $oldTicket->id !== $newTicket->id) {
                 $oldTicket->update(['status' => 'Доступно']);
             }
@@ -119,7 +118,6 @@ class OrderItemController extends Controller
             $entertainment = Entertainment::findOrFail($validated['entertainment_id']);
             $price = $entertainment->price;
 
-            // Освобождаем билет, если был
             if ($oldTicket) {
                 $oldTicket->update(['status' => 'Доступно']);
             }
@@ -134,7 +132,6 @@ class OrderItemController extends Controller
             'quantity' => $validated['quantity'] ?? 1,
         ]);
 
-        // Пересчёт для старого и нового заказа
         if ($oldOrderId != $validated['order_id']) {
             Order::find($oldOrderId)?->refreshTotalPrice();
         }
@@ -148,14 +145,12 @@ class OrderItemController extends Controller
         try {
             $order = $orderItem->order;
 
-            // Возвращаем билет только если это билет
             if ($orderItem->type === 'ticket' && $orderItem->ticket) {
                 $orderItem->ticket->update(['status' => 'Доступно']);
             }
 
             $orderItem->delete();
 
-            // Правильный пересчёт: price * quantity для всех типов
             $order->refreshTotalPrice();
 
             return redirect()

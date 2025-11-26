@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -15,9 +16,7 @@ use App\Models\Place;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/', function () {
-    return view('home'); 
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 
@@ -31,7 +30,7 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
 Route::middleware('auth')->group(function () {
     
-    Route::get('/shop/voyage/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.voyage');
+    Route::get('/shop/select-tickets/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.select-tickets');
     Route::post('/shop/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
 
     

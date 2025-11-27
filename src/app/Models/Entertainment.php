@@ -13,7 +13,10 @@ class Entertainment extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'price',
+        'image',
+        'category'
     ];
 
     protected $casts = [

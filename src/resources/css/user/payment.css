@@ -325,3 +325,94 @@
         min-width: auto;
     }
 }
+
+/* ============================================
+   PASSENGER FORMS - ФОРМЫ ПАССАЖИРОВ
+   ============================================ */
+
+.passenger-card-wrapper {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid #475569;
+    border-radius: 8px;
+    overflow: visible;
+    position: relative;
+}
+
+.passenger-card-title {
+    background: linear-gradient(135deg, #334155, #475569);
+    padding: 1rem;
+    border-bottom: 2px solid #fbbf24;
+}
+
+.passenger-info-text {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.passenger-price {
+    color: #fbbf24;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.passenger-form-section {
+    padding: 1.5rem;
+    background: rgba(15, 23, 42, 0.5);
+}
+
+.passenger-label {
+    color: #fcd34d;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.required-mark {
+    color: #ef4444;
+}
+
+.passenger-input {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid #475569 !important;
+    color: #fcd34d !important;
+    padding: 0.75rem !important;
+    border-radius: 6px !important;
+    transition: all 0.3s ease;
+}
+
+.passenger-input:focus {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border-color: #fbbf24 !important;
+    color: #fcd34d !important;
+    outline: none !important;
+    box-shadow: 0 0 0 0.2rem rgba(251, 191, 36, 0.25) !important;
+}
+
+.passenger-input::placeholder {
+    color: #64748b;
+}
+
+/* Улучшенные стили для поля даты */
+.passenger-birthdate-display {
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.05em;
+    font-size: 1rem;
+}
+
+.passenger-birthdate-display:invalid {
+    border-color: #ef4444 !important;
+}
+
+.passenger-birthdate-display::placeholder {
+    color: #64748b;
+    font-family: inherit;
+    letter-spacing: normal;
+}
+
+.age-display {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #94a3b8;
+}

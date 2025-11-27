@@ -42,4 +42,9 @@ class OrderItem extends Model
     {
         return $this->item_type === 'ticket' ? $this->ticket : $this->entertainment;
     }
+
+    public function passenger()
+    {
+        return $this->hasOne(Passenger::class, 'order_item_id');
+    }
 }

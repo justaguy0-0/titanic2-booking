@@ -3,10 +3,8 @@
 @section('main_content')
 <div class="container-fluid px-0">
 
-    <!-- Контент -->
     <div class="container py-5 shop-container">
 
-        <!-- Компактный заголовок -->
         <div class="text-center mb-5 shop-page-header">
             <h1 class="display-5 fw-bold mb-2 shop-page-title">
                 <i class="fas fa-ship me-3"></i>Доступные рейсы
@@ -16,7 +14,6 @@
             </p>
         </div>
 
-        {{-- Сообщения --}}
         @if (session('success'))
             <div class="alert alert-success mb-4 text-center shop-alert">
                 {{ session('success') }}
@@ -33,7 +30,6 @@
                 @foreach($voyages as $voyage)
                     <div class="col-lg-4 col-md-6 col-sm-12">
                         <div class="card flight-card h-100 border-0 shadow-lg">
-                            <!-- Header -->
                             <div class="card-header flight-card-header text-center py-3">
                                 <h5 class="mb-0 flight-card-title">{{ $voyage->name }}</h5>
                                 <small class="flight-card-route">
@@ -41,7 +37,6 @@
                                 </small>
                             </div>
 
-                            <!-- Body -->
                             <div class="card-body flight-card-body text-center">
                                 <div class="mb-4">
                                     <div class="d-flex justify-content-around align-items-stretch gap-3">
@@ -80,7 +75,6 @@
                                 </h4>
                             </div>
 
-                            <!-- Footer -->
                             <div class="card-footer flight-card-footer text-center">
                                 <a href="{{ route('shop.select-tickets', $voyage->id) }}"
                                    class="btn btn-gold fw-bold w-100 py-3">

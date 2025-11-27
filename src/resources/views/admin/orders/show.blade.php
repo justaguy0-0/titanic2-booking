@@ -1,5 +1,5 @@
 @extends('admin.admin')
-@section('title', 'Заказ #{{ $order->id }}')
+@section('title', "Заказ: {$order->id}")
 
 @section('content')
     <div class="container mx-auto px-4 py-6">

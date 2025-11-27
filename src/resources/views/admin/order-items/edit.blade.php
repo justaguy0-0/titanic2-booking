@@ -1,9 +1,9 @@
 @extends('admin.admin')
-@section('title', 'Редактировать элемент заказа #{{ $orderItem->id }}')
+@section('title', 'Редактировать детали заказа')
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-3xl font-bold text-gray-800 mb-2">
-            Редактировать элемент заказа #{{ $orderItem->id }}
+            Редактировать детали заказа #{{ $orderItem->id }}
         </h1>
         <p class="text-gray-600 mb-6">Можно изменить заказ, тип и детали.</p>
 

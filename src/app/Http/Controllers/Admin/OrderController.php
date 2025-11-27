@@ -88,7 +88,7 @@ class OrderController extends Controller
                 OrderItem::create([
                     'order_id' => $order->id,
                     'ticket_id' => $ticketId,
-                    'type' => 'ticket',
+                    'item_type' => 'ticket',
                     'price' => $ticket->price,
                     'quantity' => 1,
                 ]);
@@ -102,7 +102,7 @@ class OrderController extends Controller
                 OrderItem::create([
                     'order_id' => $order->id,
                     'entertainment_id' => $ent->id,
-                    'type' => 'entertainment',
+                    'item_type' => 'entertainment',
                     'price' => $ent->price,
                     'quantity' => $item['quantity'] ?? 1,
                 ]);
@@ -125,7 +125,7 @@ class OrderController extends Controller
         $entertainments = Entertainment::all();
 
         $existingEntertainments = $order->orderItems
-            ->where('type', 'entertainment')
+            ->where('item_type', 'entertainment')
             ->pluck('quantity', 'entertainment_id')
             ->toArray();
 
@@ -160,7 +160,7 @@ class OrderController extends Controller
         $newTicketIds = $validated['tickets'] ?? [];
 
         $order->orderItems()
-            ->where('type', 'ticket')
+            ->where('item_type', 'ticket')
             ->whereNotIn('ticket_id', $newTicketIds)
             ->each(function ($item) {
                 if ($item->ticket) {
@@ -174,7 +174,7 @@ class OrderController extends Controller
             if (!$ticket || $ticket->status !== 'Доступно') continue;
 
             $exists = $order->orderItems()
-                ->where('type', 'ticket')
+                ->where('item_type', 'ticket')
                 ->where('ticket_id', $ticketId)
                 ->exists();
 
@@ -182,7 +182,7 @@ class OrderController extends Controller
                 OrderItem::create([
                     'order_id' => $order->id,
                     'ticket_id' => $ticketId,
-                    'type' => 'ticket',
+                    'item_type' => 'ticket',
                     'price' => $ticket->price,
                     'quantity' => 1,
                 ]);
@@ -193,7 +193,7 @@ class OrderController extends Controller
         $newEntIds = collect($validated['entertainments'] ?? [])->pluck('id')->toArray();
 
         $order->orderItems()
-            ->where('type', 'entertainment')
+            ->where('item_type', 'entertainment')
             ->whereNotIn('entertainment_id', $newEntIds)
             ->delete();
 
@@ -205,7 +205,7 @@ class OrderController extends Controller
                     'entertainment_id' => $ent->id,
                 ],
                 [
-                    'type' => 'entertainment',
+                    'item_type' => 'entertainment',
                     'price' => $ent->price,
                     'quantity' => $item['quantity'] ?? 1,
                 ]
@@ -219,7 +219,7 @@ class OrderController extends Controller
     {
         try {
             foreach ($order->orderItems as $item) {
-                if ($item->type === 'ticket' && $item->ticket) {
+                if ($item->item_type === 'ticket' && $item->ticket) {
                     $item->ticket->update(['status' => 'Доступно']);
                 }
                 $item->delete();

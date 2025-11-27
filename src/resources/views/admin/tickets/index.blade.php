@@ -1,7 +1,5 @@
 @extends('admin.admin')
-
 @section('title', 'Билеты')
-
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
@@ -31,18 +29,15 @@
                         $currentSort = request('sort', 'id');
                         $currentDir = request('direction', 'desc');
                         $nextDir = $currentDir === 'asc' ? 'desc' : 'asc';
-
                         $sortUrl = fn($field) => request()->fullUrlWithQuery([
                             'sort' => $field,
                             'direction' => $currentSort === $field ? $nextDir : 'asc'
                         ]);
-
                         $sortIcon = function($field) use ($currentSort, $currentDir) {
                             if ($currentSort !== $field) return '';
                             return $currentDir === 'asc' ? '↑' : '↓';
                         };
                     @endphp
-
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('id') }}" class="hover:text-gray-900 flex items-center gap-1">
                             ID <span class="text-gray-400">{{ $sortIcon('id') }}</span>
@@ -77,6 +72,7 @@
                     </th>
                 </tr>
                 </thead>
+
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($tickets as $ticket)
                     @php
@@ -118,19 +114,30 @@
                                 <span class="text-gray-400">—</span>
                             @endif
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+
+                        {{-- Только иконки в действиях --}}
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+                            <a href="{{ route('admin.tickets.show', $ticket) }}"
+                               class="text-gray-600 hover:text-blue-600" title="Просмотр">
+                                <i class="fas fa-eye"></i>
+                            </a>
+
                             <a href="{{ route('admin.tickets.edit', $ticket) }}"
-                               class="text-blue-600 hover:text-blue-900 mr-4">Редактировать</a>
+                               class="text-gray-600 hover:text-indigo-600" title="Редактировать">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
                             @if($ticket->orderItems->isEmpty())
                                 <form action="{{ route('admin.tickets.destroy', $ticket) }}" method="POST" class="inline"
                                       onsubmit="return confirm('Удалить билет {{ $ticket->number }}?')">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>
+                                    <button type="submit" class="text-gray-600 hover:text-red-600" title="Удалить">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
                                 </form>
                             @else
-                                <span class="text-gray-400" title="Нельзя удалить — билет в заказе">
-                                    Удалить
+                                <span class="text-gray-300" title="Нельзя удалить — билет в заказе">
+                                    <i class="fas fa-trash-alt"></i>
                                 </span>
                             @endif
                         </td>

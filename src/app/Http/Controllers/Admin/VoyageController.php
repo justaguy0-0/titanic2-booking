@@ -121,9 +121,20 @@ class VoyageController extends Controller
 
     public function show(Voyage $voyage)
     {
-        $voyage->load(['departurePlace', 'arrivalPlace', 'tickets']);
+        $voyage->load(['departurePlace', 'arrivalPlace']);
 
-        return view('admin.voyages.show', compact('voyage'));
+        // Пагинация билетов (например, по 10 на страницу)
+        $tickets = $voyage->tickets()->paginate(20);
+
+        // Получаем счетчики для статистики
+        $voyage->loadCount([
+            'tickets',
+            'tickets as available_tickets_count' => function ($query) {
+                $query->where('status', 'Доступно');
+            }
+        ]);
+
+        return view('admin.voyages.show', compact('voyage', 'tickets'));
     }
 
     public function edit(Voyage $voyage)

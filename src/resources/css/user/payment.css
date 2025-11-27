@@ -416,3 +416,132 @@
     font-size: 0.875rem;
     color: #94a3b8;
 }
+
+/* ============================================
+   PAYMENT METHOD CARD - БАНКОВСКАЯ КАРТА
+   ============================================ */
+
+.payment-method-card {
+    background: rgba(30, 41, 59, 0.6);
+    border: 2px solid #475569;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.payment-method-card:hover {
+    border-color: #fbbf24;
+    box-shadow: 0 6px 15px rgba(251, 191, 36, 0.15);
+}
+
+/* Card input wrapper для номера карты с индикатором */
+.card-input-wrapper {
+    position: relative;
+}
+
+.card-number-input {
+    padding-right: 120px !important; /* Место для индикатора типа карты */
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.1em;
+    font-size: 1.1rem;
+}
+
+.card-type-indicator {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.card-type-text {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.card-type-badge {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Стили для разных платежных систем */
+.card-type-visa {
+    background: linear-gradient(135deg, #1a1f71, #2e3f9e);
+    color: #ffffff;
+    border: 1px solid #4a5fc1;
+}
+
+.card-type-mastercard {
+    background: linear-gradient(135deg, #eb001b, #f79e1b);
+    color: #ffffff;
+    border: 1px solid #ff6b00;
+}
+
+.card-type-sbp {
+    background: linear-gradient(135deg, #4a90e2, #56ccf2);
+    color: #ffffff;
+    border: 1px solid #2d9cdb;
+}
+
+.card-type-tinkoff {
+    background: linear-gradient(135deg, #ffdd2d, #ffc700);
+    color: #333333;
+    border: 1px solid #e6b800;
+}
+
+.card-type-yandex {
+    background: linear-gradient(135deg, #fc3f1d, #ff5733);
+    color: #ffffff;
+    border: 1px solid #d62c1a;
+}
+
+/* Анимация появления индикатора */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+.card-type-badge {
+    animation: fadeInScale 0.3s ease;
+}
+
+/* Ошибки валидации */
+.error-message {
+    display: block;
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.is-invalid {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25) !important;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 576px) {
+    .card-number-input {
+        font-size: 0.95rem;
+        padding-right: 110px !important;
+    }
+
+    .card-type-badge {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+    }
+}

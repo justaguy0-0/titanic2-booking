@@ -149,7 +149,6 @@
                                 @endforeach
                             </div>
 
-                            {{-- Развлечения --}}
                             @if(count($entertainmentItems) > 0)
                                 <h5 class="mb-3 mt-4" style="color: #fbbf24;">
                                     <i class="fas fa-star me-2"></i>Дополнительные услуги
@@ -181,6 +180,66 @@
                                     </tbody>
                                 </table>
                             @endif
+
+                                <h5 class="mb-3 mt-4" style="color: #fbbf24;">
+                                    <i class="fas fa-credit-card me-2"></i>Платежные данные
+                                </h5>
+                                <div class="payment-method-card mb-4">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label class="passenger-label">Номер карты <span class="required-mark">*</span></label>
+                                            <div class="card-input-wrapper">
+                                                <input
+                                                    type="text"
+                                                    name="card_number"
+                                                    id="card-number-input"
+                                                    class="passenger-input card-number-input"
+                                                    placeholder="1234 5678 9012 3456"
+                                                    maxlength="19"
+                                                    autocomplete="off"
+                                                    required>
+                                                <div class="card-type-indicator" id="card-type-indicator">
+                                                    <span class="card-type-text">Введите номер</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="passenger-label">Срок действия <span class="required-mark">*</span></label>
+                                            <input
+                                                type="text"
+                                                name="card_expiry"
+                                                id="card-expiry-input"
+                                                class="passenger-input"
+                                                placeholder="MM/ГГ"
+                                                maxlength="5"
+                                                autocomplete="off"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="passenger-label">CVV код <span class="required-mark">*</span></label>
+                                            <input
+                                                type="text"
+                                                name="card_cvv"
+                                                id="card-cvv-input"
+                                                class="passenger-input"
+                                                placeholder="123"
+                                                maxlength="3"
+                                                autocomplete="off"
+                                                required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="passenger-label">Имя держателя карты <span class="required-mark">*</span></label>
+                                            <input
+                                                type="text"
+                                                name="card_holder"
+                                                id="card-holder-input"
+                                                class="passenger-input"
+                                                placeholder="IVAN IVANOV"
+                                                style="text-transform: uppercase;"
+                                                required>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="total-section">
                                     <div class="total-row">
@@ -222,7 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('payment-form');
     const payBtn = document.getElementById('pay-btn');
 
-    // Функция для правильного склонения слова "лет"
     function getYearsText(age) {
         const lastDigit = age % 10;
         const lastTwoDigits = age % 100;
@@ -242,14 +300,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return 'лет';
     }
 
-    // Функция для валидации даты рождения
     function validateDate(input) {
         const index = input.dataset.index;
         const dateStr = input.value;
         const ageDisplay = document.getElementById(`age-display-${index}`);
         const hiddenInput = document.querySelector(`.passenger-birthdate-hidden[data-index="${index}"]`);
 
-        // Проверяем формат ДД.ММ.ГГГГ
         const datePattern = /^(\d{2})\.(\d{2})\.(\d{4})$/;
         const match = dateStr.match(datePattern);
 
@@ -264,7 +320,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const month = parseInt(match[2], 10);
         const year = parseInt(match[3], 10);
 
-        // Проверяем корректность даты
         if (month < 1 || month > 12) {
             ageDisplay.innerHTML = '<span style="color: #ef4444;"><i class="fas fa-exclamation-triangle me-1"></i>Месяц должен быть от 01 до 12</span>';
             input.setCustomValidity('Неверный месяц');
@@ -279,11 +334,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Создаем дату (месяц в JS начинается с 0)
         const birthDate = new Date(year, month - 1, day);
         const today = new Date();
 
-        // Проверка на корректность даты (например, 31.02 станет 03.03)
         if (birthDate.getDate() !== day || birthDate.getMonth() !== month - 1 || birthDate.getFullYear() !== year) {
             ageDisplay.innerHTML = '<span style="color: #ef4444;"><i class="fas fa-exclamation-triangle me-1"></i>Такой даты не существует</span>';
             input.setCustomValidity('Некорректная дата');
@@ -291,7 +344,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Проверка на будущую дату
         if (birthDate > today) {
             ageDisplay.innerHTML = '<span style="color: #ef4444;"><i class="fas fa-exclamation-triangle me-1"></i>Дата не может быть в будущем</span>';
             input.setCustomValidity('Дата в будущем');
@@ -299,7 +351,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Проверка на год
         if (year < 1920 || year > today.getFullYear()) {
             ageDisplay.innerHTML = '<span style="color: #ef4444;"><i class="fas fa-exclamation-triangle me-1"></i>Год должен быть от 1920 до ' + today.getFullYear() + '</span>';
             input.setCustomValidity('Неверный год');
@@ -307,7 +358,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Рассчитываем возраст
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDiff = today.getMonth() - birthDate.getMonth();
 
@@ -315,7 +365,6 @@ document.addEventListener('DOMContentLoaded', function() {
             age--;
         }
 
-        // Проверяем корректность возраста
         if (age < 0 || age > 120) {
             ageDisplay.innerHTML = '<span style="color: #ef4444;"><i class="fas fa-exclamation-triangle me-1"></i>Проверьте дату</span>';
             input.setCustomValidity('Некорректный возраст');
@@ -323,14 +372,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Форматируем дату для отправки на сервер (YYYY-MM-DD)
         const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         hiddenInput.value = formattedDate;
-
-        // Сбрасываем ошибку валидации
         input.setCustomValidity('');
 
-        // Отображаем возраст
         if (age < 12) {
             ageDisplay.innerHTML = `<i class="fas fa-child me-1"></i>Возраст: ${age} ${getYearsText(age)} <span style="color: #10b981; font-weight: bold;">• Детская скидка 20%</span>`;
             ageDisplay.style.color = '#10b981';
@@ -343,9 +388,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Обработчик отправки формы
+
     form.addEventListener('submit', function(e) {
-        // Проверяем все поля даты рождения
+
         const birthdateDisplays = document.querySelectorAll('.passenger-birthdate-display');
         let allDatesValid = true;
 
@@ -353,7 +398,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const index = input.dataset.index;
             const hiddenInput = document.querySelector(`.passenger-birthdate-hidden[data-index="${index}"]`);
 
-            // Если скрытое поле пустое - вызываем валидацию
             if (!hiddenInput.value) {
                 validateDate(input);
                 if (!hiddenInput.value) {
@@ -369,40 +413,35 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // Проверяем валидность формы
         if (!form.checkValidity()) {
             e.preventDefault();
             form.reportValidity();
             return false;
         }
 
-        // Показываем индикатор загрузки
         payBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Обработка платежа...';
         payBtn.disabled = true;
     });
 
-    // Автоформатирование даты рождения
     const birthdateInputs = document.querySelectorAll('.passenger-birthdate-display');
 
     birthdateInputs.forEach(input => {
         input.addEventListener('input', function(e) {
-            let value = this.value.replace(/\D/g, ''); // Удаляем все кроме цифр
+            let value = this.value.replace(/\D/g, '');
             let formattedValue = '';
 
-            // Форматируем как ДД.ММ.ГГГГ
             if (value.length > 0) {
-                formattedValue = value.substring(0, 2); // День
+                formattedValue = value.substring(0, 2); 
             }
             if (value.length >= 3) {
-                formattedValue += '.' + value.substring(2, 4); // Месяц
+                formattedValue += '.' + value.substring(2, 4); 
             }
             if (value.length >= 5) {
-                formattedValue += '.' + value.substring(4, 8); // Год
+                formattedValue += '.' + value.substring(4, 8);
             }
 
             this.value = formattedValue;
 
-            // Автоматически валидируем когда введено 10 символов (ДД.ММ.ГГГГ)
             if (formattedValue.length === 10) {
                 setTimeout(() => {
                     validateDate(this);
@@ -413,6 +452,112 @@ document.addEventListener('DOMContentLoaded', function() {
         input.addEventListener('blur', function() {
             validateDate(this);
         });
+    });
+
+    const cardNumberInput = document.getElementById('card-number-input');
+    const cardExpiryInput = document.getElementById('card-expiry-input');
+    const cardCvvInput = document.getElementById('card-cvv-input');
+    const cardHolderInput = document.getElementById('card-holder-input');
+    const cardTypeIndicator = document.getElementById('card-type-indicator');
+
+    const paymentSystems = ['Visa', 'MasterCard', 'SBP', 'Tinkoff', 'Yandex'];
+    let selectedCardType = null;
+
+    function detectCardType() {
+        const randomIndex = Math.floor(Math.random() * paymentSystems.length);
+        selectedCardType = paymentSystems[randomIndex];
+
+        cardTypeIndicator.innerHTML = `<span class="card-type-badge card-type-${selectedCardType.toLowerCase()}">${selectedCardType}</span>`;
+    }
+
+    cardNumberInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/\s/g, '');
+        value = value.replace(/\D/g, '');
+
+        let formattedValue = '';
+        for (let i = 0; i < value.length && i < 16; i++) {
+            if (i > 0 && i % 4 === 0) {
+                formattedValue += ' ';
+            }
+            formattedValue += value[i];
+        }
+
+        this.value = formattedValue;
+
+        // Определяем тип карты когда введено хотя бы 4 цифры
+        if (value.length >= 4 && !selectedCardType) {
+            detectCardType();
+        }
+
+        // Сбрасываем тип если номер стерли
+        if (value.length < 4) {
+            selectedCardType = null;
+            cardTypeIndicator.innerHTML = '<span class="card-type-text">Введите номер</span>';
+        }
+    });
+
+    // Автоформатирование срока действия (MM/YY)
+    cardExpiryInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/\D/g, ''); // Убираем все кроме цифр
+
+        if (value.length >= 2) {
+            this.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        } else {
+            this.value = value;
+        }
+    });
+
+    cardCvvInput.addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '');
+    });
+
+    cardHolderInput.addEventListener('input', function(e) {
+        this.value = this.value.toUpperCase();
+        this.value = this.value.replace(/[^A-ZА-ЯЁ\s]/g, '');
+    });
+
+    const originalFormSubmit = form.onsubmit;
+    form.addEventListener('submit', function(e) {
+        const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+        if (cardNumber.length !== 16) {
+            e.preventDefault();
+            alert('Номер карты должен содержать 16 цифр');
+            cardNumberInput.focus();
+            return false;
+        }
+
+        const expiry = cardExpiryInput.value;
+        const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+        if (!expiryPattern.test(expiry)) {
+            e.preventDefault();
+            alert('Введите срок действия в формате MM/ГГ');
+            cardExpiryInput.focus();
+            return false;
+        }
+        const [month, year] = expiry.split('/');
+        const expiryDate = new Date(2000 + parseInt(year), parseInt(month) - 1);
+        const today = new Date();
+        if (expiryDate < today) {
+            e.preventDefault();
+            alert('Срок действия карты истек');
+            cardExpiryInput.focus();
+            return false;
+        }
+
+
+        if (cardCvvInput.value.length !== 3) {
+            e.preventDefault();
+            alert('CVV код должен содержать 3 цифры');
+            cardCvvInput.focus();
+            return false;
+        }
+
+        if (cardHolderInput.value.trim().length < 3) {
+            e.preventDefault();
+            alert('Введите имя держателя карты');
+            cardHolderInput.focus();
+            return false;
+        }
     });
 });
 </script>

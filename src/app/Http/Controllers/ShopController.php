@@ -7,9 +7,11 @@ use App\Models\Ticket;
 use App\Models\Entertainment;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ShopController extends Controller
 {
@@ -28,9 +30,6 @@ class ShopController extends Controller
         return view('shop', compact('voyages', 'entertainments'));
     }
 
-    /**
-     * Показать страницу выбора билетов для рейса
-     */
     public function showVoyage($voyageId)
     {
         $voyage = Voyage::with(['departurePlace', 'arrivalPlace'])
@@ -150,18 +149,18 @@ class ShopController extends Controller
      */
     public function processPayment(Request $request)
     {
-        \Log::info('=== НАЧАЛО ОБРАБОТКИ ПЛАТЕЖА ===');
-        \Log::info('Request data:', $request->all());
+        Log::info('=== НАЧАЛО ОБРАБОТКИ ПЛАТЕЖА ===');
+        Log::info('Request data:', $request->all());
 
         // Проверяем наличие данных заказа в сессии
         if (!session()->has('order_data')) {
-            \Log::error('Данные заказа не найдены в сессии');
+            Log::error('Данные заказа не найдены в сессии');
             return redirect()->route('shop')->with('error', 'Данные заказа не найдены.');
         }
 
-        \Log::info('Данные сессии найдены:', session('order_data'));
+        Log::info('Данные сессии найдены:', session('order_data'));
 
-        // Валидация данных пассажиров
+        // Валидация данных пассажиров и банковских реквизитов
         $validated = $request->validate([
             'passengers' => 'required|array',
             'passengers.*.first_name' => 'required|string|max:100',
@@ -171,6 +170,41 @@ class ShopController extends Controller
             'passengers.*.passport_number' => 'required|string|max:20',
             'passengers.*.citizenship' => 'required|string|max:100',
             'passengers.*.ticket_id' => 'required|exists:tickets,id',
+            // Банковские данные
+            'card_number' => 'required|string',
+            'card_expiry' => 'required|string|size:5',
+            'card_cvv' => 'required|string|size:3',
+            'card_holder' => 'required|string|min:3|max:100',
+        ]);
+
+        // Дополнительная валидация номера карты (должно быть 16 цифр после удаления пробелов)
+        $cardNumber = str_replace(' ', '', $validated['card_number']);
+        if (!preg_match('/^\d{16}$/', $cardNumber)) {
+            return back()->withInput()->withErrors(['card_number' => 'Номер карты должен содержать 16 цифр.']);
+        }
+
+        // Проверка формата срока действия (MM/YY)
+        if (!preg_match('/^(0[1-9]|1[0-2])\/\d{2}$/', $validated['card_expiry'])) {
+            return back()->withInput()->withErrors(['card_expiry' => 'Неверный формат срока действия. Используйте формат MM/ГГ.']);
+        }
+
+        // Проверка срока действия карты (не должен быть истекшим)
+        [$month, $year] = explode('/', $validated['card_expiry']);
+        $expiryDate = \Carbon\Carbon::createFromDate(2000 + (int)$year, (int)$month, 1)->endOfMonth();
+        if ($expiryDate->isPast()) {
+            return back()->withInput()->withErrors(['card_expiry' => 'Срок действия карты истек.']);
+        }
+
+        // Проверка CVV (должен содержать только цифры)
+        if (!preg_match('/^\d{3}$/', $validated['card_cvv'])) {
+            return back()->withInput()->withErrors(['card_cvv' => 'CVV код должен содержать только 3 цифры.']);
+        }
+
+        // Логируем успешную валидацию (без полных данных карты для безопасности)
+        Log::info('Платежные данные валидированы', [
+            'card_last4' => substr($cardNumber, -4),
+            'card_holder' => $validated['card_holder'],
+            'expiry' => $validated['card_expiry'],
         ]);
 
         $orderData = session('order_data');
@@ -240,17 +274,30 @@ class ShopController extends Controller
                 }
             }
 
-            // Симуляция оплаты: временно отключена для отладки
-            // $paymentChance = rand(1, 100);
-            // if ($paymentChance > 70) {
-            //     DB::rollBack();
-            //     return back()->with('error', 'Оплата отклонена. Пожалуйста, попробуйте снова или используйте другой способ оплаты.');
-            // }
+            // Симуляция оплаты: 70% успех, 30% отказ
+            $paymentChance = rand(1, 100);
+            if ($paymentChance > 70) {
+                DB::rollBack();
+                return back()->with('error', 'Оплата отклонена. Пожалуйста, попробуйте снова или используйте другой способ оплаты.');
+            }
 
             // Создаём заказ
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'total_price' => $totalPrice,
+                'status' => 'Оплачен',
+            ]);
+
+            // Определяем платежную систему рандомно (как на фронтенде)
+            $paymentSystems = ['Visa', 'MasterCard', 'SBP', 'Tinkoff', 'Yandex'];
+            $paymentProvider = $paymentSystems[array_rand($paymentSystems)];
+
+            // Создаем запись о платеже
+            Payment::create([
+                'order_id' => $order->id,
+                'amount' => $totalPrice,
+                'provider' => $paymentProvider,
+                'transaction_id' => 'TXN-' . strtoupper(uniqid()),
                 'status' => 'Оплачен',
             ]);
 
@@ -307,9 +354,9 @@ class ShopController extends Controller
                 ->with('success', 'Заказ успешно оплачен! Номер заказа: #' . $order->id);
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('=== ОШИБКА ПРИ ОБРАБОТКЕ ПЛАТЕЖА ===');
-            \Log::error('Exception: ' . $e->getMessage());
-            \Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('=== ОШИБКА ПРИ ОБРАБОТКЕ ПЛАТЕЖА ===');
+            Log::error('Exception: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
             return back()->with('error', 'Ошибка при обработке оплаты: ' . $e->getMessage());
         }
     }

@@ -87,19 +87,19 @@
 
 /* Специфичные изображения кают */
 .cabin-image-rouz {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rouz.webp');
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabinaf.webp');
 }
 
 .cabin-image-cost {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabincost.jpg');
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabinareal.jpg');
 }
 
 .cabin-image-djek {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/djekcabin.jpg');
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/nosfilm.webp');
 }
 
 .cabin-image-chip {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabinchip.png');
+    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/realnos.webp');
 }
 
 .cabin-image-lestni {

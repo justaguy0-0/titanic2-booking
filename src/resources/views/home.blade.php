@@ -30,19 +30,19 @@
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
                                 <div class="cabin-image cabin-image-rouz mb-3"></div>
-                                <p class="cabin-description">Каюта Роуз Дьюитт Бьюкейтер</p>
+                                <p class="cabin-description">Кабина капитана</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
                                 <div class="cabin-image cabin-image-cost mb-3"></div>
-                                <p class="cabin-description">Первый класс</p>
-                                <div class="price-tag mb-2">650.000 руб.</div>
+                                <p class="cabin-description">Новое управление</p>
+                                <div class="price-tag mb-2">Обеспечение</div>
                                 <ul class="list-unstyled cabin-features">
-                                    <li>• Панорамные окна</li>
-                                    <li>• Персональный дворецкий</li>
-                                    <li>• Гидромассажная ванна</li>
+                                    <li>• Улучшенная версия</li>
+                                    <li>• Динамичное движение</li>
+                                    <li>• Воссоздание дизайна</li>
                                 </ul>
                             </div>
                         </div>
@@ -58,19 +58,19 @@
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
                                 <div class="cabin-image cabin-image-djek mb-3"></div>
-                                <p class="cabin-description">Каюта Джека Доусона</p>
+                                <p class="cabin-description">Нос корабля</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
                                 <div class="cabin-image cabin-image-chip mb-3"></div>
-                                <p class="cabin-description">Эконом класс</p>
-                                <div class="price-tag mb-2">250.000 руб.</div>
+                                <p class="cabin-description">Достопримечательность</p>
+                                <div class="price-tag mb-2">Место для ваших фото</div>
                                 <ul class="list-unstyled cabin-features">
-                                    <li>• Удобные кровати</li>
-                                    <li>• Собственный санузел</li>
-                                    <li>• Wi-Fi и телевизор</li>
+                                    <li>• Полная копия момента из фильма</li>
+                                    <li>• Лучший вид</li>
+                                    <li>• Конкурс лучшего фото</li>
                                 </ul>
                             </div>
                         </div>

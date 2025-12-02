@@ -19,6 +19,11 @@ class HomeController extends Controller
             'Йога для самых здоровых' => Entertainment::where('name', 'Йога для самых здоровых')->first()?->price ?? 0,
         ];
 
+//        $prices = Entertainment::whereIn([
+//            'Вечерний ужин на палубе',
+//            'Спа-процедуры'
+//        ])->get();
+
         return view("home", compact("prices"));
     }
 }

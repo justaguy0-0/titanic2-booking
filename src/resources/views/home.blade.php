@@ -173,7 +173,24 @@
                 </div>
             </div>
         </div>
-
+{{--        @foreach($prices as $price)--}}
+{{--            <div class="row align-items-center mb-5 g-4">--}}
+{{--                <div class="col-md-6 order-md-2">--}}
+{{--                    <div class="entertainment-image entertainment-image-spa rounded"></div>--}}
+{{--                </div>--}}
+{{--                <div class="col-md-6 order-md-1">--}}
+{{--                    <h3 class="entertainment-title">{{$price->title}}</h3>--}}
+{{--                    <p class="entertainment-text">{{$title->desc}}</p>--}}
+{{--                    <div class="price-tag" style="font-size: 1.2rem;">--}}
+{{--                        {{ $prices->price??0 }} руб.--}}
+{{--                    </div>--}}
+{{--                    <div class="mt-3">--}}
+{{--                        <span class="badge badge-gold">09:00-21:00</span>--}}
+{{--                        <span class="badge badge-dark ms-2">Релакс</span>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        @endforeach--}}
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6 order-md-2">
                 <div class="entertainment-image entertainment-image-spa rounded"></div>

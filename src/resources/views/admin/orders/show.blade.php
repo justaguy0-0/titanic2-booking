@@ -25,7 +25,7 @@
                                 @if($item->type === 'ticket')
                                     <strong>Билет {{ $item->ticket->number }}</strong> ({{ $item->ticket->voyage->name ?? 'N/A' }}, {{ number_format($item->price, 2, ',', ' ') }} ₽)
                                 @else
-                                    <strong>{{ $item->entertainment->name }}</strong> ×{{ $item->quantity }} ({{ number_format($item->price * $item->quantity, 2, ',', ' ') }} ₽)
+                                    <strong>{{ $item->entertainment?->name }}</strong> ×{{ $item->quantity }} ({{ number_format($item->price * $item->quantity, 2, ',', ' ') }} ₽)
                                 @endif
                             </p>
                         </div>

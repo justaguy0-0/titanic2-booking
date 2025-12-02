@@ -59,6 +59,130 @@
                 </div>
             </div>
 
+            
+            @php
+                // Рассчитываем лояльность прямо здесь
+                $totalTickets = Auth::user()->orders()->where('status', 'Оплачен')->sum('ticket_count');
+                
+                if ($totalTickets >= 10) {
+                    $loyaltyInfo = [
+                        'level' => 3,
+                        'discount' => 20,
+                        'next_level_tickets' => null,
+                        'progress' => 100
+                    ];
+                } elseif ($totalTickets >= 5) {
+                    $nextLevelTickets = 10 - $totalTickets;
+                    $progress = (($totalTickets - 5) / 5) * 100;
+                    $loyaltyInfo = [
+                        'level' => 2,
+                        'discount' => 10,
+                        'next_level_tickets' => $nextLevelTickets,
+                        'progress' => min($progress, 100)
+                    ];
+                } else {
+                    $nextLevelTickets = 5 - $totalTickets;
+                    $progress = ($totalTickets / 5) * 100;
+                    $loyaltyInfo = [
+                        'level' => 1,
+                        'discount' => 0,
+                        'next_level_tickets' => $nextLevelTickets,
+                        'progress' => min($progress, 100)
+                    ];
+                }
+            @endphp
+
+            <div class="section-card mb-4">
+                <div class="section-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Ваша система лояльности</h5>
+                        <span class="badge" style="background: linear-gradient(45deg, #fbbf24, #f59e0b); color: white; padding: 0.5rem 1rem; border-radius: 20px;">
+                            Уровень {{ $loyaltyInfo['level'] }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="text-sm">Ваш прогресс</span>
+                                    <span class="text-sm font-weight-bold">{{ $loyaltyInfo['progress'] }}%</span>
+                                </div>
+                                <div class="progress" style="height: 10px; border-radius: 5px; background-color: #e5e7eb;">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ $loyaltyInfo['progress'] }}%; background: linear-gradient(45deg, #fbbf24, #f59e0b); border-radius: 5px;"
+                                         aria-valuenow="{{ $loyaltyInfo['progress'] }}" 
+                                         aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row text-center mb-3">
+                                <div class="col-4">
+                                    <div class="text-xs text-gray-500">Билетов куплено</div>
+                                    <div class="font-weight-bold" style="color: #f59e0b;">{{ Auth::user()->total_tickets ?? 0 }}</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="text-xs text-gray-500">Текущая скидка</div>
+                                    <div class="font-weight-bold" style="color: #10b981;">{{ $loyaltyInfo['discount'] }}%</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="text-xs text-gray-500">Следующий уровень</div>
+                                    <div class="font-weight-bold" style="color: #8b5cf6;">
+                                        @if($loyaltyInfo['next_level_tickets'])
+                                            {{ $loyaltyInfo['next_level_tickets'] }} билетов
+                                        @else
+                                            Максимум
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="bg-gray-800 p-4 rounded-lg">
+                                <h6 class="text-white mb-3">Уровни лояльности</h6>
+                                <div class="space-y-3">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle mr-2" style="width: 20px; height: 20px; background: {{ $loyaltyInfo['level'] >= 1 ? '#f59e0b' : '#4b5563' }};"></div>
+                                            <span class="{{ $loyaltyInfo['level'] >= 1 ? 'text-yellow-300' : 'text-gray-400' }}">Уровень 1</span>
+                                        </div>
+                                        <span class="{{ $loyaltyInfo['level'] >= 1 ? 'text-yellow-300' : 'text-gray-400' }}">0-4 билетов • 0%</span>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle mr-2" style="width: 20px; height: 20px; background: {{ $loyaltyInfo['level'] >= 2 ? '#f59e0b' : '#4b5563' }};"></div>
+                                            <span class="{{ $loyaltyInfo['level'] >= 2 ? 'text-yellow-300' : 'text-gray-400' }}">Уровень 2</span>
+                                        </div>
+                                        <span class="{{ $loyaltyInfo['level'] >= 2 ? 'text-yellow-300' : 'text-gray-400' }}">5-9 билетов • 10%</span>
+                                    </div>
+                                    
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle mr-2" style="width: 20px; height: 20px; background: {{ $loyaltyInfo['level'] >= 3 ? '#f59e0b' : '#4b5563' }};"></div>
+                                            <span class="{{ $loyaltyInfo['level'] >= 3 ? 'text-yellow-300' : 'text-gray-400' }}">Уровень 3</span>
+                                        </div>
+                                        <span class="{{ $loyaltyInfo['level'] >= 3 ? 'text-yellow-300' : 'text-gray-400' }}">10+ билетов • 20%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if($loyaltyInfo['next_level_tickets'])
+                        <div class="mt-3 text-center">
+                            <p class="text-sm text-gray-400">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                До уровня {{ $loyaltyInfo['level'] + 1 }} осталось купить {{ $loyaltyInfo['next_level_tickets'] }} билетов
+                            </p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             {{-- Быстрые действия --}}
             <div class="section-card mb-4">
                 <div class="section-header">
@@ -228,4 +352,5 @@
         </div>
     </div>
 </div>
+
 @endsection

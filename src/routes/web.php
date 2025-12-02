@@ -14,7 +14,9 @@ use App\Http\Controllers\Admin\OrderItemController;
 use App\Http\Controllers\Admin\PaymentController;
 use Illuminate\Support\Facades\Route;
 
-
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 

@@ -13,6 +13,9 @@ class Order extends Model
         'user_id',
         'total_price',
         'status',
+        'ticket_count',           
+        'loyalty_discount_applied', 
+        'final_price',            
     ];
 
     public function user()

@@ -386,7 +386,29 @@
     box-shadow: 0 6px 16px rgba(251, 191, 36, 0.4);
     color: #1e293b;
 }
+.text-yellow-300 {
+    color: #fbbf24;
+}
 
+.text-gray-400 {
+    color: #9ca3af;
+}
+
+.bg-gray-800 {
+    background-color: #1f2937;
+}
+
+.space-y-3 > * + * {
+    margin-top: 0.75rem;
+}
+
+.text-gray-500 {
+    color: #6b7280;
+}
+
+.font-weight-bold {
+    font-weight: 600;
+}
 @media (max-width: 767.98px) {
     .stat-card {
         padding: 1rem;

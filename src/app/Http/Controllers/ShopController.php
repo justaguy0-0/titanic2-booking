@@ -8,6 +8,7 @@ use App\Models\Entertainment;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
+use App\Models\Passenger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -120,7 +121,7 @@ class ShopController extends Controller
         }
 
         // Рассчитываем стоимость билетов
-        $totalPrice = $tickets->sum('price');
+        $baseTotalPrice = $tickets->sum('price');
 
         // Получаем развлечения
         $entertainmentItems = [];
@@ -130,7 +131,7 @@ class ShopController extends Controller
                     $entertainment = Entertainment::find($entData['id']);
                     if ($entertainment) {
                         $quantity = $entData['quantity'];
-                        $totalPrice += $entertainment->price * $quantity;
+                        $baseTotalPrice += $entertainment->price * $quantity;
                         $entertainmentItems[] = [
                             'entertainment' => $entertainment,
                             'quantity' => $quantity,
@@ -141,7 +142,18 @@ class ShopController extends Controller
             }
         }
 
-        return view('shop.payment', compact('voyage', 'tickets', 'entertainmentItems', 'totalPrice'));
+        // РАСЧЕТ СКИДКИ ЛОЯЛЬНОСТИ
+        $loyaltyInfo = $this->getLoyaltyInfo(Auth::user());
+        $discountCalculation = $this->calculateOrderDiscount(Auth::user(), $baseTotalPrice);
+
+        return view('shop.payment', compact(
+            'voyage', 
+            'tickets', 
+            'entertainmentItems', 
+            'baseTotalPrice',
+            'loyaltyInfo',
+            'discountCalculation'
+        ));
     }
 
     /**
@@ -227,6 +239,10 @@ class ShopController extends Controller
             $totalPrice = 0;
             $ticketPrices = []; // Сохраняем цены с учетом скидок для каждого билета
 
+            // ПРИМЕНЯЕМ СКИДКУ ЛОЯЛЬНОСТИ
+            $loyaltyInfo = $this->getLoyaltyInfo(Auth::user());
+            $loyaltyDiscount = $loyaltyInfo['discount'];
+
             foreach ($validated['passengers'] as $passengerData) {
                 $ticket = $tickets->firstWhere('id', $passengerData['ticket_id']);
                 if ($ticket) {
@@ -236,18 +252,22 @@ class ShopController extends Controller
                     $age = $today->diff($birthDate)->y;
 
                     // Применяем скидку для детей до 12 лет
-                    $discountPercent = 0;
-                    $finalPrice = $ticket->price;
+                    $childDiscountPercent = 0;
+                    $basePrice = $ticket->price;
 
                     if ($age < 12) {
-                        $discountPercent = 20;
-                        $finalPrice = $ticket->price * (1 - $discountPercent / 100);
+                        $childDiscountPercent = 20;
+                        $basePrice = $ticket->price * (1 - $childDiscountPercent / 100);
                     }
+
+                    // ПРИМЕНЯЕМ СКИДКУ ЛОЯЛЬНОСТИ
+                    $finalPrice = $basePrice * (1 - $loyaltyDiscount / 100);
 
                     $ticketPrices[$passengerData['ticket_id']] = [
                         'original_price' => $ticket->price,
                         'final_price' => $finalPrice,
-                        'discount' => $discountPercent,
+                        'child_discount' => $childDiscountPercent,
+                        'loyalty_discount' => $loyaltyDiscount,
                         'age' => $age,
                         'passenger_data' => $passengerData,
                     ];
@@ -281,10 +301,13 @@ class ShopController extends Controller
                 return back()->with('error', 'Оплата отклонена. Пожалуйста, попробуйте снова или используйте другой способ оплаты.');
             }
 
-            // Создаём заказ
+            // Создаём заказ С УЧЕТОМ ЛОЯЛЬНОСТИ
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'total_price' => $totalPrice,
+                'ticket_count' => count($tickets), // Сохраняем количество билетов
+                'loyalty_discount_applied' => $loyaltyDiscount, // Сохраняем примененную скидку
+                'final_price' => $totalPrice, // Итоговая цена уже со скидкой
                 'status' => 'Оплачен',
             ]);
 
@@ -315,7 +338,7 @@ class ShopController extends Controller
                 ]);
 
                 // Создаем запись пассажира
-                \App\Models\Passenger::create([
+                Passenger::create([
                     'order_item_id' => $orderItem->id,
                     'first_name' => $priceData['passenger_data']['first_name'],
                     'last_name' => $priceData['passenger_data']['last_name'],
@@ -324,7 +347,7 @@ class ShopController extends Controller
                     'passport_number' => $priceData['passenger_data']['passport_number'],
                     'citizenship' => $priceData['passenger_data']['citizenship'],
                     'age' => $priceData['age'],
-                    'discount_percent' => $priceData['discount'],
+                    'discount_percent' => $priceData['child_discount'],
                 ]);
 
                 $ticket->update(['status' => 'Забронировано']);
@@ -342,8 +365,8 @@ class ShopController extends Controller
                 ]);
             }
 
-            // Обновляем итоговую стоимость заказа
-            $order->refreshTotalPrice();
+            // ОБНОВЛЯЕМ ЛОЯЛЬНОСТЬ ПОЛЬЗОВАТЕЛЯ
+            $this->updateUserLoyalty(Auth::user());
 
             DB::commit();
 
@@ -359,5 +382,85 @@ class ShopController extends Controller
             Log::error('Stack trace: ' . $e->getTraceAsString());
             return back()->with('error', 'Ошибка при обработке оплаты: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Рассчитывает уровень лояльности на основе количества билетов
+     */
+    private function calculateLoyaltyLevel(int $totalTickets): array
+    {
+        if ($totalTickets >= 10) {
+            return [
+                'level' => 3,
+                'discount' => 20,
+                'next_level_tickets' => null,
+                'progress' => 100
+            ];
+        } elseif ($totalTickets >= 5) {
+            $nextLevelTickets = 10 - $totalTickets;
+            $progress = (($totalTickets - 5) / 5) * 100;
+            
+            return [
+                'level' => 2,
+                'discount' => 10,
+                'next_level_tickets' => $nextLevelTickets,
+                'progress' => min($progress, 100)
+            ];
+        } else {
+            $nextLevelTickets = 5 - $totalTickets;
+            $progress = ($totalTickets / 5) * 100;
+            
+            return [
+                'level' => 1,
+                'discount' => 0,
+                'next_level_tickets' => $nextLevelTickets,
+                'progress' => min($progress, 100)
+            ];
+        }
+    }
+
+    /**
+     * Обновляет лояльность пользователя
+     */
+    private function updateUserLoyalty($user): void
+    {
+        // Считаем ТОЛЬКО оплаченные заказы
+        $totalTickets = $user->orders()->where('status', 'Оплачен')->sum('ticket_count');
+        
+        $loyaltyData = $this->calculateLoyaltyLevel($totalTickets);
+        
+        $user->update([
+            'total_tickets' => $totalTickets,
+            'loyalty_level' => $loyaltyData['level'],
+            'loyalty_discount' => $loyaltyData['discount']
+        ]);
+    }
+
+    /**
+     * Получает информацию о лояльности пользователя
+     */
+    private function getLoyaltyInfo($user): array
+    {
+        // ВАЖНО: всегда считаем на основе реальных заказов, а не сохраненного значения
+        $totalTickets = $user->orders()->where('status', 'Оплачен')->sum('ticket_count');
+        return $this->calculateLoyaltyLevel($totalTickets);
+    }
+
+    /**
+     * Рассчитывает скидку для заказа
+     */
+    private function calculateOrderDiscount($user, float $totalPrice): array
+    {
+        $loyaltyInfo = $this->getLoyaltyInfo($user);
+        $discountAmount = $totalPrice * ($loyaltyInfo['discount'] / 100);
+        $finalPrice = $totalPrice - $discountAmount;
+
+        return [
+            'base_total' => $totalPrice,
+            'discount_percent' => $loyaltyInfo['discount'],
+            'discount_amount' => $discountAmount,
+            'final_price' => $finalPrice,
+            'loyalty_info' => $loyaltyInfo
+        ];
     }
 }

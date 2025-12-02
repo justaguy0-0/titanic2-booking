@@ -71,6 +71,54 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- СИСТЕМА ЛОЯЛЬНОСТИ --}}
+                    <div class="payment-card">
+                        <div class="payment-card-header">
+                            <h3 class="payment-card-title">
+                                <i class="fas fa-percentage me-2"></i>Ваша скидка
+                            </h3>
+                        </div>
+                        <div class="payment-card-body">
+                            <div class="loyalty-info">
+                                <div class="loyalty-level-display mb-3">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="loyalty-level-text">Уровень {{ $loyaltyInfo['level'] }}</span>
+                                        <span class="loyalty-discount-badge">{{ $loyaltyInfo['discount'] }}% скидка</span>
+                                    </div>
+                                    <div class="progress loyalty-progress-bar mt-2">
+                                        <div class="progress-bar" role="progressbar" 
+                                             style="width: {{ $loyaltyInfo['progress'] }}%"
+                                             aria-valuenow="{{ $loyaltyInfo['progress'] }}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    @if($loyaltyInfo['next_level_tickets'])
+                                        <small class="loyalty-hint mt-1">
+                                            До уровня {{ $loyaltyInfo['level'] + 1 }} осталось: {{ $loyaltyInfo['next_level_tickets'] }} билетов
+                                        </small>
+                                    @endif
+                                </div>
+
+                                <div class="loyalty-breakdown">
+                                    <div class="price-row">
+                                        <span>Стоимость {{ count($tickets) }} билетов:</span>
+                                        <span>{{ number_format($baseTotalPrice, 0) }} ₽</span>
+                                    </div>
+                                    @if($loyaltyInfo['discount'] > 0)
+                                        <div class="price-row discount-row">
+                                            <span>Скидка {{ $loyaltyInfo['discount'] }}%:</span>
+                                            <span>-{{ number_format($discountCalculation['discount_amount'], 0) }} ₽</span>
+                                        </div>
+                                    @endif
+                                    <div class="price-row total-row">
+                                        <strong>Итого к оплате:</strong>
+                                        <strong class="final-price">{{ number_format($discountCalculation['final_price'], 0) }} ₽</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="col-lg-7">
@@ -242,18 +290,25 @@
                                 </div>
 
                                 <div class="total-section">
-                                    <div class="total-row">
+                                    <div class="total-row final-total">
                                         <div class="total-label">
                                             <i class="fas fa-calculator me-2"></i>Итого к оплате:
                                         </div>
                                         <div class="total-amount">
-                                            {{ number_format($totalPrice, 0) }} ₽
+                                            @if($loyaltyInfo['discount'] > 0)
+                                                <div class="original-price" style="text-decoration: line-through; color: #94a3b8; font-size: 0.9em;">
+                                                    {{ number_format($baseTotalPrice, 0) }} ₽
+                                                </div>
+                                            @endif
+                                            <div class="final-price-amount" style="color: #10b981; font-size: 1.3em; font-weight: bold;">
+                                                {{ number_format($discountCalculation['final_price'], 0) }} ₽
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="payment-actions">
                                         <button type="submit" class="btn-pay" id="pay-btn">
-                                            <i class="fas fa-lock me-2"></i>Оплатить {{ number_format($totalPrice, 0) }} ₽
+                                            <i class="fas fa-lock me-2"></i>Оплатить {{ number_format($discountCalculation['final_price'], 0) }} ₽
                                         </button>
                                         <a href="{{ route('shop') }}" class="btn-cancel">
                                             <i class="fas fa-times me-2"></i>Отмена
@@ -388,9 +443,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
     form.addEventListener('submit', function(e) {
-
         const birthdateDisplays = document.querySelectorAll('.passenger-birthdate-display');
         let allDatesValid = true;
 
@@ -423,8 +476,8 @@ document.addEventListener('DOMContentLoaded', function() {
         payBtn.disabled = true;
     });
 
+    // Остальной JavaScript код остается таким же...
     const birthdateInputs = document.querySelectorAll('.passenger-birthdate-display');
-
     birthdateInputs.forEach(input => {
         input.addEventListener('input', function(e) {
             let value = this.value.replace(/\D/g, '');
@@ -454,6 +507,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Остальной код для валидации карты...
     const cardNumberInput = document.getElementById('card-number-input');
     const cardExpiryInput = document.getElementById('card-expiry-input');
     const cardCvvInput = document.getElementById('card-cvv-input');
@@ -484,21 +538,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         this.value = formattedValue;
 
-        // Определяем тип карты когда введено хотя бы 4 цифры
         if (value.length >= 4 && !selectedCardType) {
             detectCardType();
         }
 
-        // Сбрасываем тип если номер стерли
         if (value.length < 4) {
             selectedCardType = null;
             cardTypeIndicator.innerHTML = '<span class="card-type-text">Введите номер</span>';
         }
     });
 
-    // Автоформатирование срока действия (MM/YY)
     cardExpiryInput.addEventListener('input', function(e) {
-        let value = this.value.replace(/\D/g, ''); // Убираем все кроме цифр
+        let value = this.value.replace(/\D/g, '');
 
         if (value.length >= 2) {
             this.value = value.substring(0, 2) + '/' + value.substring(2, 4);
@@ -543,7 +594,6 @@ document.addEventListener('DOMContentLoaded', function() {
             cardExpiryInput.focus();
             return false;
         }
-
 
         if (cardCvvInput.value.length !== 3) {
             e.preventDefault();

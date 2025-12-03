@@ -77,7 +77,7 @@
                 @forelse($tickets as $ticket)
                     @php
                         $isSold = $ticket->status === 'Продано';
-                        $isBooked = $ticket->status === 'Забронировано';
+                        $isBooked = in_array($ticket->status, ['Забронировано', 'Забронирован']);
                         $rowClass = $isSold ? 'bg-red-50' : ($isBooked ? 'bg-yellow-50' : '');
                     @endphp
                     <tr class="{{ $rowClass }} hover:bg-gray-50 transition">

@@ -157,12 +157,16 @@
                                                 {{ $cabinType->name }} — {{ $cabinType->description }}
                                             </div>
 
-                                            <div class="deck-body"
-                                                style="background-image: url('/images/decks/{{ $deckKey }}-deck.png');">
-                                                <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
-                                                    @foreach($cabinType->tickets as $ticket)
+                                            <div class="deck-body">
+                                                <div class="deck-image-wrapper">
+                                                    <img src="/images/decks/{{ $deckKey }}-deck.png?v={{ time() }}"
+                                                         alt="{{ $cabinType->name }}"
+                                                         class="deck-image">
+                                                    <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
+                                                        @foreach($cabinType->tickets as $ticket)
                                                         @php
-                                                            $isBooked = $ticket->status === 'Забронирован';
+                                                            // Проверяем оба варианта написания статуса для совместимости
+                                                            $isBooked = in_array($ticket->status, ['Забронировано', 'Забронирован']);
                                                             $seatClass = $isBooked ? 'seat booked' : 'seat available';
                                                             // Добавляем класс размера в зависимости от типа палубы
                                                             $seatClass .= ' ' . $deckKey . '-seat';
@@ -179,7 +183,8 @@
                                                             data-seat-index="{{ $seatIndex }}"
                                                             title="{{ $tooltipText }}">
                                                         </div>
-                                                    @endforeach
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -402,9 +407,11 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        seat.addEventListener('click', function() {
+        seat.addEventListener('click', function(e) {
             const ticketId = this.dataset.ticketId;
             const checkbox = document.getElementById('ticket-' + ticketId);
+
+            console.log('Клик по билету:', ticketId, 'Трапеция:', this.classList.contains('trapezoid-left') || this.classList.contains('trapezoid-right'));
 
             if (checkbox) {
                 // Переключаем состояние чекбокса
@@ -419,6 +426,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Обновляем итоговую сумму
                 updateTotal();
+            } else {
+                console.error('Чекбокс не найден для билета:', ticketId);
             }
         });
     });
@@ -486,6 +495,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 seat.style.top = position.top + '%';
                 seat.style.left = position.left + '%';
                 seat.style.transform = 'translate(-50%, -50%)'; // Центрируем относительно координат
+
+                // Если место должно быть трапецией, добавляем специальный класс
+                if (position.isTrapezoid) {
+                    if (position.isTrapezoid === 'left') {
+                        seat.classList.add('trapezoid-left');
+                    } else if (position.isTrapezoid === 'right') {
+                        seat.classList.add('trapezoid-right');
+                    }
+                }
             } else {
                 console.warn('Позиция не найдена для места', seatIndex, 'на палубе', deckType);
             }

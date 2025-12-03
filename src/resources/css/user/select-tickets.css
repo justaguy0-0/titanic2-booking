@@ -1,14 +1,9 @@
-/* ============================================
-   SELECT TICKETS PAGE - ВЫБОР БИЛЕТОВ
-   ============================================ */
 
-/* Контейнер страницы */
 .select-tickets-container {
     background: #0f172a;
     min-height: 100vh;
 }
 
-/* Информация о рейсе */
 .voyage-info-card {
     background: #1e293b;
     border-radius: 12px;
@@ -75,7 +70,7 @@
 
 /* Схема корабля */
 .ship-layout {
-    background: #1e293b;
+    background: transparent;
     border-radius: 12px;
     padding: 1rem;
     border: 2px solid #fbbf24;
@@ -89,8 +84,6 @@
     margin-bottom: 0.8rem;
 }
 
-/* Переключатель этажей */
-/* Переключатель этажей - КОМПАКТНАЯ ВЕРСИЯ */
 .deck-selector {
     display: flex;
     justify-content: center;
@@ -117,7 +110,7 @@
     min-width: auto;
     position: relative;
     overflow: hidden;
-    /* ВАЖНО: убираем возможные свойства, которые могут скрывать кнопки */
+ 
     opacity: 1 !important;
     visibility: visible !important;
     z-index: 10;
@@ -180,7 +173,6 @@
     pointer-events: none;
 }
 
-/* Контейнер палуб */
 .decks-container {
     position: relative;
     min-height: 250px;
@@ -192,7 +184,6 @@
     width: 100%;
 }
 
-/* Адаптивность для мобильных */
 @media (max-width: 768px) {
     .deck-selector {
         flex-direction: column;
@@ -216,144 +207,163 @@
 }
 
 .deck-body {
-    padding: 1.5rem 3rem;
+    padding: 0;
     border-radius: 0 0 8px 8px;
     border: 2px solid #475569;
     border-top: none;
+    width: 100%;
+    background: transparent;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deck-image-wrapper {
     position: relative;
-    min-height: 250px;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
 }
 
-/* Фоновые изображения палуб */
-.first-class .deck-body {
-    background-image: url('../../images/decks/first-class-deck.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
-    padding: 2rem;
-}
-
-.business-class .deck-body {
-    background-image: url('../../images/decks/business-class-deck.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
-    padding: 2rem;
-}
-
-.economy-class .deck-body {
-    background-image: url('../../images/decks/economy-class-deck.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
-    padding: 2rem;
+.deck-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: transparent;
 }
 
 .seats-container {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    min-height: 400px;
     z-index: 1;
     background: transparent;
 }
 
-.seats-container.first-class {
-    min-height: 400px;
-}
-
-.seats-container.business-class {
-    min-height: 450px;
-}
-
-.seats-container.economy-class {
-    min-height: 500px;
-}
-
-/* Стили мест - простой квадрат с рамкой */
 .seat {
     position: relative;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 0.3vw;
+    color: #fbbf24;
+    transition: all 0.3s ease;
 }
 
-/* Размеры для первого класса */
 .seat.first-class-seat {
-    width: 70px;
-    height: 70px;
+    width: 11.2%;
+    aspect-ratio: 113 / 126;
 }
 
-/* Размеры для второго класса */
 .seat.business-class-seat {
-    width: 55px;
-    height: 55px;
+    width: 7.2%;
+    aspect-ratio: 70 / 115;
 }
 
-/* Размеры для третьего класса */
 .seat.economy-class-seat {
-    width: 45px;
-    height: 45px;
+    width: 3%;
+    aspect-ratio: 1 / 2.2;
 }
 
-/* Доступное место - пустой квадрат с тонкой рамкой */
-.seat.available {
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    background: transparent;
+.seat.economy-class-seat.trapezoid-left,
+.seat.economy-class-seat.trapezoid-right {
+    width: 13%;
+    aspect-ratio: 1.15 / 1;
 }
 
-/* При наведении - золотая рамка */
-.seat.available:hover {
-    border-color: #fbbf24;
-    box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+.seat.business-class-seat.trapezoid-left,
+.seat.business-class-seat.trapezoid-right {
+    width: 12%;
+    aspect-ratio: 1 / 1;
 }
 
-/* Выбранное место - золотая рамка */
-.seat.selected {
-    border: 3px solid #fbbf24;
-    background: transparent;
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+.seat.trapezoid-left {
+    clip-path: polygon(0% 0%, 92% 30%, 92% 100%, 0% 100%);
 }
 
-/* Забронированное место - серая рамка */
-.seat.booked {
-    border: 2px solid rgba(100, 116, 139, 0.5);
-    background: transparent;
+
+.seat.trapezoid-right {
+    clip-path: polygon(0% 0%, 92% 0%, 92% 70%, 0% 100%);
+}
+
+.seat.trapezoid-left.available,
+.seat.trapezoid-right.available {
+    border-color: rgba(251, 191, 36, 0.8) !important;
+    background: rgba(251, 191, 36, 0.2) !important;
+}
+
+.seat.trapezoid-left.available:hover,
+.seat.trapezoid-right.available:hover {
+    border-color: #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.4) !important;
+    box-shadow: 0 0 1vw rgba(251, 191, 36, 0.5);
+}
+
+.seat.trapezoid-left.selected,
+.seat.trapezoid-right.selected {
+    border: 0.4vw solid #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.7) !important;
+    box-shadow: 0 0 2vw rgba(251, 191, 36, 1),
+                inset 0 0 1vw rgba(251, 191, 36, 0.5) !important;
+    z-index: 100 !important;
+}
+
+/* Забронированные трапециевидные места */
+.seat.trapezoid-left.booked,
+.seat.trapezoid-right.booked {
+    border-color: rgba(239, 68, 68, 0.8) !important;
+    background: rgba(239, 68, 68, 0.2) !important;
     cursor: not-allowed;
 }
 
-/* Tooltip для показа цены при наведении */
+.seat.available {
+    border: 0.25vw solid rgba(251, 191, 36, 0.8);
+    background: rgba(251, 191, 36, 0.2);
+}
+
+
+.seat.available:hover {
+    border-color: #fbbf24;
+    box-shadow: 0 0 1vw rgba(251, 191, 36, 0.5);
+    background: rgba(251, 191, 36, 0.4);
+}
+
+.seat.selected {
+    border: 0.4vw solid #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.7) !important;
+    box-shadow: 0 0 2vw rgba(251, 191, 36, 1),
+                inset 0 0 1vw rgba(251, 191, 36, 0.5) !important;
+    z-index: 100 !important;
+}
+
+.seat.booked {
+    border: 0.25vw solid rgba(239, 68, 68, 0.8);
+    background: rgba(239, 68, 68, 0.2);
+    cursor: not-allowed;
+}
+
 .seat.available::after {
     content: attr(title);
     position: absolute;
-    bottom: 100%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    background: rgba(30, 41, 59, 0.95);
+    transform: translate(-50%, -50%);
     color: #fbbf24;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    border: 1px solid rgba(251, 191, 36, 0.5);
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    white-space: nowrap;
+    text-align: center;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s ease;
-    z-index: 100;
-    margin-bottom: 8px;
+    z-index: 10;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
 
 .seat.available:hover::after {
     opacity: 1;
 }
 
-/* Легенда */
 .ship-legend {
     display: flex;
     justify-content: center;
@@ -378,27 +388,27 @@
 }
 
 .legend-box.available {
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(251, 191, 36, 0.2);
+    border-color: rgba(251, 191, 36, 0.8);
 }
 
 .legend-box.selected {
-    background: transparent;
+    background: rgba(251, 191, 36, 0.7);
     border-color: #fbbf24;
-    box-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+    box-shadow: 0 0 8px rgba(251, 191, 36, 1),
+                inset 0 0 4px rgba(251, 191, 36, 0.5);
 }
 
 .legend-box.booked {
-    background: transparent;
-    border-color: rgba(100, 116, 139, 0.5);
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.8);
 }
 
-/* Билеты (старый список - скрываем) */
 .ticket-item {
     border-bottom: 1px solid #334155;
     padding: 1rem 0;
     transition: all 0.3s ease;
-    display: none; /* Скрываем старый список */
+    display: none;
 }
 
 .ticket-item:hover {
@@ -494,7 +504,6 @@
     transition: all 0.3s ease;
 }
 
-/* Убираем стрелки у input type="number" */
 .quantity-input::-webkit-outer-spin-button,
 .quantity-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -512,7 +521,6 @@
     background: #3f4a5e !important;
 }
 
-/* Блок итого */
 .total-card {
     background: #1e293b;
     border-radius: 12px;
@@ -531,7 +539,6 @@
     font-weight: 700;
 }
 
-/* Кнопка отправки */
 .btn-submit {
     background: #475569;
     border: none;
@@ -559,7 +566,6 @@
     cursor: not-allowed;
 }
 
-/* Сообщения */
 .select-tickets-alert {
     background: #1e293b;
     border: 2px solid #fbbf24;
@@ -572,7 +578,6 @@
     font-style: italic;
 }
 
-/* Accordion стили для развлечений (как на странице shop) */
 #entertainmentsAccordionSelect .entertainment-accordion-item {
     background: transparent !important;
     border: none !important;
@@ -622,37 +627,9 @@
 }
 
 @media (max-width: 1200px) {
-    /* Уменьшаем размеры квадратов */
-    .seat.first-class-seat {
-        width: 60px;
-        height: 60px;
-    }
-
-    .seat.business-class-seat {
-        width: 48px;
-        height: 48px;
-    }
-
-    .seat.economy-class-seat {
-        width: 40px;
-        height: 40px;
-    }
-
-    /* Уменьшаем отступы палуб */
-    .first-class .deck-body {
-        padding: 2rem;
-    }
-
-    .business-class .deck-body {
-        padding: 3rem;
-    }
-
-    .economy-class .deck-body {
-        padding: 4rem;
-    }
+    /* Размеры автоматически масштабируются через % */
 }
 
-/* Планшеты маленькие (до 991px) */
 @media (max-width: 991px) {
     .voyage-title {
         font-size: 1.5rem;
@@ -661,81 +638,11 @@
     .total-amount {
         font-size: 1.5rem;
     }
-
-    /* Еще меньше квадраты */
-    .seat.first-class-seat {
-        width: 50px;
-        height: 50px;
-    }
-
-    .seat.business-class-seat {
-        width: 42px;
-        height: 42px;
-    }
-
-    .seat.economy-class-seat {
-        width: 35px;
-        height: 35px;
-    }
-
-    /* Уменьшаем отступы */
-    .first-class .deck-body {
-        padding: 1.5rem;
-    }
-
-    .business-class .deck-body {
-        padding: 2.5rem;
-    }
-
-    .economy-class .deck-body {
-        padding: 3.5rem;
-    }
-
-    /* Добавляем скролл для контейнера палубы на маленьких экранах */
-    .deck-body {
-        overflow-x: auto;
-        overflow-y: auto;
-    }
-
-    .seats-container {
-        min-width: 600px; /* Минимальная ширина чтобы места не слипались */
-    }
 }
 
-/* Мобильные (до 768px) */
 @media (max-width: 768px) {
-    /* Минимальные размеры квадратов */
-    .seat.first-class-seat {
-        width: 40px;
-        height: 40px;
-    }
-
-    .seat.business-class-seat {
-        width: 35px;
-        height: 35px;
-    }
-
-    .seat.economy-class-seat {
-        width: 30px;
-        height: 30px;
-    }
-
-    /* Минимальные отступы */
-    .first-class .deck-body,
-    .business-class .deck-body,
-    .economy-class .deck-body {
-        padding: 1rem;
-    }
-
-    /* Гарантируем скролл на мобильных */
-    .seats-container {
-        min-width: 500px;
-    }
-
-    /* Уменьшаем размер tooltip */
     .seat.available::after {
         font-size: 0.75rem;
         padding: 0.4rem 0.8rem;
     }
-
 }

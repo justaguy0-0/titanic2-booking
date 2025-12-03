@@ -71,11 +71,11 @@ composer dump-autoload     # Обновить autoload
 - `Order` имеет метод `refreshTotalPrice()` для автоматического пересчета итоговой стоимости на основе OrderItems
 - `OrderItem` использует полиморфизм: `item_type` может быть 'ticket' или 'entertainment', accessor `item` возвращает связанную модель
 - `Voyage` связан с `Place` дважды (departurePlace и arrivalPlace)
-- `Ticket` имеет статусы: 'Доступно' или 'Забронирован'
+- `Ticket` имеет статусы: 'Доступно' или 'Забронировано'
 - Используется Spatie Permission: проверяйте роли через `$user->hasRole('admin')`
 
 **Статусы:**
-- **Ticket.status:** 'Доступно', 'Забронирован'
+- **Ticket.status:** 'Доступно', 'Забронировано'
 - **Order.status:** 'Оплачен', 'Новый', 'Обработан', 'Отменён'
 
 ### Структура маршрутов (routes/web.php)
@@ -185,7 +185,7 @@ composer dump-autoload     # Обновить autoload
      - Создает `Order` со статусом **'Оплачен'**
      - Создает `OrderItem` для каждого билета (`item_type='ticket'`)
      - Создает `OrderItem` для каждого развлечения (`item_type='entertainment'`)
-     - Обновляет статус билетов на **'Забронирован'**
+     - Обновляет статус билетов на **'Забронировано'**
      - `DB::commit()` - сохраняет изменения
    - Очищает сессию
    - Редирект на `profile.orders` с сообщением успеха/ошибки

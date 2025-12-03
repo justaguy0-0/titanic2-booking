@@ -93,7 +93,7 @@ class OrderItemSeeder extends Seeder
 //            'price' => $ticket->price,
 //        ]);
 //
-//        $ticket->update(['status' => 'Забронирован']);
+//        $ticket->update(['status' => 'Забронировано']);
 //        $totalPrice += $ticket->price;
 //
 //        // Удаляем из доступных

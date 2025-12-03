@@ -87,6 +87,15 @@
                 </a>
             </div> --}}
 
+            {{-- Пользователи --}}
+            <div class="pt-4">
+                <div class="text-gray-500 text-xs uppercase mb-2 tracking-wider">Пользователи</div>
+                <a href="{{ route('admin.users.index') }}"
+                   class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700 transition">
+                    <i class="fas fa-users mr-3"></i> Все пользователи
+                </a>
+            </div>
+
             <div class="border-t border-gray-200 mt-8 pt-4">
                 <a href="{{ route('home') }}"
                    class="flex items-center px-3 py-2 rounded-md hover:bg-green-50 text-green-700 font-medium transition group">

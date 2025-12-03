@@ -32,10 +32,10 @@
                         Тип <span class="text-red-500">*</span>
                     </label>
                     <div class="flex gap-6">
-                        <label><input type="radio" name="type" value="ticket" checked class="mr-2"> Билет</label>
-                        <label><input type="radio" name="type" value="entertainment" class="mr-2"> Развлечение</label>
+                        <label><input type="radio" name="item_type" value="ticket" checked class="mr-2"> Билет</label>
+                        <label><input type="radio" name="item_type" value="entertainment" class="mr-2"> Развлечение</label>
                     </div>
-                    @error('type')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
+                    @error('item_type')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
 
                 <!-- Билет (показывается только если выбран тип ticket) -->
@@ -93,14 +93,12 @@
     </div>
 
     <script>
-        // Показ/скрытие полей в зависимости от выбранного типа
-        document.querySelectorAll('input[name="type"]').forEach(radio => {
+        document.querySelectorAll('input[name="item_type"]').forEach(radio => {
             radio.addEventListener('change', function () {
                 document.querySelector('.ticket-section').classList.toggle('hidden', this.value !== 'ticket');
                 document.querySelector('.entertainment-section').classList.toggle('hidden', this.value !== 'entertainment');
             });
         });
-        // Инициализация при загрузке
-        document.querySelector('input[name="type"]:checked').dispatchEvent(new Event('change'));
+        document.querySelector('input[name="item_type"]:checked')?.dispatchEvent(new Event('change'));
     </script>
 @endsection

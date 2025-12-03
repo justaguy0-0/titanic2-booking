@@ -1,12 +1,12 @@
 @extends('admin.admin')
 
-@section('title', 'Добавить путешествие')
+@section('title', 'Добавить рейс')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Добавить путешествие</h1>
-        <p class="text-gray-600 mt-2">Введите данные и сохраните новое путешествие</p>
+        <h1 class="text-3xl font-bold text-gray-800">Добавить рейс</h1>
+        <p class="text-gray-600 mt-2">Введите данные и сохраните новое рейс</p>
     </div>
 
     <div class="bg-white shadow-md rounded-lg p-6 max-w-2xl">
@@ -17,7 +17,7 @@
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Название <span class="text-red-500">*</span></label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-500 @enderror"
-                       placeholder="Например: Путешествие к айсбергу" required>
+                       placeholder="Например: Рейс к айсбергу" required>
                 @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -109,47 +109,10 @@
                     Отмена
                 </a>
             </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    const departureInput = document.getElementById('departure_date');
-                    const arrivalInput = document.getElementById('arrival_date');
-                    const travelTimeInput = document.getElementById('travel_time');
-
-                    function calculateTravelTime() {
-                        if (!departureInput.value || !arrivalInput.value) {
-                            travelTimeInput.value = '';
-                            return;
-                        }
-
-                        const departure = new Date(departureInput.value);
-                        const arrival = new Date(arrivalInput.value);
-
-                        // Проверка: прибытие должно быть позже отправления
-                        if (arrival <= departure) {
-                            travelTimeInput.value = '';
-                            return;
-                        }
-
-                        // Разница в миллисекундах → часы → округляем до целого вверх
-                        const diffMs = arrival - departure;
-                        const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
-
-                        travelTimeInput.value = diffHours;
-                    }
-
-                    // Обновляем при изменении любого из полей
-                    departureInput.addEventListener('change', calculateTravelTime);
-                    arrivalInput.addEventListener('change', calculateTravelTime);
-
-                    // При загрузке страницы (если old() вернул значения после ошибки валидации)
-                    if (departureInput.value && arrivalInput.value) {
-                        calculateTravelTime();
-                    }
-                });
-            </script>
-
         </form>
     </div>
 </div>
+
+@vite('resources/js/voyage-form.js')
+
 @endsection

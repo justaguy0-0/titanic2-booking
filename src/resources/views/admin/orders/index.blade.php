@@ -89,9 +89,13 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             @if($order->user)
-                                <a href="mailto:{{ $order->user->email }}" class="text-blue-600 hover:underline">
+                                <a href="{{ route('admin.users.show', $order->user) }}"
+                                   class="text-blue-600 hover:underline font-medium">
                                     {{ $order->user->email }}
                                 </a>
+                                <div class="text-xs text-gray-500 mt-1">
+                                    {{ $order->user->name }}
+                                </div>
                             @else
                                 <span class="text-gray-400">Удалённый пользователь</span>
                             @endif

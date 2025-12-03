@@ -4,6 +4,9 @@
 /* Bootstrap CSS */
 @import "bootstrap/dist/css/bootstrap.min.css";
 
+/* Том Селект XD */
+@import "tom-select/dist/css/tom-select.css";
+
 @import 'admin/head.css';
 
 @tailwind base;

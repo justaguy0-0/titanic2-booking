@@ -108,4 +108,27 @@ class TicketController extends Controller
 
         return view('admin.tickets.show', compact('ticket'));
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        return Ticket::with(['voyage', 'cabinType'])
+            ->where('status', 'Доступно')
+            ->when($query, function ($q) use ($query) {
+                $q->where('number', 'like', "%{$query}%")
+                    ->orWhereHas('voyage', fn($v) => $v->where('name', 'like', "%{$query}%"))
+                    ->orWhereHas('cabinType', fn($c) => $c->where('name', 'like', "%{$query}%"));
+            })
+            ->take(50)
+            ->get()
+            ->map(fn($t) => [
+                'id' => $t->id,
+                'number' => $t->number,
+                'voyage_name' => $t->voyage?->name ?? '—',
+                'cabin_type_name' => $t->cabinType?->name ?? '—',
+                'price' => $t->price,
+                'price_formatted' => number_format($t->price, 0, '', ' ')
+            ]);
+    }
 }

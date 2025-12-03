@@ -11,11 +11,12 @@ use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\CabinTypeController;
 use App\Http\Controllers\Admin\OrderItemController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('home'); 
+    return view('home');
 })->name('home');
 
 
@@ -40,12 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-   
+
     Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
     Route::get('/profile/orders/{order}', [ProfileController::class, 'showOrder'])->name('profile.orders.show');
     Route::patch('/profile/orders/{order}/cancel', [ProfileController::class, 'cancelOrder'])->name('profile.orders.cancel');
 
-   
+
     Route::get('/dashboard', fn() => view('dashboard'))
         ->name('dashboard');
 });
@@ -60,6 +61,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('cabin-types', CabinTypeController::class);
     Route::resource('order-items', OrderItemController::class);
     Route::resource('payments', PaymentController::class);
+    Route::resource('users', UserController::class);
+
+    Route::get('/tickets/search', [TicketController::class, 'search'])
+        ->name('tickets.search');
 });
 
 

@@ -10,7 +10,9 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css',
                     'resources/css/admin.css',
-                    'resources/js/app.js'],
+                    'resources/js/app.js',
+                    'resources/js/voyage-form.js',
+                    'resources/js/order-create.js'],
             refresh: true,
         }),
     ],

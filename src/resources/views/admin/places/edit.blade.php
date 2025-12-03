@@ -30,7 +30,6 @@
                     @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                    <p class="text-gray-500 text-xs mt-1">Максимум 100 символов. Название должно быть уникальным для типа.</p>
                 </div>
 
                 <div class="mb-6">

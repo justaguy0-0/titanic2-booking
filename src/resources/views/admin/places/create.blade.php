@@ -23,13 +23,12 @@
                         id="name"
                         value="{{ old('name') }}"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-500 @enderror"
-                        placeholder="Например: Москва, Санкт-Петербург"
+                        placeholder="Например: Саратов или Сайлент Хилл, стоп, или это одно и то же?"
                         required
                     >
                     @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                    <p class="text-gray-500 text-xs mt-1">Максимум 100 символов. Название должно быть уникальным для типа.</p>
                 </div>
 
                 <div class="mb-6">

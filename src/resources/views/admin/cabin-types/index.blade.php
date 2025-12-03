@@ -1,7 +1,5 @@
 @extends('admin.admin')
-
 @section('title', 'Типы кают')
-
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
@@ -31,18 +29,15 @@
                         $currentSort = request('sort', 'name');
                         $currentDir = request('direction', 'asc');
                         $nextDir = $currentDir === 'asc' ? 'desc' : 'asc';
-
                         $sortUrl = function($field) use ($currentSort, $nextDir) {
                             $dir = $currentSort === $field ? $nextDir : 'asc';
                             return request()->fullUrlWithQuery(['sort' => $field, 'direction' => $dir]);
                         };
-
                         $sortIcon = function($field) use ($currentSort, $currentDir) {
                             if ($currentSort !== $field) return '';
                             return $currentDir === 'asc' ? '↑' : '↓';
                         };
                     @endphp
-
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('id') }}" class="hover:text-gray-900 flex items-center gap-1">
                             ID <span class="text-gray-400 text-lg">{{ $sortIcon('id') }}</span>
@@ -66,6 +61,7 @@
                     </th>
                 </tr>
                 </thead>
+
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($cabinTypes as $cabinType)
                     <tr class="hover:bg-gray-50 transition">
@@ -81,9 +77,13 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $cabinType->created_at->format('d.m.Y H:i') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+
+                        {{-- Только иконки в действиях --}}
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                             <a href="{{ route('admin.cabin-types.edit', $cabinType) }}"
-                               class="text-blue-600 hover:text-blue-900 mr-4">Редактировать</a>
+                               class="text-gray-600 hover:text-indigo-600" title="Редактировать">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
                             <form action="{{ route('admin.cabin-types.destroy', $cabinType) }}"
                                   method="POST" class="inline"
@@ -91,10 +91,10 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                        class="text-red-600 hover:text-red-900
-                                               @if($cabinType->tickets()->exists()) opacity-50 cursor-not-allowed @endif"
+                                        class="text-gray-600 hover:text-red-600
+                                               @if($cabinType->tickets()->exists()) opacity-40 cursor-not-allowed @endif"
                                         @if($cabinType->tickets()->exists()) disabled title="Нельзя удалить — есть билеты" @endif>
-                                    Удалить
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
                         </td>

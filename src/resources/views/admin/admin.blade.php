@@ -87,6 +87,14 @@
                 </a>
             </div> --}}
 
+            <div class="border-t border-gray-200 mt-8 pt-4">
+                <a href="{{ route('home') }}"
+                   class="flex items-center px-3 py-2 rounded-md hover:bg-green-50 text-green-700 font-medium transition group">
+                    <i class="fas fa-home mr-3 text-green-600 group-hover:text-green-700"></i>
+                    На главную
+                </a>
+            </div>
+
             {{-- Кнопка выхода --}}
             <form action="{{ route('logout') }}" method="POST" class="pt-4 border-t mt-6">
                 @csrf

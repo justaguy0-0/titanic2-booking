@@ -19,7 +19,7 @@
 
 <section class="section-dark py-5">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold section-title">ЛЕГЕНДА И СОВРЕМЕННОСТЬ</h2>
+        <h2 class="text-center mb-5 fw-bold section-title fs-3">ЛЕГЕНДА И СОВРЕМЕННОСТЬ</h2>
 
         <div class="row g-4">
 
@@ -30,19 +30,19 @@
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
                                 <div class="cabin-image cabin-image-rouz mb-3"></div>
-                                <p class="cabin-description">Каюта Роуз Дьюитт Бьюкейтер</p>
+                                <p class="cabin-description">Кабина капитана</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
                                 <div class="cabin-image cabin-image-cost mb-3"></div>
-                                <p class="cabin-description">Первый класс</p>
-                                <div class="price-tag mb-2">650.000 руб.</div>
+                                <p class="cabin-description">Новое управление</p>
+                                <div class="price-tag mb-2">Обеспечение</div>
                                 <ul class="list-unstyled cabin-features">
-                                    <li>• Панорамные окна</li>
-                                    <li>• Персональный дворецкий</li>
-                                    <li>• Гидромассажная ванна</li>
+                                    <li>• Улучшенная версия</li>
+                                    <li>• Динамичное движение</li>
+                                    <li>• Воссоздание дизайна</li>
                                 </ul>
                             </div>
                         </div>
@@ -58,19 +58,19 @@
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
                                 <div class="cabin-image cabin-image-djek mb-3"></div>
-                                <p class="cabin-description">Каюта Джека Доусона</p>
+                                <p class="cabin-description">Нос корабля</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
                                 <div class="cabin-image cabin-image-chip mb-3"></div>
-                                <p class="cabin-description">Эконом класс</p>
-                                <div class="price-tag mb-2">250.000 руб.</div>
+                                <p class="cabin-description">Достопримечательность</p>
+                                <div class="price-tag mb-2">Место для ваших фото</div>
                                 <ul class="list-unstyled cabin-features">
-                                    <li>• Удобные кровати</li>
-                                    <li>• Собственный санузел</li>
-                                    <li>• Wi-Fi и телевизор</li>
+                                    <li>• Полная копия момента из фильма</li>
+                                    <li>• Лучший вид</li>
+                                    <li>• Конкурс лучшего фото</li>
                                 </ul>
                             </div>
                         </div>
@@ -155,147 +155,29 @@
 
 <section class="py-5" style="background: #0f172a;">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold section-title">Возможности круиза</h2>
+        <h2 class="text-center mb-5 fw-bold section-title fs-3">ВОЗМОЖНОСТИ КРУИЗА</h2>
 
+        @foreach($entertainmentForHome as $index => $entertainment)
         <div class="row align-items-center mb-5 g-4">
-            <div class="col-md-6">
-                <div class="entertainment-image entertainment-image-rest rounded"></div>
+            <div class="col-md-6 {{ $index % 2 != 0 ? 'order-md-2' : '' }}">
+                <div class="entertainment-image {{ $entertainment->image }} rounded"></div>
             </div>
-            <div class="col-md-6">
-                <h3 class="entertainment-title">Вечерний ужин на палубе</h3>
-                <p class="entertainment-text">Роскошный ужин при свечах с видом на океан. Шеф-повар мирового класса.</p>
+            <div class="col-md-6 {{ $index % 2 != 0 ? 'order-md-1' : '' }}">
+                <h3 class="entertainment-title">{{ $entertainment->name }}</h3>
+                <p class="entertainment-text">{{ $entertainment->description }}</p>
                 <div class="price-tag" style="font-size: 1.2rem;">
-                    {{ $prices['Вечерний ужин на палубе'] }} руб.
+                    @if($entertainment->price == 0)
+                        Бесплатно
+                    @else
+                        {{ number_format($entertainment->price, 0, ',', ' ') }} руб.
+                    @endif
                 </div>
                 <div class="mt-3">
-                    <span class="badge badge-gold">18:00-23:00</span>
-                    <span class="badge badge-dark ms-2">Романтическое</span>
+                    <span class="badge badge-dark ms-2">{{ $entertainment->category }}</span>
                 </div>
             </div>
         </div>
-{{--        @foreach($prices as $price)--}}
-{{--            <div class="row align-items-center mb-5 g-4">--}}
-{{--                <div class="col-md-6 order-md-2">--}}
-{{--                    <div class="entertainment-image entertainment-image-spa rounded"></div>--}}
-{{--                </div>--}}
-{{--                <div class="col-md-6 order-md-1">--}}
-{{--                    <h3 class="entertainment-title">{{$price->title}}</h3>--}}
-{{--                    <p class="entertainment-text">{{$title->desc}}</p>--}}
-{{--                    <div class="price-tag" style="font-size: 1.2rem;">--}}
-{{--                        {{ $prices->price??0 }} руб.--}}
-{{--                    </div>--}}
-{{--                    <div class="mt-3">--}}
-{{--                        <span class="badge badge-gold">09:00-21:00</span>--}}
-{{--                        <span class="badge badge-dark ms-2">Релакс</span>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        @endforeach--}}
-        <div class="row align-items-center mb-5 g-4">
-            <div class="col-md-6 order-md-2">
-                <div class="entertainment-image entertainment-image-spa rounded"></div>
-            </div>
-            <div class="col-md-6 order-md-1">
-                <h3 class="entertainment-title">Спа-процедуры</h3>
-                <p class="entertainment-text">Премиум спа-комплекс с талассотерапией, массажем и косметическими процедурами.</p>
-                <div class="price-tag" style="font-size: 1.2rem;">
-                    {{ $prices['Спа-процедуры'] }} руб.
-                </div>
-                <div class="mt-3">
-                    <span class="badge badge-gold">09:00-21:00</span>
-                    <span class="badge badge-dark ms-2">Релакс</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row align-items-center mb-5 g-4">
-            <div class="col-md-6">
-                <div class="entertainment-image entertainment-image-mus rounded"></div>
-            </div>
-            <div class="col-md-6">
-                <h3 class="entertainment-title">Концерт оркестра</h3>
-                <p class="entertainment-text">Живая музыка в исполнении симфонического оркестра. Классические и современные произведения.</p>
-                <div class="price-tag" style="font-size: 1.2rem;">
-                    @if($prices['Концерт оркестра'] == 0)Включено в стоимость@else{{ $prices['Концерт оркестра'] }} руб.@endif
-                </div>
-                <div class="mt-3">
-                    <span class="badge badge-gold">20:00-22:00</span>
-                    <span class="badge badge-dark ms-2">Культурное</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row align-items-center mb-5 g-4">
-            <div class="col-md-6 order-md-2">
-                <div class="entertainment-image entertainment-image-child rounded"></div>
-            </div>
-            <div class="col-md-6 order-md-1">
-                <h3 class="entertainment-title">Детский клуб "Морские приключения"</h3>
-                <p class="entertainment-text">Анимационная программа, мастер-классы, игры и развлечения для детей всех возрастов под присмотром профессиональных воспитателей.</p>
-                <div class="price-tag" style="font-size: 1.2rem;">
-                    @if($prices['Детский клуб "Морские приключения"'] == 0)Бесплатно для детей@else{{ $prices['Детский клуб "Морские приключения"'] }} руб.@endif
-                </div>
-                <div class="mt-3">
-                    <span class="badge badge-gold">10:00-18:00</span>
-                    <span class="badge badge-dark ms-2">Детское</span>
-                    <span class="badge badge-red ms-2">3-12 лет</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row align-items-center mb-5 g-4">
-            <div class="col-md-6">
-                <div class="entertainment-image entertainment-image-akro rounded"></div>
-            </div>
-            <div class="col-md-6">
-                <h3 class="entertainment-title">Шоу воздушных акробатов</h3>
-                <p class="entertainment-text">Захватывающее представление профессиональных акробатов под куполом главного атриума. Огни, музыка и невероятные трюки.</p>
-                <div class="price-tag" style="font-size: 1.2rem;">
-                    {{ $prices['Шоу воздушных акробатов'] }} руб.
-                </div>
-                <div class="mt-3">
-                    <span class="badge badge-gold">21:00</span>
-                    <span class="badge badge-dark ms-2">Шоу</span>
-                    <span class="badge badge-red ms-2">Экстрим</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row align-items-center mb-5 g-4">
-            <div class="col-md-6 order-md-2">
-                <div class="entertainment-image entertainment-image-dance rounded"></div>
-            </div>
-            <div class="col-md-6 order-md-1">
-                <h3 class="entertainment-title">Танцевальный вечер в бальном зале</h3>
-                <p class="entertainment-text">Роскошный бал в стиле 20-х годов. Живой джаз-бэнд, профессиональные танцоры и уроки исторических танцев.</p>
-                <div class="price-tag" style="font-size: 1.2rem;">
-                    {{ $prices['Танцевальный вечер в бальном зале'] }} руб.
-                </div>
-                <div class="mt-3">
-                    <span class="badge badge-gold">19:00-01:00</span>
-                    <span class="badge badge-dark ms-2">Вечеринка</span>
-                    <span class="badge badge-purple ms-2">Винтаж</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row align-items-center g-4">
-            <div class="col-md-6">
-                <div class="entertainment-image entertainment-image-ioga rounded"></div>
-            </div>
-            <div class="col-md-6">
-                <h3 class="entertainment-title">Йога для самых здоровых</h3>
-                <p class="entertainment-text">Дневные занятия на свежем воздухе. Под шум волн.</p>
-                <div class="price-tag" style="font-size: 1.2rem;">
-                    {{ $prices['Йога для самых здоровых'] }} руб.
-                </div>
-                <div class="mt-3">
-                    <span class="badge badge-gold">9:00-10:30</span>
-                    <span class="badge badge-dark ms-2">Спорт</span>
-                    <span class="badge badge-purple ms-2">Здоровый образ жизни</span>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
 </section>
 <section class="py-5" style="background: #1e293b;">

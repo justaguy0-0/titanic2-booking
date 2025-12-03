@@ -1,7 +1,5 @@
 @extends('admin.admin')
-
 @section('title', 'Путешествия')
-
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
@@ -27,125 +25,116 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                 <tr>
-                    {{-- Helper для сортировки --}}
                     @php
                         $currentSort = request('sort', 'departure_date');
                         $currentDir = request('direction', 'desc');
                         $nextDir = $currentDir === 'asc' ? 'desc' : 'asc';
-
-                        $sortUrl = function($field) use ($currentSort, $currentDir, $nextDir) {
-                            $dir = $currentSort === $field ? $nextDir : 'asc';
-                            return request()->fullUrlWithQuery(['sort' => $field, 'direction' => $dir]);
-                        };
-
-                        $sortIcon = function($field) use ($currentSort, $currentDir) {
-                            if ($currentSort !== $field) return '';
-                            return $currentDir === 'asc' ? '↑' : '↓';
-                        };
+                        $sortUrl = fn($field) => request()->fullUrlWithQuery([
+                            'sort' => $field,
+                            'direction' => $currentSort === $field ? $nextDir : 'asc'
+                        ]);
+                        $sortIcon = fn($field) => $currentSort === $field
+                            ? ($currentDir === 'asc' ? '↑' : '↓')
+                            : '';
                     @endphp
 
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('id') }}" class="hover:text-gray-900 flex items-center gap-1">
                             ID <span class="text-gray-400">{{ $sortIcon('id') }}</span>
                         </a>
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('name') }}" class="hover:text-gray-900 flex items-center gap-1">
                             Название <span class="text-gray-400">{{ $sortIcon('name') }}</span>
                         </a>
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Место отправления
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Место прибытия
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Откуда</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Куда</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('departure_date') }}" class="hover:text-gray-900 flex items-center gap-1">
                             Дата отправления <span class="text-gray-400">{{ $sortIcon('departure_date') }}</span>
                         </a>
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        <a href="{{ $sortUrl('base_price') }}" class="hover:text-gray-900 flex items-center gap-1">
-                            Базовая цена <span class="text-gray-400">{{ $sortIcon('base_price') }}</span>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <a href="{{ $sortUrl('arrival_date') }}" class="hover:text-gray-900 flex items-center gap-1">
+                            Дата прибытия <span class="text-gray-400">{{ $sortIcon('arrival_date') }}</span>
                         </a>
                     </th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Действия
-                    </th>
+                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
                 </tr>
                 </thead>
+
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($voyages as $voyage)
-                        @php
-                            // Определяем, завершён ли рейс (по дате прибытия) или хотя бы отправление в прошлом
-                            $isPast = $voyage->arrival_date?->isPast() || $voyage->departure_date?->isPast();
-                            $rowClasses = $isPast
-                                ? 'opacity-60 italic'
-                                : 'hover:bg-gray-50 transition';
-                        @endphp
+                @forelse($voyages as $voyage)
+                    @php
+                        $isPast = $voyage->arrival_date?->isPast() || $voyage->departure_date?->isPast();
+                        $rowClasses = $isPast ? 'opacity-60 italic' : 'hover:bg-gray-50 transition';
+                    @endphp
+                    <tr class="{{ $rowClasses }}">
+                        <td class="px-4 py-4 text-sm text-gray-900">{{ $voyage->id }}</td>
 
-                        <tr class="{{ $rowClasses }}">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $voyage->id }}
-                            </td>
+                        <td class="px-4 py-4 text-sm font-medium text-gray-900">
+                            @if($isPast)
+                                <i class="fas fa-calendar-times text-red-400 mr-2" title="Рейс завершён"></i>
+                            @endif
+                            {{ $voyage->name }}
+                        </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                @if($isPast)
-                                    <span class="inline-block mr-2" title="Рейс завершён">
-                                        <i class="fas fa-calendar-times text-red-400"></i>
-                                    </span>
-                                @endif
-                                <a href="{{ route('admin.voyages.show', $voyage) }}" class="hover:text-blue-600">
-                                    {{ $voyage->name }}
-                                </a>
-                            </td>
+                        <td class="px-4 py-4 text-sm text-gray-900">
+                            {{ $voyage->departurePlace->name ?? '—' }}
+                        </td>
+                        <td class="px-4 py-4 text-sm text-gray-900">
+                            {{ $voyage->arrivalPlace->name ?? '—' }}
+                        </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $voyage->departurePlace->name ?? '—' }}
-                            </td>
+                        <td class="px-4 py-4 text-sm text-gray-500">
+                            {{ $voyage->departure_date?->format('d.m.Y H:i') ?? '—' }}
+                            @if($voyage->departure_date?->isToday())
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Сегодня
+                                </span>
+                            @endif
+                        </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $voyage->arrivalPlace->name ?? '—' }}
-                            </td>
+                        <td class="px-4 py-4 text-sm text-gray-500">
+                            {{ $voyage->arrival_date?->format('d.m.Y H:i') ?? '—' }}
+                        </td>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $voyage->departure_date?->format('d.m.Y H:i') ?? '—' }}
-                                @if($voyage->departure_date?->isToday())
-                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                            Сегодня
-                        </span>
-                                @endif
-                            </td>
+                        <td class="px-4 py-4 text-right text-sm font-medium space-x-3">
+                            <a href="{{ route('admin.voyages.show', $voyage) }}"
+                               class="text-gray-600 hover:text-blue-600" title="Просмотр">
+                                <i class="fas fa-eye"></i>
+                            </a>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-medium">
-                                {{ $voyage->formatted_price }}
-                            </td>
+                            <a href="{{ route('admin.voyages.edit', $voyage) }}"
+                               class="text-gray-600 hover:text-indigo-600" title="Редактировать">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('admin.voyages.edit', $voyage) }}" class="text-blue-600 hover:text-blue-900 mr-4">
-                                    Редактировать
-                                </a>
-
-                                @if(! $voyage->departure_date?->isPast())
-                                    <form action="{{ route('admin.voyages.destroy', $voyage) }}" method="POST" class="inline"
-                                          onsubmit="return confirm('Удалить рейс «{{ addslashes($voyage->name) }}»?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>
-                                    </form>
-                                @else
-                                    <span class="text-gray-400" title="Нельзя удалить завершённый рейс">Удалить</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">
-                                Нет путешествий. <a href="{{ route('admin.voyages.create') }}" class="text-blue-600 hover:underline">Добавить первое?</a>
-                            </td>
-                        </tr>
-                    @endforelse
+                            @if(! $voyage->departure_date?->isPast())
+                                <form action="{{ route('admin.voyages.destroy', $voyage) }}" method="POST"
+                                      class="inline"
+                                      onsubmit="return confirm('Удалить рейс «{{ addslashes($voyage->name) }}»?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-gray-600 hover:text-red-600" title="Удалить">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            @else
+                                <span class="text-gray-300" title="Нельзя удалить завершённый рейс">
+                                    <i class="fas fa-trash-alt"></i>
+                                </span>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-gray-500">
+                            Нет рейсов. <a href="{{ route('admin.voyages.create') }}" class="text-blue-600 hover:underline">Добавить первый?</a>
+                        </td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
         </div>

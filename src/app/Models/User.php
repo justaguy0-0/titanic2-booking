@@ -22,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'total_tickets',       
+        'loyalty_level',        
+        'loyalty_discount',    
     ];
 
     /**

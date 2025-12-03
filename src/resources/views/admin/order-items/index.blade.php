@@ -1,11 +1,9 @@
 @extends('admin.admin')
-
-@section('title', 'Элементы заказа')
-
+@section('title', 'Детали заказа')
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-800">Элементы заказа</h1>
+            <h1 class="text-3xl font-bold text-gray-800">Детали заказа</h1>
             <a href="{{ route('admin.order-items.create') }}"
                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition">
                 + Добавить элемент
@@ -31,17 +29,14 @@
                         $currentSort = request('sort', 'id');
                         $currentDir = request('direction', 'desc');
                         $nextDir = $currentDir === 'asc' ? 'desc' : 'asc';
-
                         $sortUrl = fn($field) => request()->fullUrlWithQuery([
                             'sort' => $field,
                             'direction' => $currentSort === $field ? $nextDir : 'asc'
                         ]);
-
                         $sortIcon = fn($field) => $currentSort === $field
                             ? ($currentDir === 'asc' ? '↑' : '↓')
                             : '';
                     @endphp
-
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('id') }}" class="hover:text-gray-900 flex items-center gap-1">
                             ID <span class="text-gray-400">{{ $sortIcon('id') }}</span>
@@ -72,6 +67,7 @@
                     </th>
                 </tr>
                 </thead>
+
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($orderItems as $item)
                     @php
@@ -111,14 +107,20 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                             {{ number_format($item->price * $item->quantity, 0, '', ' ') }} ₽
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+
+                        {{-- Только иконки в действиях --}}
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                             <a href="{{ route('admin.order-items.edit', $item) }}"
-                               class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
+                               class="text-gray-600 hover:text-indigo-600" title="Редактировать">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
                             <form action="{{ route('admin.order-items.destroy', $item) }}" method="POST" class="inline"
                                   onsubmit="return confirm('Удалить элемент #{{ $item->id }}?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>
+                                <button type="submit" class="text-gray-600 hover:text-red-600" title="Удалить">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>

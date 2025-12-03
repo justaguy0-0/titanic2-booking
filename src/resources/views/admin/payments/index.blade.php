@@ -1,7 +1,5 @@
 @extends('admin.admin')
-
 @section('title', 'Платежи')
-
 @section('content')
     <div class="container mx-auto px-4 py-6">
         <div class="flex justify-between items-center mb-6">
@@ -31,17 +29,14 @@
                         $currentSort = request('sort', 'id');
                         $currentDir = request('direction', 'desc');
                         $nextDir = $currentDir === 'asc' ? 'desc' : 'asc';
-
                         $sortUrl = fn($field) => request()->fullUrlWithQuery([
                             'sort' => $field,
                             'direction' => $currentSort === $field ? $nextDir : 'asc'
                         ]);
-
                         $sortIcon = fn($field) => $currentSort === $field
                             ? ($currentDir === 'asc' ? '↑' : '↓')
                             : '';
                     @endphp
-
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <a href="{{ $sortUrl('id') }}" class="hover:text-gray-900 flex items-center gap-1">
                             ID <span class="text-gray-400">{{ $sortIcon('id') }}</span>
@@ -77,13 +72,14 @@
                     </th>
                 </tr>
                 </thead>
+
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($payments as $payment)
                     @php
                         $statusClass = match($payment->status) {
-                            'Успешно'     => 'bg-green-100 text-green-800',
-                            'Отклонено'   => 'bg-red-100 text-red-800',
-                            default       => 'bg-yellow-100 text-yellow-800',
+                            'Успешно' => 'bg-green-100 text-green-800',
+                            'Отклонено' => 'bg-red-100 text-red-800',
+                            default => 'bg-yellow-100 text-yellow-800',
                         };
                     @endphp
                     <tr class="hover:bg-gray-50 transition">
@@ -114,14 +110,20 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $payment->created_at->format('d.m.Y H:i') }}
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-3">
+
+                        {{-- Только иконки в действиях --}}
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                             <a href="{{ route('admin.payments.edit', $payment) }}"
-                               class="text-blue-600 hover:text-blue-900">Редактировать</a>
+                               class="text-gray-600 hover:text-indigo-600" title="Редактировать">
+                                <i class="fas fa-edit"></i>
+                            </a>
 
                             <form action="{{ route('admin.payments.destroy', $payment) }}" method="POST" class="inline"
                                   onsubmit="return confirm('Удалить платёж #{{ $payment->id }}?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>
+                                <button type="submit" class="text-gray-600 hover:text-red-600" title="Удалить">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>

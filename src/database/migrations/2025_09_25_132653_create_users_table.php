@@ -15,6 +15,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 255);
             $table->rememberToken();
+            $table->integer('total_tickets')->default(0);
+            $table->integer('loyalty_level')->default(1);
+            $table->decimal('loyalty_discount', 5, 2)->default(0);
             $table->timestamps();
             $table->engine = 'InnoDB';
         });

@@ -16,7 +16,7 @@ class OrderItem extends Model
         'type',
         'price',
         'quantity',
-        'item_type',   // 'ticket' или 'entertainment'
+        'item_type',
     ];
 
     protected $casts = [

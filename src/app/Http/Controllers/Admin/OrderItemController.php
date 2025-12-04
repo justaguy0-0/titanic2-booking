@@ -15,7 +15,6 @@ class OrderItemController extends Controller
     {
         $query = OrderItem::with(['order.user', 'ticket.voyage', 'entertainment']);
 
-        // === Сортировка ===
         $sortField = $request->get('sort', 'id');
         $sortDirection = $request->get('direction', 'desc');
 
@@ -23,9 +22,9 @@ class OrderItemController extends Controller
             'id',
             'order_id',
             'item_type',
-            'total_price',     // price * quantity
+            'total_price',
             'created_at',
-            'item_name',       // название билета или развлечения
+            'item_name',
         ];
 
         if (!in_array($sortField, $allowedSorts)) {
@@ -35,17 +34,14 @@ class OrderItemController extends Controller
             $sortDirection = 'desc';
         }
 
-        // Простые поля
         if (in_array($sortField, ['id', 'order_id', 'item_type', 'created_at'])) {
             $query->orderBy($sortField, $sortDirection);
         }
 
-        // Итоговая цена (price * quantity)
         elseif ($sortField === 'total_price') {
             $query->orderByRaw("(price * quantity) {$sortDirection}");
         }
 
-        // Сортировка по названию элемента (билет или развлечение)
         elseif ($sortField === 'item_name') {
             $query->select('order_items.*')
                 ->leftJoin('tickets', 'order_items.ticket_id', '=', 'tickets.id')
@@ -78,7 +74,6 @@ class OrderItemController extends Controller
             'quantity' => 'required_if:item_type,entertainment|nullable|integer|min:1',
         ]);
 
-        // Проверка: билет уже в заказе?
         if ($validated['item_type'] === 'ticket') {
             $exists = OrderItem::where('order_id', $validated['order_id'])
                 ->where('ticket_id', $validated['ticket_id'])

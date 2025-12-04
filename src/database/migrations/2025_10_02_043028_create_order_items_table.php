@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
             $table->foreignId('ticket_id')->nullable()->constrained('tickets')->onDelete('set null');
             $table->foreignId('entertainment_id')->nullable()->constrained('entertainments')->onDelete('set null');
-            $table->string('item_type', 20); // 'ticket' или 'entertainment'
+            $table->string('item_type', 20); 
             $table->integer('quantity')->default(1);
             $table->decimal('price', 10, 2);
             $table->timestamps();

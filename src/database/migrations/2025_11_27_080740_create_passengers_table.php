@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('passport_series', 10);
             $table->string('passport_number', 20);
             $table->string('citizenship', 100)->default('Россия');
-            $table->integer('age')->nullable(); // Рассчитанный возраст
-            $table->decimal('discount_percent', 5, 2)->default(0); // Скидка в процентах
+            $table->integer('age')->nullable(); 
+            $table->decimal('discount_percent', 5, 2)->default(0); 
             $table->timestamps();
             $table->engine = 'InnoDB';
         });

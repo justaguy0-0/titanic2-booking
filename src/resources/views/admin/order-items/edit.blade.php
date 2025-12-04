@@ -168,7 +168,7 @@
     </div>
 
     <script>
-        // Показываем нужный блок при смене типа
+        
         document.querySelectorAll('input[name="item_type"]').forEach(radio => {
             radio.addEventListener('change', function () {
                 const isTicket = this.value === 'ticket';
@@ -177,7 +177,7 @@
             });
         });
 
-        // Инициализация при загрузке
+        
         const currentType = "{{ old('item_type', $orderItem->item_type) }}";
         if (currentType === 'ticket') {
             document.querySelector('.ticket-section').classList.remove('hidden');

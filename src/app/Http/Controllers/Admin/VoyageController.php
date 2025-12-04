@@ -11,7 +11,6 @@ class VoyageController extends Controller
 {
     public function index(Request $request)
     {
-        // Базовый query с подсчетом билетов
         $query = Voyage::with(['departurePlace', 'arrivalPlace'])
             ->withCount([
                 'tickets',
@@ -20,17 +19,14 @@ class VoyageController extends Controller
                 }
             ]);
 
-        // Фильтрация по месту отправления
         if ($request->filled('departure_place')) {
             $query->where('departure_place_id', $request->departure_place);
         }
 
-        // Фильтрация по месту прибытия
         if ($request->filled('arrival_place')) {
             $query->where('arrival_place_id', $request->arrival_place);
         }
 
-        // Фильтрация по статусу рейса
         if ($request->filled('status')) {
             $now = now();
             switch ($request->status) {
@@ -47,7 +43,6 @@ class VoyageController extends Controller
             }
         }
 
-        // Фильтрация по диапазону дат
         if ($request->filled('date_from')) {
             $query->where('departure_date', '>=', $request->date_from);
         }
@@ -56,27 +51,22 @@ class VoyageController extends Controller
             $query->where('departure_date', '<=', $request->date_to . ' 23:59:59');
         }
 
-        // Сортировка
         $sortField = $request->get('sort', 'departure_date');
         $sortDirection = $request->get('direction', 'desc');
 
-        // Валидация поля сортировки (защита от SQL injection)
         $allowedSorts = ['id', 'name', 'departure_date', 'arrival_date', 'base_price'];
         if (!in_array($sortField, $allowedSorts)) {
             $sortField = 'departure_date';
         }
 
-        // Валидация направления
         if (!in_array($sortDirection, ['asc', 'desc'])) {
             $sortDirection = 'desc';
         }
 
         $query->orderBy($sortField, $sortDirection);
 
-        // Пагинация с сохранением всех параметров
         $voyages = $query->paginate(15)->appends($request->except('page'));
 
-        // Данные для фильтров
         $departurePlaces = Place::where('type', 'departure')->orderBy('name')->get();
         $arrivalPlaces = Place::where('type', 'arrival')->orderBy('name')->get();
 
@@ -123,10 +113,8 @@ class VoyageController extends Controller
     {
         $voyage->load(['departurePlace', 'arrivalPlace']);
 
-        // Пагинация билетов (например, по 10 на страницу)
         $tickets = $voyage->tickets()->paginate(20);
 
-        // Получаем счетчики для статистики
         $voyage->loadCount([
             'tickets',
             'tickets as available_tickets_count' => function ($query) {
@@ -142,7 +130,6 @@ class VoyageController extends Controller
         $departures = Place::departure()->orderBy('name')->get();
         $arrivals = Place::arrival()->orderBy('name')->get();
 
-        // Загружаем связанные данные
         $voyage->load(['departurePlace', 'arrivalPlace']);
 
         return view('admin.voyages.edit', compact('voyage', 'departures', 'arrivals'));
@@ -171,7 +158,6 @@ class VoyageController extends Controller
 
     public function destroy(Voyage $voyage)
     {
-        // Проверка: нельзя удалить рейс, который уже начался
         if ($voyage->departure_date && $voyage->departure_date->isPast()) {
             return redirect()
                 ->back()

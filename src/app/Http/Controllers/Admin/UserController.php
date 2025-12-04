@@ -14,7 +14,6 @@ class UserController extends Controller
     {
         $query = User::query()->with('roles');
 
-        // Поиск
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -23,7 +22,6 @@ class UserController extends Controller
             });
         }
 
-        // Сортировка
         $sortField = $request->get('sort', 'id');
         $sortDirection = $request->get('direction', 'desc');
         $allowed = ['id', 'name', 'email', 'created_at'];
@@ -69,12 +67,10 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        // Нельзя удалить самого себя
         if ($user->id === auth()->id()) {
             return back()->with('error', 'Нельзя удалить самого себя!');
         }
 
-        // Нельзя удалить последнего админа
         if ($user->hasRole('admin') && User::role('admin')->count() === 1) {
             return back()->with('error', 'Нельзя удалить последнего администратора!');
         }
@@ -86,7 +82,6 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        // Подгружаем роли и заказы (с товарами внутри)
         $user->load(['roles', 'orders.orderItems.ticket.voyage', 'orders.orderItems.entertainment']);
 
         return view('admin.users.show', compact('user'));

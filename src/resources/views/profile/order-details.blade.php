@@ -27,7 +27,6 @@
             @endif
 
             @if(isset($order))
-                {{-- Информация о заказе --}}
                 <div class="section-card mb-4">
                     <div class="section-header">
                         <h5 class="mb-0">Информация о заказе</h5>
@@ -86,7 +85,6 @@
                     </div>
                 </div>
 
-                {{-- Состав заказа --}}
                 @if(isset($order->orderItems) && $order->orderItems->count() > 0)
                     <div class="section-card">
                         <div class="section-header">

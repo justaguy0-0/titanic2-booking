@@ -10,7 +10,6 @@
             <p class="text-gray-600 mt-2">Обзор ключевых метрик и статистики</p>
         </div> --}}
 
-        {{-- Предупреждения --}}
         @if(count($alerts) > 0)
             <div class="mb-6 space-y-3">
                 @foreach($alerts as $alert)
@@ -28,7 +27,6 @@
             </div>
         @endif
 
-        {{-- Быстрые ссылки --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <a href="{{ route('admin.orders.index') }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-lg text-center transition flex items-center justify-center gap-3">
                 <i class="fas fa-file-invoice"></i> Заказы
@@ -44,7 +42,6 @@
             </a>
         </div>
 
-        {{-- Ключевые метрики --}}
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <div class="bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg rounded-lg p-6 text-white">
                 <div class="flex items-center justify-between">
@@ -99,7 +96,6 @@
             </div>
         </div>
 
-        {{-- Дополнительные метрики --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white shadow-md rounded-lg p-6">
                 <h3 class="text-sm font-semibold text-gray-600">Средний чек</h3>
@@ -123,7 +119,6 @@
             </div>
         </div>
 
-        {{-- График продаж --}}
         <div class="bg-white shadow-md rounded-lg p-6 mb-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                 <i class="fas fa-chart-line mr-2 text-green-600"></i> График продаж за последние 30 дней
@@ -131,9 +126,7 @@
             <canvas id="sales-chart" class="w-full h-96"></canvas>
         </div>
 
-        {{-- Топ направления и развлечения --}}
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {{-- Топ направления --}}
             <div class="bg-white shadow-md rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">
                     <i class="fas fa-globe mr-2 text-blue-600"></i> Популярные направления
@@ -155,7 +148,6 @@
                 @endif
             </div>
 
-            {{-- Топ развлечения --}}
             <div class="bg-white shadow-md rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">
                     <i class="fas fa-theater-masks mr-2 text-purple-600"></i> Популярные развлечения
@@ -178,7 +170,6 @@
             </div>
         </div>
 
-        {{-- Недавние заказы --}}
         <div class="bg-white shadow-md rounded-lg p-6">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                 <i class="fas fa-clipboard-list mr-2 text-indigo-600"></i> Недавние заказы

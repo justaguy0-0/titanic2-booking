@@ -343,20 +343,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const cityDots = document.querySelectorAll('.city-dot');
     const icebergDots = document.querySelectorAll('.iceberg-dot');
 
-    // Функция для показа маршрута
+    
     function showRoute(routeId) {
-        // Скрываем все маршруты
+        
         routeLines.forEach(line => {
             line.style.opacity = '0';
         });
 
-        // Показываем выбранный маршрут
+        
         const selectedRoute = document.getElementById(routeId);
         if (selectedRoute) {
             selectedRoute.style.opacity = '1';
         }
 
-        // Подсвечиваем активный элемент в списке
+        
         routeItems.forEach(item => {
             item.classList.remove('active');
         });
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Обработчики для точек на карте
+    
     cityDots.forEach(dot => {
         dot.addEventListener('click', function() {
             const routeId = this.parentElement.getAttribute('data-city');
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Обработчики для элементов списка
+    
     routeItems.forEach(item => {
         item.addEventListener('click', function() {
             const routeId = this.getAttribute('data-route');
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Показываем первый маршрут по умолчанию
+    
     showRoute('route1');
 });
 document.addEventListener('DOMContentLoaded', function() {
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const popupRoutes = document.getElementById('popup-routes');
     const popupClose = document.getElementById('popup-close');
 
-    // Группы маршрутов - одинаковые названия как в data-group
+    
     const routeGroups = {
         'nepotopinsk': {
             title: 'Непотопинск',
@@ -410,24 +410,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Обработчики для групповых точек
+    
     document.querySelectorAll('.city-group').forEach(group => {
         group.addEventListener('click', function(e) {
             const groupId = this.getAttribute('data-group');
             const groupData = routeGroups[groupId];
 
-            console.log('Clicked group:', groupId, groupData); // Для отладки
+            console.log('Clicked group:', groupId, groupData); 
 
             if (!groupData) {
                 console.error('Group data not found for:', groupId);
                 return;
             }
 
-            // Показываем попап
+            
             popupTitle.textContent = groupData.title;
             popupRoutes.innerHTML = '';
 
-            // Добавляем маршруты в попап
+            
             groupData.routes.forEach(routeId => {
                 console.log('Looking for route:', routeId);
                 const routeElement = document.querySelector(`[data-route="${routeId}"]`);
@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
 
-            // Позиционируем попап
+            
             const rect = this.getBoundingClientRect();
             const mapRect = document.querySelector('.route-map').getBoundingClientRect();
 
@@ -467,7 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Закрытие попапа
+    
     popupClose.addEventListener('click', function() {
         popup.style.display = 'none';
     });

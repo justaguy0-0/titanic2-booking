@@ -111,7 +111,6 @@
                             {{ $payment->created_at->format('d.m.Y H:i') }}
                         </td>
 
-                        {{-- Только иконки в действиях --}}
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                             <a href="{{ route('admin.payments.edit', $payment) }}"
                                class="text-gray-600 hover:text-indigo-600" title="Редактировать">

@@ -14,14 +14,12 @@ class PlaceController extends Controller
     {
         $type = $request->query('type', 'departure');
 
-        // Проверка типа
         if (!in_array($type, ['departure', 'arrival'])) {
             $type = 'departure';
         }
 
         $query = Place::where('type', $type);
 
-        // === Сортировка ===
         $sortField = $request->get('sort', 'id');
         $sortDirection = $request->get('direction', 'desc');
 

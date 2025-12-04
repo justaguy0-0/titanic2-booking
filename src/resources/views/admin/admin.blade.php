@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Админ-панель')</title>
 
-    {{-- Стили из app.css и скрипты из app.js --}}
     @vite(['resources/css/admin.css', 'resources/js/app.js'])
 
-    {{-- Дополнительные стили --}}
     @stack('styles')
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-{{-- Основной контейнер: меню + контент --}}
 <div class="flex flex-1">
 
-    {{-- Боковое меню --}}
     <aside class="w-64 bg-white shadow-md flex-shrink-0">
         <div class="p-4 border-b">
             <h1 class="text-xl font-bold text-gray-800">Админ-панель</h1>
@@ -28,7 +24,6 @@
                 <i class="fas fa-chart-bar mr-2"></i> Главная
             </a>
 
-            {{-- Справочники --}}
             <div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Справочники</div>
                 <a href="{{ route('admin.voyages.index') }}"
@@ -45,7 +40,6 @@
                 </a>
             </div>
 
-            {{-- Пользователи --}}
             {{-- <div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Пользователи</div>
                 <a class="flex items-center text-gray-400 px-3 py-2 rounded-md pointer-events-none opacity-50 cursor-not-allowed">
@@ -56,7 +50,6 @@
                 </a>
             </div> --}}
 
-            {{-- Продажи --}}
             <div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Продажи</div>
                 <a href="{{ route('admin.tickets.index') }}" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
@@ -76,7 +69,6 @@
                 </a>
             </div>
 
-            {{-- Настройки --}}
             {{-- }}<div>
                 <div class="text-gray-500 text-xs uppercase mt-4 mb-1 tracking-wider">Система</div>
                 <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700">
@@ -87,7 +79,6 @@
                 </a>
             </div> --}}
 
-            {{-- Пользователи --}}
             <div class="pt-4">
                 <div class="text-gray-500 text-xs uppercase mb-2 tracking-wider">Пользователи</div>
                 <a href="{{ route('admin.users.index') }}"
@@ -104,7 +95,6 @@
                 </a>
             </div>
 
-            {{-- Кнопка выхода --}}
             <form action="{{ route('logout') }}" method="POST" class="pt-4 border-t mt-6">
                 @csrf
                 <button type="submit"
@@ -115,14 +105,12 @@
         </nav>
     </aside>
 
-    {{-- Основной контент --}}
     <main class="flex-1 p-8">
         @yield('content')
     </main>
 
 </div>
 
-{{-- Футер --}}
 <footer class="bg-white shadow-inner">
     <div class="max-w-7xl mx-auto px-4 py-4">
         <p class="text-center text-gray-500 text-sm">
@@ -131,7 +119,6 @@
     </div>
 </footer>
 
-{{-- Дополнительные скрипты --}}
 @stack('scripts')
 </body>
 </html>

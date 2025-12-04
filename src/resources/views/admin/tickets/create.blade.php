@@ -85,7 +85,7 @@
             const cabinSelect = document.getElementById('cabin_type_id');
             const priceInput = document.getElementById('price');
 
-            // При загрузке — если есть old() или selected → установить цену
+            
             function updatePrice() {
                 const selected = cabinSelect.options[cabinSelect.selectedIndex];
                 if (selected && selected.value) {
@@ -96,18 +96,18 @@
                 }
             }
 
-            // При смене типа каюты — обновить цену (если не редактировалось вручную)
+            
             cabinSelect.addEventListener('change', function () {
                 updatePrice();
                 priceInput.dataset.manuallyEdited = 'false';
             });
 
-            // Если пользователь начал вводить вручную — больше не автозаполнять
+            
             priceInput.addEventListener('input', function () {
                 this.dataset.manuallyEdited = 'true';
             });
 
-            // При загрузке страницы
+            
             document.addEventListener('DOMContentLoaded', updatePrice);
         </script>
     @endpush

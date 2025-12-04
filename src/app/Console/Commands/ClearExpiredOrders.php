@@ -48,7 +48,6 @@ class ClearExpiredOrders extends Command
         DB::beginTransaction();
         try {
             foreach ($expiredOrders as $order) {
-                // Освобождаем все билеты из заказа
                 foreach ($order->orderItems as $orderItem) {
                     if ($orderItem->ticket && $orderItem->ticket->status === 'Забронировано') {
                         $orderItem->ticket->update(['status' => 'Доступно']);
@@ -56,7 +55,6 @@ class ClearExpiredOrders extends Command
                     }
                 }
 
-                // Меняем статус заказа на "Отменён"
                 $order->update(['status' => 'Отменён']);
                 $clearedCount++;
 

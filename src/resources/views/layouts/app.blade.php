@@ -9,14 +9,12 @@
 </head>
 <body class="@if(request()->is('login') || request()->is('register') || request()->is('password.request*')) auth-bg @endif" style="background: #0f172a; margin: 0; padding: 0;">
 
-    {{-- Подключаем шапку --}}
     @include('layouts.header')
 
     <main style="background: #0f172a;">
         @yield('main_content')
     </main>
 
-    {{-- Подключаем подвал --}}
     @include('layouts.footer')
 
     @yield('scripts')

@@ -44,13 +44,6 @@ services:
       - ./src:/var/www/laravel
     tty: true
 
-  main:
-    container_name: main
-    build:
-      context: .
-      target: development
-    command: npm run dev
-
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     restart: always
@@ -59,3 +52,14 @@ services:
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: password
+
+  cron:
+    build:
+      context: .
+      dockerfile: dockerfiles/cron.Dockerfile
+    volumes:
+      - ./src:/var/www/laravel
+    depends_on:
+      - mysql
+      - php
+    restart: unless-stopped

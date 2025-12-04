@@ -177,9 +177,9 @@
                     }).format(total) + ' ₽';
                 }
 
-                // === ОБРАБОТКА ОТПРАВКИ ФОРМЫ ===
+                
                 form.addEventListener('submit', function(e) {
-                    e.preventDefault(); // Останавливаем, чтобы успеть добавить поля
+                    e.preventDefault(); 
 
                     const container = document.getElementById('entertainments-hidden');
                     container.innerHTML = '';
@@ -189,7 +189,7 @@
                         const checkbox = item.querySelector('.ent-checkbox');
                         const quantityInput = item.querySelector('.ent-quantity');
                         if (checkbox && checkbox.checked && quantityInput && quantityInput.value) {
-                            const entId = item.getAttribute('data-ent-id'); // Исправлено: getAttribute
+                            const entId = item.getAttribute('data-ent-id'); 
                             const quantity = quantityInput.value;
 
                             const idInput = document.createElement('input');
@@ -208,11 +208,11 @@
                         }
                     });
 
-                    // Отправляем форму вручную
+                    
                     form.submit();
                 });
 
-                // === СОБЫТИЯ ===
+                
                 ticketsSelect.addEventListener('change', updateTotalPrice);
 
                 document.querySelectorAll('.ent-checkbox').forEach(cb => {

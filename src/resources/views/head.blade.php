@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ТИТАНИК 2')</title>
 
-    {{-- Стили из app.css и скрипты из app.js --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Дополнительные стили --}}
     @stack('styles')
 </head>
 <body class="@if(request()->is('login') || request()->is('register') || request()->is('password.request*')) auth-bg @endif">
 
-    {{-- Шапка сайта --}}
     @if (Auth::check() || (!request()->routeIs('login') && !request()->routeIs('register') && !request()->is('password.request*')))
         <header class="site-header d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3">
-            {{-- Логотип --}}
             <div class="col-md-3 mb-2 mb-md-0 ps-3">
                 <a href="/" class="d-inline-flex align-items-center text-decoration-none">
                     <div class="ms-2">
@@ -26,7 +22,6 @@
                 </a>
             </div>
 
-            {{-- Навигация --}}
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="{{ route('home') }}" class="nav-link px-3">Главная</a></li>
                 <li><a href="{{ route('about') }}" class="nav-link px-3">О нас</a></li> 
@@ -34,22 +29,18 @@
                 <li><a href="{{ route('shop') }}" class="nav-link px-3">Билеты</a></li>
             </ul>
 
-            {{-- Кнопки справа --}}
             <div class="col-md-3 text-end pe-3 d-flex align-items-center justify-content-end gap-2">
                 @auth
-                    {{-- Имя пользователя --}}
                     <a href="{{ route('dashboard') }}" class="user-name">
                         <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
                     </a>
 
-                    {{-- Кнопка админ-панели (только для админов) --}}
                     @if(Auth::user()->hasRole('admin'))
                         <a href="{{ route('admin.dashboard.index') }}" class="btn btn-admin">
                             <i class="fas fa-crown me-1"></i>Админка
                         </a>
                     @endif
 
-                    {{-- Кнопка выхода --}}
                     <form method="POST" action="{{ route('logout') }}" class="d-inline">
                         @csrf
                         <button type="submit" class="btn btn-logout">Выйти</button>
@@ -66,12 +57,10 @@
         @yield('main_content')
     </main>
 
-    {{-- Подвал --}}
     @if (Auth::check() || (!request()->routeIs('login') && !request()->routeIs('register') && !request()->is('password.request*')))
         <footer class="footer-section py-5">
         <div class="container">
             <div class="row g-4">
-                {{-- Колонка 1: О компании --}}
                 <div class="col-lg-5 col-md-6">
                     <div class="footer-brand mb-3">
                         <h4 class="footer-brand-title">ТИТАНИК 2</h4>
@@ -83,10 +72,8 @@
                  
                 </div>
 
-                {{-- Колонка 2: Навигация и Контакты (рядом) --}}
                 <div class="col-lg-7 col-md-6">
                     <div class="row">
-                        {{-- Навигация --}}
                         <div class="col-md-5">
                             <h5 class="footer-heading">Навигация</h5>
                             <ul class="list-unstyled">
@@ -110,7 +97,6 @@
                             </ul>
                         </div>
 
-                        {{-- Контакты --}}
                         <div class="col-md-7">
                             <h5 class="footer-heading">Контакты и поддержка</h5>
                             <ul class="list-unstyled">
@@ -152,7 +138,6 @@
                 </div>
             </div>
 
-            {{-- Нижняя часть подвала --}}
             <div class="row mt-5 pt-4 border-top border-secondary">
                 <div class="col-md-6">
                     <p class="footer-copyright mb-0">

@@ -7,7 +7,6 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
 
-            {{-- Сообщения --}}
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show select-tickets-alert" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
@@ -35,7 +34,6 @@
                 </div>
             @endif
 
-            {{-- Информация о рейсе --}}
             <div class="voyage-info-card mb-4">
                 <div class="card-body p-4">
                     <div class="row align-items-center">
@@ -72,24 +70,21 @@
                 </div>
             </div>
 
-            {{-- Форма покупки --}}
             <form action="{{ route('shop.purchase') }}" method="POST" id="purchase-form">
                 @csrf
                 <input type="hidden" name="voyage_id" value="{{ $voyage->id }}">
 
-                {{-- БИЛЕТЫ - СХЕМА КОРАБЛЯ - НА ВСЮ ШИРИНУ --}}
                 <div class="row g-4">
                     <div class="col-12">
                         @if($tickets->count() > 0)
                             <div class="ship-layout">
 
                                 @php
-                                    // Группируем билеты по типу
+                                    
                                     $ticketsByType = $tickets->groupBy('type');
                                 @endphp
 
 
-                                {{-- Переключатель этажей --}}
                                 <div class="deck-selector">
 
                                     @forelse($availableCabinTypes as $cabinType)
@@ -131,7 +126,6 @@
 
                                 </div>
 
-                                {{-- Контейнер палуб --}}
                                 <div class="decks-container">
                                     @forelse($availableCabinTypes as $cabinType)
                                         @php
@@ -165,15 +159,15 @@
                                                     <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
                                                         @foreach($cabinType->tickets as $ticket)
                                                         @php
-                                                            // Проверяем оба варианта написания статуса для совместимости
+                                                            
                                                             $isBooked = in_array($ticket->status, ['Забронировано']);
                                                             $seatClass = $isBooked ? 'seat booked' : 'seat available';
-                                                            // Добавляем класс размера в зависимости от типа палубы
+                                                            
                                                             $seatClass .= ' ' . $deckKey . '-seat';
                                                             $tooltipText = $isBooked
                                                                 ? "Место {$ticket->number} — Забронировано"
                                                                 : number_format($ticket->price, 0, '', ' ') . " ₽";
-                                                            // Порядковый индекс места в рамках этого класса каюты (начиная с 0)
+                                                            
                                                             $seatIndex = $loop->index;
                                                         @endphp
                                                         <div class="{{ $seatClass }}"
@@ -193,7 +187,6 @@
                                     @endforelse
                                 </div>
 
-                                {{-- Легенда --}}
                                 <div class="ship-legend">
                                     <div class="legend-item">
                                         <div class="legend-box available"></div>
@@ -210,7 +203,6 @@
                                 </div>
                             </div>
 
-                            {{-- Скрытые чекбоксы для формы --}}
                             @foreach($tickets as $ticket)
                                 <input type="checkbox"
                                        class="d-none ticket-checkbox"
@@ -232,9 +224,7 @@
                     </div>
                 </div>
 
-                {{-- РАЗВЛЕЧЕНИЯ И ИТОГО - ДВЕ КОЛОНКИ --}}
                 <div class="row g-4 mt-4">
-                    {{-- РАЗВЛЕЧЕНИЯ --}}
                     <div class="col-lg-8">
                         <div class="section-card entertainment-card-select">
                             <div class="section-header p-3">
@@ -308,7 +298,6 @@
                         </div>
                     </div>
 
-                    {{-- ИТОГО --}}
                     <div class="col-lg-4">
                         <div class="total-card">
                             <div class="card-body p-4">
@@ -342,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('purchase-form');
     const seats = document.querySelectorAll('.seat');
 
-    // Переключение этажей
+    
     const deckButtons = document.querySelectorAll('.deck-button');
     const deckSections = document.querySelectorAll('.deck-section[data-deck]');
 
@@ -350,13 +339,13 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const targetDeck = this.dataset.deck;
 
-            // Убираем активный класс со всех кнопок
+            
             deckButtons.forEach(btn => btn.classList.remove('active'));
 
-            // Добавляем активный класс к нажатой кнопке
+            
             this.classList.add('active');
 
-            // Скрываем все палубы и показываем выбранную
+            
             deckSections.forEach(section => {
                 if (section.dataset.deck === targetDeck) {
                     section.style.display = 'block';
@@ -371,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let total = 0;
         let hasTickets = false;
 
-        // Считаем стоимость билетов
+        
         ticketCheckboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 hasTickets = true;
@@ -380,17 +369,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Считаем стоимость развлечений
+        
         quantityInputs.forEach(input => {
             const quantity = parseInt(input.value) || 0;
             const price = parseFloat(input.dataset.price) || 0;
             total += quantity * price;
         });
 
-        // Обновляем отображение
+        
         totalPriceEl.textContent = total.toLocaleString('ru-RU') + ' ₽';
 
-        // Обновляем состояние кнопки
+        
         if (hasTickets) {
             submitBtn.disabled = false;
             submitBtn.classList.add('active');
@@ -400,9 +389,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Обработка кликов по местам на корабле
+    
     seats.forEach(seat => {
-        // Пропускаем забронированные места
+        
         if (seat.classList.contains('booked')) {
             return;
         }
@@ -414,17 +403,17 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Клик по билету:', ticketId, 'Трапеция:', this.classList.contains('trapezoid-left') || this.classList.contains('trapezoid-right'));
 
             if (checkbox) {
-                // Переключаем состояние чекбокса
+                
                 checkbox.checked = !checkbox.checked;
 
-                // Переключаем визуальное состояние места
+                
                 if (checkbox.checked) {
                     this.classList.add('selected');
                 } else {
                     this.classList.remove('selected');
                 }
 
-                // Обновляем итоговую сумму
+                
                 updateTotal();
             } else {
                 console.error('Чекбокс не найден для билета:', ticketId);
@@ -432,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Валидация формы
+    
     form.addEventListener('submit', function(e) {
         const hasChecked = document.querySelector('.ticket-checkbox:checked');
         if (!hasChecked) {
@@ -441,17 +430,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        // Показываем сообщение о загрузке
+        
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Обработка...';
         submitBtn.disabled = true;
     });
 
-    // Слушатели событий для чекбоксов
+    
     ticketCheckboxes.forEach(cb => {
         cb.addEventListener('change', updateTotal);
     });
 
-    // Слушатели событий для количества развлечений
+    
     quantityInputs.forEach(input => {
         input.addEventListener('input', updateTotal);
         input.addEventListener('change', function() {
@@ -465,19 +454,17 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-{{-- Подключение конфигурации позиций мест --}}
 <script src="{{ asset('js/seat-positions.js') }}"></script>
 <script>
-// Применяем позиции к местам после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
-    // Для каждой палубы применяем позиции
+    
     const deckContainers = document.querySelectorAll('.seats-container[data-deck-type]');
 
     deckContainers.forEach(container => {
         const deckType = container.dataset.deckType;
         const seats = container.querySelectorAll('.seat[data-seat-index]');
 
-        // Получаем позиции для этого типа палубы
+        
         const positions = seatPositions[deckType];
 
         if (!positions) {
@@ -490,13 +477,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const position = positions[seatIndex];
 
             if (position) {
-                // Применяем позицию
+                
                 seat.style.position = 'absolute';
                 seat.style.top = position.top + '%';
                 seat.style.left = position.left + '%';
-                seat.style.transform = 'translate(-50%, -50%)'; // Центрируем относительно координат
+                seat.style.transform = 'translate(-50%, -50%)'; 
 
-                // Если место должно быть трапецией, добавляем специальный класс
+                
                 if (position.isTrapezoid) {
                     if (position.isTrapezoid === 'left') {
                         seat.classList.add('trapezoid-left');

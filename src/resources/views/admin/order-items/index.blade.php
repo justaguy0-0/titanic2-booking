@@ -108,7 +108,6 @@
                             {{ number_format($item->price * $item->quantity, 0, '', ' ') }} ₽
                         </td>
 
-                        {{-- Только иконки в действиях --}}
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
                             <a href="{{ route('admin.order-items.edit', $item) }}"
                                class="text-gray-600 hover:text-indigo-600" title="Редактировать">

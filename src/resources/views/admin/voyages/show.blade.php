@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-6">
-        {{-- Хлебные крошки --}}
         <nav class="mb-6">
             <ol class="list-reset flex text-gray-600">
                 <li>
@@ -17,7 +16,6 @@
             </ol>
         </nav>
 
-        {{-- Уведомления --}}
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 {{ session('success') }}
@@ -49,14 +47,12 @@
             </div>
         </div>
 
-        {{-- Основная информация о рейсе --}}
         <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Основная информация</h2>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Левая колонка --}}
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-500">ID</label>
@@ -76,7 +72,6 @@
                         </div>
                     </div>
 
-                    {{-- Правая колонка --}}
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-500">Дата и время отправления</label>
@@ -106,7 +101,6 @@
                     </div>
                 </div>
 
-                {{-- Статус рейса --}}
                 <div class="mt-6 pt-6 border-t border-gray-200">
                     @php
                         $now = now();
@@ -136,7 +130,6 @@
             </div>
         </div>
 
-        {{-- Секция с билетами --}}
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-xl font-semibold text-gray-800">Билеты</h2>
@@ -207,7 +200,6 @@
                     </table>
                 </div>
 
-                {{-- Пагинация для билетов --}}
                 <div class="px-6 py-4 border-t border-gray-200">
                     {{ $tickets->links() }}
                 </div>
@@ -221,7 +213,6 @@
             @endif
         </div>
 
-        {{-- Кнопка возврата --}}
         <div class="mt-6">
             <a href="{{ route('admin.voyages.index') }}"
                class="inline-flex items-center text-gray-600 hover:text-gray-900">

@@ -9,7 +9,6 @@
             <div class="col-md-6 col-lg-5">
                 <div class="login-card" style="background: #1e293b; border: 2px solid #fbbf24; border-radius: 12px; padding: 3rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);">
 
-                    <!-- Заголовок -->
                     <div class="text-center mb-4">
                         <h2 style="font-family: Georgia, serif; color: #fbbf24; letter-spacing: 3px; font-weight: bold; font-size: 2rem; margin-bottom: 0.5rem;">
                             ВХОД
@@ -27,11 +26,9 @@
                         </div>
                     @endif
 
-                    <!-- Форма -->
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <!-- Email -->
                         <div class="mb-4 position-relative">
                             <label for="email" style="color: #fcd34d; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
                                 Email
@@ -57,7 +54,6 @@
                             @enderror
                         </div>
 
-                        <!-- Password -->
                         <div class="mb-4 position-relative">
                             <label for="password" style="color: #fcd34d; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
                                 Пароль
@@ -81,7 +77,6 @@
                             @enderror
                         </div>
 
-                        <!-- Remember Me -->
                         <div class="mb-4">
                             <div class="form-check">
                                 <input
@@ -97,7 +92,6 @@
                             </div>
                         </div>
 
-                        <!-- Forgot Password & Submit -->
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             @if (Route::has('password.request'))
                                 <a href="{{ route('password.request') }}" style="color: #fbbf24; text-decoration: none; font-size: 0.9rem; transition: color 0.3s;">
@@ -115,7 +109,6 @@
                             </button>
                         </div>
 
-                        <!-- Register Link -->
                         <div class="text-center pt-3" style="border-top: 1px solid #475569;">
                             <p style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 0.5rem;">
                                 Нет аккаунта?
@@ -132,12 +125,10 @@
 </div>
 
 <style>
-    /* Улучшения для инпутов */
     .form-control:focus {
         outline: none;
     }
 
-    /* Стиль для чекбокса */
     .form-check-input:checked {
         background-color: #fbbf24;
         border-color: #fbbf24;
@@ -147,12 +138,10 @@
         box-shadow: 0 0 0 0.2rem rgba(251, 191, 36, 0.25);
     }
 
-    /* Анимация для ссылок */
     a:hover {
         color: #f59e0b !important;
     }
 
-    /* Responsive для мобильных */
     @media (max-width: 576px) {
         .login-card { padding: 2rem; }
         .btn { width: 100%; }

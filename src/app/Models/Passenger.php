@@ -28,30 +28,20 @@ class Passenger extends Model
         'discount_percent' => 'decimal:2',
     ];
 
-    /**
-     * Связь с позицией заказа
-     */
     public function orderItem(): BelongsTo
     {
         return $this->belongsTo(OrderItem::class, 'order_item_id');
     }
 
-    /**
-     * Рассчитать возраст на основе даты рождения
-     */
     public function calculateAge(): int
     {
         return Carbon::parse($this->birth_date)->age;
     }
 
-    /**
-     * Рассчитать скидку в зависимости от возраста
-     */
     public function calculateDiscount(): float
     {
         $age = $this->calculateAge();
 
-        // Дети до 12 лет получают скидку 20%
         if ($age < 12) {
             return 20.0;
         }
@@ -59,9 +49,6 @@ class Passenger extends Model
         return 0.0;
     }
 
-    /**
-     * Получить полное имя пассажира
-     */
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";

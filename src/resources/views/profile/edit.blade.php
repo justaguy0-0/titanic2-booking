@@ -8,7 +8,6 @@
         <div class="col-lg-10">
             <h2 class="page-title mb-4">Профиль</h2>
 
-            {{-- Информация профиля --}}
             <div class="profile-section mb-4">
                 <div class="section-header">
                     <h5 class="mb-0">Информация профиля</h5>
@@ -65,7 +64,6 @@
                 </div>
             </div>
 
-            {{-- Изменение пароля --}}
             <div class="profile-section mb-4">
                 <div class="section-header">
                     <h5 class="mb-0">Изменить пароль</h5>
@@ -116,7 +114,6 @@
                 </div>
             </div>
 
-            {{-- Удаление аккаунта --}}
             <div class="profile-section danger-section">
                 <div class="section-header">
                     <h5 class="mb-0">Удалить аккаунт</h5>
@@ -132,7 +129,6 @@
     </div>
 </div>
 
-{{-- Модальное окно удаления --}}
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content custom-modal">

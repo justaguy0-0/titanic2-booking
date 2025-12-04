@@ -17,7 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withSchedule(function (Schedule $schedule): void {
-        // Запускаем очистку истекших заказов каждую минуту
         $schedule->command('orders:clear-expired')->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions): void {

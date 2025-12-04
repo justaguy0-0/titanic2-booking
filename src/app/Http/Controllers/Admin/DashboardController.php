@@ -18,11 +18,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // Временные метки для фильтрации
         $lastMonth = Carbon::now()->subMonth();
         $lastYear = Carbon::now()->subYear();
 
-        // Ключевые метрики за последний месяц
         $totalOrders = Order::where('created_at', '>=', $lastMonth)->count();
 
         $revenue = Order::where('created_at', '>=', $lastMonth)
@@ -33,7 +31,6 @@ class DashboardController extends Controller
             ->where('arrival_date', '>=', Carbon::now())
             ->count();
 
-        // Дополнительные метрики
         $totalTicketsSold = Order::where('orders.created_at', '>=', $lastMonth)
             ->where('orders.status', '!=', 'cancelled')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
@@ -43,12 +40,10 @@ class DashboardController extends Controller
         $newUsersCount = User::where('created_at', '>=', $lastMonth)->count();
         $totalUsers = User::count();
 
-        // Средний чек
         $averageOrderValue = Order::where('created_at', '>=', $lastMonth)
             ->where('status', '!=', 'cancelled')
             ->avg('total_price');
 
-        // Недавние заказы (последние 10)
         $recentOrders = Order::with('user')
             ->latest()
             ->take(10)
@@ -63,7 +58,6 @@ class DashboardController extends Controller
                 ];
             });
 
-        // График продаж за последние 30 дней
         $salesData = Order::where('created_at', '>=', Carbon::now()->subDays(30))
             ->where('status', '!=', 'cancelled')
             ->select(
@@ -75,7 +69,6 @@ class DashboardController extends Controller
             ->orderBy('date')
             ->get();
 
-        // Форматируем данные для Chart.js
         $chartLabels = $salesData->pluck('date')->map(function ($date) {
             return Carbon::parse($date)->format('d.m');
         })->toArray();
@@ -83,7 +76,6 @@ class DashboardController extends Controller
         $chartOrders = $salesData->pluck('orders_count')->toArray();
         $chartRevenue = $salesData->pluck('daily_revenue')->toArray();
 
-        // Топ-5 популярных направлений
         $topDestinations = Voyage::select(
             'voyages.id',
             'dep.name as departure',
@@ -101,7 +93,6 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Топ-5 развлечений
         $topEntertainments = Entertainment::select(
             'entertainments.id',
             'entertainments.name',
@@ -117,17 +108,14 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Статистика по статусам заказов
         $orderStatusStats = Order::select('status', DB::raw('COUNT(*) as count'))
             ->where('created_at', '>=', $lastMonth)
             ->groupBy('status')
             ->get()
             ->pluck('count', 'status');
 
-        // Предупреждения
         $alerts = [];
 
-        // Просроченные платежи
         $overduePayments = Payment::where('status', 'pending')
             ->where('created_at', '<', Carbon::now()->subDays(3))
             ->count();
@@ -138,7 +126,6 @@ class DashboardController extends Controller
             ];
         }
 
-        // Путешествия без билетов
         $voyagesWithoutTickets = Voyage::where('departure_date', '>', Carbon::now())
             ->whereDoesntHave('tickets')
             ->count();
@@ -149,7 +136,6 @@ class DashboardController extends Controller
             ];
         }
 
-        // Низкий запас доступных билетов
         $lowStockVoyages = Voyage::where('departure_date', '>', Carbon::now())
             ->where('departure_date', '<', Carbon::now()->addDays(30))
             ->withCount(['tickets' => function ($query) {

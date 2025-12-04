@@ -12,7 +12,7 @@ class OrderItemSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = Faker::create(); // Инициализация Faker
+        $faker = Faker::create(); 
         
         if (Order::count() === 0) {
             throw new \Exception('Нет заказов. Запустите OrderSeeder.');
@@ -45,7 +45,7 @@ class OrderItemSeeder extends Seeder
                         'order_id'         => $order->id,
                         'ticket_id'        => $ticketId,
                         'entertainment_id' => null,
-                        'item_type'        => 'ticket', // Изменено с 'type' на 'item_type'
+                        'item_type'        => 'ticket', 
                         'price'            => $ticket->price,
                         'quantity'         => 1,
                     ]);
@@ -61,24 +61,22 @@ class OrderItemSeeder extends Seeder
                         'order_id'         => $order->id,
                         'ticket_id'        => null,
                         'entertainment_id' => $entertainmentId,
-                        'item_type'        => 'entertainment', // Изменено с 'type' на 'item_type'
+                        'item_type'        => 'entertainment', 
                         'price'            => $entertainment->price,
                         'quantity'         => $quantity,
                     ]);
                 }
             }
             
-            // Обновляем total_price
+            
             $order->refreshTotalPrice();
         }
     }
 }
 
 //$orders = Order::all();
-//$availableTickets = Ticket::where('status', 'Доступно')->get();
 //
 //foreach ($orders as $order) {
-//    // Берём 1-2 случайных доступных билета
 //    $tickets = $availableTickets->random(min(2, $availableTickets->count()));
 //
 //    $totalPrice = 0;
@@ -93,14 +91,11 @@ class OrderItemSeeder extends Seeder
 //            'price' => $ticket->price,
 //        ]);
 //
-//        $ticket->update(['status' => 'Забронировано']);
 //        $totalPrice += $ticket->price;
 //
-//        // Удаляем из доступных
 //        $availableTickets = $availableTickets->reject(fn($t) => $t->id === $ticket->id);
 //    }
 //
-//    // Обновляем цену заказа
 //    $order->update(['total_price' => $totalPrice]);
 //
 //    if ($availableTickets->isEmpty()) {

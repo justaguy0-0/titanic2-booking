@@ -36,7 +36,7 @@ class PlaceFactory extends Factory
         ];
     }
 
-    // Методы для явного указания типа
+    
     public function departure()
     {
         return $this->state(function (array $attributes) {

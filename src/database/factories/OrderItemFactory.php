@@ -47,11 +47,9 @@ class OrderItemFactory extends Factory
 }
 
 //if ($isTicket) {
-//    // Элемент — билет
 //    $ticket = Ticket::inRandomOrder()->first() ?? Ticket::factory()->create();
 //
 //    return [
-//        'order_id' => Order::factory(), // создаст заказ
 //        'ticket_id' => $ticket->id,
 //        'entertainment_id' => null,
 //        'item_type' => 'ticket',
@@ -59,7 +57,6 @@ class OrderItemFactory extends Factory
 //        'price' => $ticket->price,
 //    ];
 //} else {
-//    // Элемент — развлечение
 //    $entertainment = Entertainment::inRandomOrder()->first() ?? Entertainment::factory()->create();
 //    $quantity = $this->faker->numberBetween(1, 5);
 //

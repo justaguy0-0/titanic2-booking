@@ -11,7 +11,6 @@
         </div>
     </div>
 
-    {{-- Карусель с изображениями --}}
 <div class="row mb-5">
     <div class="col-12">
         <div id="aboutCarousel" class="carousel slide" data-bs-ride="carousel">
@@ -23,7 +22,6 @@
             </div>
 
             <div class="carousel-inner rounded-3 overflow-hidden" style="height: 500px;">
-                {{-- Слайд 1 --}}
                 <div class="carousel-item active h-100">
                     <div class="w-100 h-100"
                          style="background: linear-gradient(rgba(30, 41, 59, 0.3), rgba(30, 41, 59, 0.3)),
@@ -33,7 +31,6 @@
 
                 </div>
 
-                {{-- Слайд 2 --}}
                 <div class="carousel-item h-100">
                     <div class="w-100 h-100"
                          style="background: linear-gradient(rgba(30, 41, 59, 0.3), rgba(30, 41, 59, 0.3)),
@@ -43,7 +40,6 @@
 
                 </div>
 
-                {{-- Слайд 3 --}}
                 <div class="carousel-item h-100">
                     <div class="w-100 h-100"
                          style="background: linear-gradient(rgba(30, 41, 59, 0.3), rgba(30, 41, 59, 0.3)),
@@ -53,7 +49,6 @@
 
                 </div>
 
-                {{-- Слайд 4 --}}
                 <div class="carousel-item h-100">
                     <div class="w-100 h-100"
                          style="background: linear-gradient(rgba(30, 41, 59, 0.3), rgba(30, 41, 59, 0.3)),

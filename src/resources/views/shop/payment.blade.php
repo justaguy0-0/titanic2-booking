@@ -15,7 +15,6 @@
                 </div>
             @endif
 
-            {{-- Заголовок страницы --}}
             <div class="payment-header">
                 <h1 class="payment-title">
                     <i class="fas fa-credit-card me-3"></i>Оплата заказа
@@ -72,7 +71,6 @@
                         </div>
                     </div>
 
-                    {{-- СИСТЕМА ЛОЯЛЬНОСТИ --}}
                     <div class="payment-card">
                         <div class="payment-card-header">
                             <h3 class="payment-card-title">
@@ -132,7 +130,6 @@
                             <form action="{{ route('shop.process-payment') }}" method="POST" id="payment-form">
                                 @csrf
 
-                                {{-- Билеты с данными пассажиров --}}
                                 <div class="mb-4">
                                 <h5 class="mb-3" style="color: #fbbf24;">
                                     <i class="fas fa-users me-2"></i>Данные пассажиров
@@ -476,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function() {
         payBtn.disabled = true;
     });
 
-    // Остальной JavaScript код остается таким же...
+    
     const birthdateInputs = document.querySelectorAll('.passenger-birthdate-display');
     birthdateInputs.forEach(input => {
         input.addEventListener('input', function(e) {
@@ -507,7 +504,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Остальной код для валидации карты...
+    
     const cardNumberInput = document.getElementById('card-number-input');
     const cardExpiryInput = document.getElementById('card-expiry-input');
     const cardCvvInput = document.getElementById('card-cvv-input');

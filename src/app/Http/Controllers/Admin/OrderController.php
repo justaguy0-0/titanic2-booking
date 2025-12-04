@@ -16,7 +16,6 @@ class OrderController extends Controller
     {
         $query = Order::with(['user', 'orderItems.ticket.voyage']);
 
-        // === Сортировка ===
         $sortField = $request->get('sort', 'id');
         $sortDirection = $request->get('direction', 'desc');
 
@@ -26,7 +25,6 @@ class OrderController extends Controller
             'status',
             'created_at',
             'updated_at',
-            'user_email',  // сортировка по email пользователя
         ];
 
         if (!in_array($sortField, $allowedSorts)) {
@@ -36,16 +34,14 @@ class OrderController extends Controller
             $sortDirection = 'desc';
         }
 
-        // Простые поля
         if (in_array($sortField, ['id', 'total_price', 'status', 'created_at', 'updated_at'])) {
             $query->orderBy($sortField, $sortDirection);
         }
 
-        // Сортировка по email пользователя
         if ($sortField === 'user_email') {
             $query->join('users', 'orders.user_id', '=', 'users.id')
                 ->orderBy('users.email', $sortDirection)
-                ->select('orders.*'); // Важно! Иначе дубли полей
+                ->select('orders.*');
         }
 
         $orders = $query->paginate(15)->appends($request->query());
@@ -154,7 +150,6 @@ class OrderController extends Controller
         $order->update([
             'user_id' => $validated['user_id'],
             'status' => $validated['status'],
-            'total_price' => $validated['total_price'], // ← из формы
         ]);
 
         $newTicketIds = $validated['tickets'] ?? [];

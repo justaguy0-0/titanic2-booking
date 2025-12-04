@@ -76,7 +76,6 @@ class ProfileController extends Controller
         $order = $request->user()
             ->orders()
             ->with([
-                // Исправлено: используем новые связи
                 'orderItems.ticket.voyage.departurePlace',
                 'orderItems.ticket.voyage.arrivalPlace',
                 'orderItems.entertainment'

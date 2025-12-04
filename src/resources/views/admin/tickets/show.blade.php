@@ -4,7 +4,6 @@
 
 @section('content')
     <div class="container mx-auto px-4 py-6">
-        {{-- Хлебные крошки --}}
         <nav class="mb-6">
             <ol class="list-reset flex text-gray-600">
                 <li>
@@ -17,7 +16,6 @@
             </ol>
         </nav>
 
-        {{-- Уведомления --}}
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 {{ session('success') }}
@@ -49,14 +47,12 @@
             </div>
         </div>
 
-        {{-- Основная информация о билете --}}
         <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Основная информация</h2>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {{-- Левая колонка --}}
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-500">ID</label>
@@ -90,7 +86,6 @@
                         </div>
                     </div>
 
-                    {{-- Правая колонка --}}
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-500">Рейс</label>
@@ -131,7 +126,6 @@
             </div>
         </div>
 
-        {{-- Информация о заказе --}}
         @if($ticket->orderItems->isNotEmpty())
             <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
                 <div class="px-6 py-4 border-b border-gray-200">
@@ -188,7 +182,6 @@
             </div>
         @endif
 
-        {{-- Кнопка возврата --}}
         <div class="mt-6">
             <a href="{{ route('admin.tickets.index') }}"
                class="inline-flex items-center text-gray-600 hover:text-gray-900">

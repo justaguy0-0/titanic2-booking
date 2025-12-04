@@ -6,7 +6,6 @@
     <div class="row justify-content-center">
         <div class="col-lg-11">
 
-            {{-- Приветствие --}}
             <div class="welcome-card mb-4">
                 <div class="p-4">
                     <h3 class="welcome-title">Добро пожаловать, {{ Auth::user()->name }}!</h3>
@@ -14,7 +13,6 @@
                 </div>
             </div>
 
-            {{-- Статистика --}}
             <div class="row g-4 mb-4">
                 <div class="col-md-4">
                     <div class="stat-card">
@@ -61,7 +59,7 @@
 
             
             @php
-                // Рассчитываем лояльность прямо здесь
+                
                 $totalTickets = Auth::user()->orders()->where('status', 'Оплачен')->sum('ticket_count');
                 
                 if ($totalTickets >= 10) {
@@ -183,7 +181,6 @@
                 </div>
             </div>
 
-            {{-- Быстрые действия --}}
             <div class="section-card mb-4">
                 <div class="section-header">
                     <h5 class="mb-0">Быстрые действия</h5>
@@ -241,7 +238,6 @@
                 </div>
             </div>
 
-            {{-- Последние заказы --}}
             @php
                 $recentOrders = Auth::user()->orders()->orderBy('created_at', 'desc')->limit(5)->get();
             @endphp
@@ -308,7 +304,6 @@
                 </div>
             @endif
 
-            {{-- Информация профиля --}}
             <div class="section-card">
                 <div class="section-header">
                     <h5 class="mb-0">Информация профиля</h5>

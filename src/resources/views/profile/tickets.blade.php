@@ -18,7 +18,6 @@
                 </div>
             @endif
 
-            {{-- Информация о рейсе --}}
             <div class="voyage-card mb-4">
                 <div class="card-body p-4">
                     <h3 class="voyage-name mb-3">{{ $voyage->name }}</h3>
@@ -44,7 +43,6 @@
                 <input type="hidden" name="voyage_id" value="{{ $voyage->id }}">
 
                 <div class="row g-4">
-                    {{-- Билеты --}}
                     <div class="col-lg-7">
                         <div class="section-card">
                             <div class="section-header">
@@ -79,7 +77,6 @@
                         </div>
                     </div>
 
-                    {{-- Развлечения и итого --}}
                     <div class="col-lg-5">
                         @if($entertainments->count() > 0)
                             <div class="section-card mb-4">
@@ -112,7 +109,6 @@
                             </div>
                         @endif
 
-                        {{-- Итого --}}
                         <div class="total-card">
                             <div class="card-body p-4">
                                 <div class="total-row">

@@ -14,11 +14,9 @@ class TicketController extends Controller
     {
         $query = Ticket::with(['voyage', 'cabinType', 'orderItems.order']);
 
-        // === Сортировка (только по полям tickets) ===
         $sortField = $request->get('sort', 'id');
         $sortDirection = $request->get('direction', 'desc');
 
-        // Разрешённые поля — только из таблицы tickets
         $allowedSorts = ['id', 'number', 'price', 'status', 'created_at', 'updated_at'];
 
         if (!in_array($sortField, $allowedSorts)) {
@@ -98,7 +96,6 @@ class TicketController extends Controller
 
     public function show(Ticket $ticket)
     {
-        // Загружаем связанные данные
         $ticket->load([
             'voyage.departurePlace',
             'voyage.arrivalPlace',

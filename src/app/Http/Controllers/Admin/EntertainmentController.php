@@ -13,7 +13,6 @@ class EntertainmentController extends Controller
     {
         $query = Entertainment::query()->withCount('orderItems');
 
-        // === Сортировка ===
         $sortField = $request->get('sort', 'id');
         $sortDirection = $request->get('direction', 'desc');
 
@@ -28,7 +27,6 @@ class EntertainmentController extends Controller
             $sortDirection = 'desc';
         }
 
-        // ← ИСПРАВЛЕНО: правильный orderBy
         $query->orderBy($sortField, $sortDirection);
 
         $entertainments = $query->paginate(15)->appends($request->query());

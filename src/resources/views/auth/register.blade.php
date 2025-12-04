@@ -8,8 +8,7 @@
         <div class="row justify-content-center">
             <div class="col-md-7 col-lg-6">
                 <div class="register-card" style="background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(51, 65, 85, 0.95)); border: 2px solid #fbbf24; border-radius: 15px; padding: 3rem; box-shadow: 0 10px 40px rgba(251, 191, 36, 0.2);">
-                    
-                    <!-- Заголовок -->
+
                     <div class="text-center mb-4">
                         <h2 style="font-family: Georgia, serif; color: #fbbf24; letter-spacing: 3px; font-weight: bold; font-size: 2rem; margin-bottom: 0.5rem;">
                             РЕГИСТРАЦИЯ
@@ -20,11 +19,9 @@
                         <div style="width: 60px; height: 2px; background: #fbbf24; margin: 1rem auto;"></div>
                     </div>
 
-                    <!-- Форма -->
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
-                        <!-- Name -->
                         <div class="mb-4">
                             <label for="name" style="color: #fcd34d; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
                                 Имя
@@ -49,7 +46,6 @@
                             @enderror
                         </div>
 
-                        <!-- Email -->
                         <div class="mb-4">
                             <label for="email" style="color: #fcd34d; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
                                 Email
@@ -73,7 +69,6 @@
                             @enderror
                         </div>
 
-                        <!-- Password -->
                         <div class="mb-4">
                             <label for="password" style="color: #fcd34d; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
                                 Пароль
@@ -96,7 +91,6 @@
                             @enderror
                         </div>
 
-                        <!-- Confirm Password -->
                         <div class="mb-4">
                             <label for="password_confirmation" style="color: #fcd34d; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
                                 Подтвердите пароль
@@ -119,7 +113,6 @@
                             @enderror
                         </div>
 
-                        <!-- Already registered & Submit Button -->
                         <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
                             <a href="{{ route('login') }}" style="color: #fbbf24; text-decoration: none; font-size: 0.9rem; transition: color 0.3s;">
                                 Уже зарегистрированы?
@@ -136,7 +129,6 @@
                             </button>
                         </div>
 
-                        <!-- Divider -->
                         <div class="text-center pt-3" style="border-top: 1px solid #475569;">
                             <p style="color: #94a3b8; font-size: 0.85rem; margin: 0;">
                                 Регистрируясь, вы соглашаетесь с нашими<br>
@@ -152,23 +144,20 @@
 </div>
 
 <style>
-    /* Улучшения для инпутов */
     .form-control:focus {
         outline: none;
     }
-    
-    /* Анимация для ссылок */
+
     a:hover {
         color: #f59e0b !important;
     }
-    
-    /* Responsive для мобильных */
+
     @media (max-width: 576px) {
-        .register-card { 
-            padding: 2rem; 
+        .register-card {
+            padding: 2rem;
         }
-        .btn { 
-            width: 100%; 
+        .btn {
+            width: 100%;
             margin-top: 1rem;
         }
         .d-flex {

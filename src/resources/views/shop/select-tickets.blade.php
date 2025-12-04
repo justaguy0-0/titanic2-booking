@@ -166,7 +166,7 @@
                                                         @foreach($cabinType->tickets as $ticket)
                                                         @php
                                                             // Проверяем оба варианта написания статуса для совместимости
-                                                            $isBooked = in_array($ticket->status, ['Забронировано', 'Забронирован']);
+                                                            $isBooked = in_array($ticket->status, ['Забронировано']);
                                                             $seatClass = $isBooked ? 'seat booked' : 'seat available';
                                                             // Добавляем класс размера в зависимости от типа палубы
                                                             $seatClass .= ' ' . $deckKey . '-seat';

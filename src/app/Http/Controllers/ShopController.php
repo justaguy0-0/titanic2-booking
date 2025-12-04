@@ -36,12 +36,10 @@ class ShopController extends Controller
         $voyage = Voyage::with(['departurePlace', 'arrivalPlace'])
             ->findOrFail($voyageId);
 
-        // Получаем ТОЛЬКО доступные билеты для скрытых чекбоксов (для отправки формы)
         $tickets = Ticket::where('voyages_id', $voyageId)
             ->where('status', 'Доступно')
             ->get();
 
-        // Группируем ВСЕ билеты (включая забронированные) по типам кают
         $availableCabinTypes = \App\Models\CabinType::whereHas('tickets', function ($query) use ($voyageId) {
                 $query->where('voyages_id', $voyageId);
             })
@@ -57,9 +55,7 @@ class ShopController extends Controller
         return view('shop.select-tickets', compact('voyage', 'tickets', 'availableCabinTypes', 'entertainments'));
     }
 
-    /**
-     * Подготовка к покупке (сохранение данных в сессию)
-     */
+    
     public function purchase(Request $request)
     {
         $validated = $request->validate([
@@ -71,106 +67,161 @@ class ShopController extends Controller
             'entertainments.*.quantity' => 'integer|min:0|max:10',
         ]);
 
-        // Проверяем доступность билетов
-        $tickets = Ticket::whereIn('id', $validated['tickets'])
-            ->where('status', 'Доступно')
-            ->get();
+        DB::beginTransaction();
+        try {
 
-        if ($tickets->count() !== count($validated['tickets'])) {
-            return back()->with('error', 'Некоторые билеты уже забронированы. Попробуйте выбрать другие.');
+            $tickets = Ticket::whereIn('id', $validated['tickets'])
+                ->where('status', 'Доступно')
+                ->lockForUpdate()
+                ->get();
+
+            if ($tickets->count() !== count($validated['tickets'])) {
+                DB::rollBack();
+                return back()->with('error', 'Некоторые билеты уже забронированы. Попробуйте выбрать другие.');
+            }
+
+            $totalPrice = $tickets->sum('price');
+            $ticketCount = $tickets->count();
+
+
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'total_price' => $totalPrice,
+                'ticket_count' => $ticketCount,
+                'final_price' => $totalPrice, // Итоговая цена (до применения скидок при оплате)
+                'status' => 'Новый',
+            ]);
+
+
+            foreach ($tickets as $ticket) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'ticket_id' => $ticket->id,
+                    'item_type' => 'ticket',
+                    'quantity' => 1,
+                    'price' => $ticket->price,
+                ]);
+                $ticket->update(['status' => 'Забронировано']);
+            }
+
+            if (!empty($validated['entertainments'])) {
+                foreach ($validated['entertainments'] as $entData) {
+                    if (isset($entData['quantity']) && $entData['quantity'] > 0) {
+                        $entertainment = Entertainment::find($entData['id']);
+                        if ($entertainment) {
+                            OrderItem::create([
+                                'order_id' => $order->id,
+                                'entertainment_id' => $entertainment->id,
+                                'item_type' => 'entertainment',
+                                'quantity' => $entData['quantity'],
+                                'price' => $entertainment->price,
+                            ]);
+                            $totalPrice += $entertainment->price * $entData['quantity'];
+                        }
+                    }
+                }
+
+                $order->update(['total_price' => $totalPrice]);
+            }
+
+            DB::commit();
+
+            session(['pending_order_id' => $order->id]);
+
+            return redirect()->route('shop.payment');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Ошибка при создании заказа: ' . $e->getMessage());
+            return back()->with('error', 'Ошибка при бронировании билетов. Попробуйте снова.');
         }
-
-        // Сохраняем данные заказа в сессию
-        session([
-            'order_data' => [
-                'voyage_id' => $validated['voyage_id'],
-                'tickets' => $validated['tickets'],
-                'entertainments' => $validated['entertainments'] ?? [],
-            ]
-        ]);
-
-        return redirect()->route('shop.payment');
     }
 
-    /**
-     * Показать страницу оплаты
-     */
+   
     public function showPayment()
     {
-        // Проверяем наличие данных заказа в сессии
-        if (!session()->has('order_data')) {
+
+        if (!session()->has('pending_order_id')) {
             return redirect()->route('shop')->with('error', 'Данные заказа не найдены.');
         }
 
-        $orderData = session('order_data');
+        $orderId = session('pending_order_id');
 
-        // Получаем информацию о рейсе
+        $order = Order::with([
+            'orderItems.ticket.cabinType',
+            'orderItems.entertainment'
+        ])->findOrFail($orderId);
+
+        if ($order->user_id !== Auth::id()) {
+            return redirect()->route('shop')->with('error', 'Доступ запрещён.');
+        }
+
+        if ($order->status !== 'Новый') {
+            session()->forget('pending_order_id');
+            return redirect()->route('shop')->with('error', 'Заказ уже обработан или отменён.');
+        }
+
+        if ($order->created_at->addMinutes(10)->isPast()) {
+            session()->forget('pending_order_id');
+            return redirect()->route('shop')->with('error', 'Время бронирования истекло. Пожалуйста, выберите билеты заново.');
+        }
+
+        // Получаем информацию о рейсе (берём из первого билета)
+        $firstTicket = $order->orderItems->where('item_type', 'ticket')->first()->ticket;
         $voyage = Voyage::with(['departurePlace', 'arrivalPlace'])
-            ->findOrFail($orderData['voyage_id']);
+            ->findOrFail($firstTicket->voyages_id);
 
-        // Получаем выбранные билеты с типом каюты
-        $tickets = Ticket::with('cabinType')
-            ->whereIn('id', $orderData['tickets'])
-            ->where('status', 'Доступно')
-            ->get();
+        // Формируем список билетов
+        $tickets = $order->orderItems
+            ->where('item_type', 'ticket')
+            ->pluck('ticket');
 
-        // Если билеты недоступны, перенаправляем обратно
-        if ($tickets->count() !== count($orderData['tickets'])) {
-            session()->forget('order_data');
-            return redirect()->route('shop')->with('error', 'Некоторые билеты стали недоступны.');
-        }
-
-        // Рассчитываем стоимость билетов
-        $baseTotalPrice = $tickets->sum('price');
-
-        // Получаем развлечения
+        // Формируем список развлечений
         $entertainmentItems = [];
-        if (!empty($orderData['entertainments'])) {
-            foreach ($orderData['entertainments'] as $entData) {
-                if (isset($entData['quantity']) && $entData['quantity'] > 0) {
-                    $entertainment = Entertainment::find($entData['id']);
-                    if ($entertainment) {
-                        $quantity = $entData['quantity'];
-                        $baseTotalPrice += $entertainment->price * $quantity;
-                        $entertainmentItems[] = [
-                            'entertainment' => $entertainment,
-                            'quantity' => $quantity,
-                            'subtotal' => $entertainment->price * $quantity
-                        ];
-                    }
-                }
-            }
+        foreach ($order->orderItems->where('item_type', 'entertainment') as $item) {
+            $entertainmentItems[] = [
+                'entertainment' => $item->entertainment,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->price * $item->quantity
+            ];
         }
+
+        $baseTotalPrice = $order->total_price;
 
         // РАСЧЕТ СКИДКИ ЛОЯЛЬНОСТИ
         $loyaltyInfo = $this->getLoyaltyInfo(Auth::user());
         $discountCalculation = $this->calculateOrderDiscount(Auth::user(), $baseTotalPrice);
 
+        // Время до истечения бронирования
+        $expiresAt = $order->created_at->addMinutes(10);
+
         return view('shop.payment', compact(
-            'voyage', 
-            'tickets', 
-            'entertainmentItems', 
+            'voyage',
+            'tickets',
+            'entertainmentItems',
             'baseTotalPrice',
             'loyaltyInfo',
-            'discountCalculation'
+            'discountCalculation',
+            'order',
+            'expiresAt'
         ));
     }
 
     /**
-     * Обработать оплату и создать заказ
+     * Обработать оплату существующего заказа
      */
     public function processPayment(Request $request)
     {
         Log::info('=== НАЧАЛО ОБРАБОТКИ ПЛАТЕЖА ===');
         Log::info('Request data:', $request->all());
 
-        // Проверяем наличие данных заказа в сессии
-        if (!session()->has('order_data')) {
-            Log::error('Данные заказа не найдены в сессии');
+        // Проверяем наличие ID заказа в сессии
+        if (!session()->has('pending_order_id')) {
+            Log::error('ID заказа не найден в сессии');
             return redirect()->route('shop')->with('error', 'Данные заказа не найдены.');
         }
 
-        Log::info('Данные сессии найдены:', session('order_data'));
+        $orderId = session('pending_order_id');
+        Log::info('ID заказа из сессии:', ['order_id' => $orderId]);
 
         // Валидация данных пассажиров и банковских реквизитов
         $validated = $request->validate([
@@ -219,21 +270,33 @@ class ShopController extends Controller
             'expiry' => $validated['card_expiry'],
         ]);
 
-        $orderData = session('order_data');
-
         DB::beginTransaction();
         try {
-            // Получаем билеты с блокировкой
-            $tickets = Ticket::whereIn('id', $orderData['tickets'])
-                ->where('status', 'Доступно')
+            // Получаем существующий заказ с блокировкой
+            $order = Order::with('orderItems.ticket')
+                ->where('id', $orderId)
+                ->where('user_id', Auth::id())
                 ->lockForUpdate()
-                ->get();
+                ->firstOrFail();
 
-            if ($tickets->count() !== count($orderData['tickets'])) {
+            // Проверяем статус заказа
+            if ($order->status !== 'Новый') {
                 DB::rollBack();
-                session()->forget('order_data');
-                return redirect()->route('shop')->with('error', 'Некоторые билеты уже забронированы.');
+                session()->forget('pending_order_id');
+                return redirect()->route('shop')->with('error', 'Заказ уже обработан или отменён.');
             }
+
+            // Проверяем, не истёк ли срок бронирования (10 минут)
+            if ($order->created_at->addMinutes(10)->isPast()) {
+                DB::rollBack();
+                session()->forget('pending_order_id');
+                return redirect()->route('shop')->with('error', 'Время бронирования истекло.');
+            }
+
+            // Получаем билеты из заказа
+            $tickets = $order->orderItems
+                ->where('item_type', 'ticket')
+                ->pluck('ticket');
 
             // Рассчитываем общую стоимость с учетом скидок
             $totalPrice = 0;
@@ -276,22 +339,9 @@ class ShopController extends Controller
                 }
             }
 
-            // Добавляем развлечения
-            $entertainmentItems = [];
-            if (!empty($orderData['entertainments'])) {
-                foreach ($orderData['entertainments'] as $entData) {
-                    if (isset($entData['quantity']) && $entData['quantity'] > 0) {
-                        $entertainment = Entertainment::find($entData['id']);
-                        if ($entertainment) {
-                            $quantity = $entData['quantity'];
-                            $totalPrice += $entertainment->price * $quantity;
-                            $entertainmentItems[] = [
-                                'entertainment' => $entertainment,
-                                'quantity' => $quantity
-                            ];
-                        }
-                    }
-                }
+            // Добавляем стоимость развлечений (они уже в заказе)
+            foreach ($order->orderItems->where('item_type', 'entertainment') as $item) {
+                $totalPrice += $item->price * $item->quantity;
             }
 
             // Симуляция оплаты: 70% успех, 30% отказ
@@ -301,13 +351,11 @@ class ShopController extends Controller
                 return back()->with('error', 'Оплата отклонена. Пожалуйста, попробуйте снова или используйте другой способ оплаты.');
             }
 
-            // Создаём заказ С УЧЕТОМ ЛОЯЛЬНОСТИ
-            $order = Order::create([
-                'user_id' => Auth::id(),
+            // Обновляем заказ С УЧЕТОМ ЛОЯЛЬНОСТИ И СКИДОК
+            $order->update([
                 'total_price' => $totalPrice,
-                'ticket_count' => count($tickets), // Сохраняем количество билетов
-                'loyalty_discount_applied' => $loyaltyDiscount, // Сохраняем примененную скидку
-                'final_price' => $totalPrice, // Итоговая цена уже со скидкой
+                'loyalty_discount_applied' => $loyaltyDiscount,
+                'final_price' => $totalPrice,
                 'status' => 'Оплачен',
             ]);
 
@@ -324,54 +372,42 @@ class ShopController extends Controller
                 'status' => 'Оплачен',
             ]);
 
-            // Добавляем билеты в заказ с данными пассажиров
+            // Обновляем существующие OrderItem и добавляем данные пассажиров
             foreach ($ticketPrices as $ticketId => $priceData) {
-                $ticket = $tickets->firstWhere('id', $ticketId);
+                // Находим существующий OrderItem для этого билета
+                $orderItem = $order->orderItems
+                    ->where('item_type', 'ticket')
+                    ->where('ticket_id', $ticketId)
+                    ->first();
 
-                $orderItem = OrderItem::create([
-                    'order_id' => $order->id,
-                    'ticket_id' => $ticket->id,
-                    'entertainment_id' => null,
-                    'item_type' => 'ticket',
-                    'quantity' => 1,
-                    'price' => $priceData['final_price'],
-                ]);
+                if ($orderItem) {
+                    // Обновляем цену с учётом всех скидок
+                    $orderItem->update(['price' => $priceData['final_price']]);
 
-                // Создаем запись пассажира
-                Passenger::create([
-                    'order_item_id' => $orderItem->id,
-                    'first_name' => $priceData['passenger_data']['first_name'],
-                    'last_name' => $priceData['passenger_data']['last_name'],
-                    'birth_date' => $priceData['passenger_data']['birth_date'],
-                    'passport_series' => $priceData['passenger_data']['passport_series'],
-                    'passport_number' => $priceData['passenger_data']['passport_number'],
-                    'citizenship' => $priceData['passenger_data']['citizenship'],
-                    'age' => $priceData['age'],
-                    'discount_percent' => $priceData['child_discount'],
-                ]);
-
-                $ticket->update(['status' => 'Забронировано']);
+                    // Создаем запись пассажира
+                    Passenger::create([
+                        'order_item_id' => $orderItem->id,
+                        'first_name' => $priceData['passenger_data']['first_name'],
+                        'last_name' => $priceData['passenger_data']['last_name'],
+                        'birth_date' => $priceData['passenger_data']['birth_date'],
+                        'passport_series' => $priceData['passenger_data']['passport_series'],
+                        'passport_number' => $priceData['passenger_data']['passport_number'],
+                        'citizenship' => $priceData['passenger_data']['citizenship'],
+                        'age' => $priceData['age'],
+                        'discount_percent' => $priceData['child_discount'],
+                    ]);
+                }
             }
 
-            // Добавляем развлечения в заказ
-            foreach ($entertainmentItems as $item) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'ticket_id' => null,
-                    'entertainment_id' => $item['entertainment']->id,
-                    'item_type' => 'entertainment',
-                    'quantity' => $item['quantity'],
-                    'price' => $item['entertainment']->price,
-                ]);
-            }
+            // Билеты уже в статусе "Забронировано", оставляем их без изменений
 
             // ОБНОВЛЯЕМ ЛОЯЛЬНОСТЬ ПОЛЬЗОВАТЕЛЯ
             $this->updateUserLoyalty(Auth::user());
 
             DB::commit();
 
-            // Очищаем данные заказа из сессии
-            session()->forget('order_data');
+            // Очищаем ID заказа из сессии
+            session()->forget('pending_order_id');
 
             return redirect()->route('profile.orders')
                 ->with('success', 'Заказ успешно оплачен! Номер заказа: #' . $order->id);

@@ -442,4 +442,15 @@ class ShopController extends Controller
             'loyalty_info' => $loyaltyInfo
         ];
     }
+    public function voyage()
+{
+    
+    $voyages = Voyage::with(['departurePlace', 'arrivalPlace'])
+        ->where('departure_date', '>=', now())
+        ->orderBy('departure_date')
+        ->get();
+
+    
+    return view('voyage', compact('voyages'));
+}
 }

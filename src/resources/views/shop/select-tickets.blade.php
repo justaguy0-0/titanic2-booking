@@ -80,13 +80,10 @@
                             <div class="ship-layout">
 
                                 @php
-                                    
                                     $ticketsByType = $tickets->groupBy('type');
                                 @endphp
 
-
                                 <div class="deck-selector">
-
                                     @forelse($availableCabinTypes as $cabinType)
                                         @php
                                             $deckKey = match(trim($cabinType->name)) {
@@ -116,14 +113,12 @@
                                             <span>{{ $cabinType->name }}</span>
                                             <small>{{ $deckName }}</small>
                                         </button>
-
                                     @empty
                                         <div class="text-center py-5">
                                             <i class="fas fa-exclamation-triangle fa-3x mb-3 text-muted"></i>
                                             <p class="text-muted">Нет доступных мест на этот рейс</p>
                                         </div>
                                     @endforelse
-
                                 </div>
 
                                 <div class="decks-container">
@@ -159,15 +154,12 @@
                                                     <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
                                                         @foreach($cabinType->tickets as $ticket)
                                                         @php
-                                                            
                                                             $isBooked = in_array($ticket->status, ['Забронировано']);
                                                             $seatClass = $isBooked ? 'seat booked' : 'seat available';
-                                                            
                                                             $seatClass .= ' ' . $deckKey . '-seat';
                                                             $tooltipText = $isBooked
                                                                 ? "Место {$ticket->number} — Забронировано"
                                                                 : number_format($ticket->price, 0, '', ' ') . " ₽";
-                                                            
                                                             $seatIndex = $loop->index;
                                                         @endphp
                                                         <div class="{{ $seatClass }}"
@@ -183,7 +175,6 @@
                                             </div>
                                         </div>
                                     @empty
-                                        <!-- Нет доступных кают -->
                                     @endforelse
                                 </div>
 
@@ -224,6 +215,7 @@
                     </div>
                 </div>
 
+               
                 <div class="row g-4 mt-4">
                     <div class="col-lg-8">
                         <div class="section-card entertainment-card-select">
@@ -232,58 +224,58 @@
                                     <i class="fas fa-umbrella-beach me-2"></i>Дополнительные развлечения
                                 </h5>
                             </div>
-                            <div class="card-body p-2">
+                            <div class="card-body p-3">
                                 @if($entertainments->count() > 0)
-                                    <div class="accordion" id="entertainmentsAccordionSelect">
-                                        @foreach($entertainments->chunk(ceil($entertainments->count() / 3)) as $index => $entertainmentChunk)
-                                            <div class="accordion-item entertainment-accordion-item">
-                                                <h2 class="accordion-header" id="headingSelect{{ $index }}">
-                                                    <button class="accordion-button collapsed entertainment-accordion-button"
-                                                            type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#collapseSelect{{ $index }}"
-                                                            aria-expanded="false"
-                                                            aria-controls="collapseSelect{{ $index }}">
-                                                        Группа развлечений {{ $index + 1 }}
-                                                        <i class="fas fa-chevron-down ms-2"></i>
-                                                    </button>
-                                                </h2>
-                                                <div id="collapseSelect{{ $index }}"
-                                                     class="accordion-collapse collapse"
-                                                     aria-labelledby="headingSelect{{ $index }}"
-                                                     data-bs-parent="#entertainmentsAccordionSelect">
-                                                    <div class="accordion-body p-2">
-                                                        @foreach($entertainmentChunk as $ent)
-                                                            <div class="entertainment-item mb-3">
-                                                                <div class="entertainment-info d-flex justify-content-between align-items-start mb-2">
-                                                                    <div class="flex-grow-1">
-                                                                        <h6 class="entertainment-name mb-1">
-                                                                            <i class="fas fa-star me-2"></i>{{ $ent->name }}
-                                                                        </h6>
-                                                                        <small class="entertainment-desc">
-                                                                            {{ $ent->description ?? 'Дополнительная услуга' }}
-                                                                        </small>
-                                                                    </div>
-                                                                    <div class="entertainment-price ms-3">
-                                                                        {{ number_format($ent->price, 0) }} ₽
-                                                                    </div>
-                                                                </div>
-                                                                <div class="quantity-control d-flex align-items-center">
-                                                                    <label class="quantity-label me-3">
-                                                                        Количество:
-                                                                    </label>
-                                                                    <input type="hidden" name="entertainments[{{ $loop->parent->index * ceil($entertainments->count() / 3) + $loop->index }}][id]" value="{{ $ent->id }}">
-                                                                    <input type="number"
-                                                                           name="entertainments[{{ $loop->parent->index * ceil($entertainments->count() / 3) + $loop->index }}][quantity]"
-                                                                           value="0"
-                                                                           min="0"
-                                                                           max="10"
-                                                                           class="quantity-input form-control"
-                                                                           data-price="{{ $ent->price }}">
-                                                                </div>
+                                    <div class="row g-4">
+                                        @foreach($entertainments as $index => $ent)
+                                            <div class="col-lg-6 col-xl-4 mb-3">
+                                                <div class="entertainment-card h-100 p-3 border rounded">
+                                                    <div class="entertainment-info mb-3">
+                                                        <div class="d-flex justify-content-between align-items-start mb-2">
+                                                            <h6 class="entertainment-name mb-0">
+                                                                <i class="fas fa-star text-warning me-2"></i>{{ $ent->name }}
+                                                            </h6>
+                                                            <div class="entertainment-price fw-bold">
+                                                                {{ number_format($ent->price, 0) }} ₽
                                                             </div>
-                                                        @endforeach
+                                                        </div>
+                                                        <small class="entertainment-desc text-muted d-block">
+                                                            {{ $ent->description ?? 'Дополнительная услуга' }}
+                                                        </small>
                                                     </div>
+                                                    
+                                                    <div class="quantity-control">
+                                                        <input type="hidden" name="entertainments[{{ $index }}][id]" 
+                                                               value="{{ $ent->id }}">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <label class="me-3 mb-0">Количество:</label>
+                                                            <div class="input-group input-group-sm" style="width: 150px;">
+                                                                <button type="button" 
+                                                                        class="btn btn-outline-secondary quantity-minus"
+                                                                        data-target="entertainments[{{ $index }}][quantity]">
+                                                                    <i class="fas fa-minus"></i>
+                                                                </button>
+                                                                <input type="number"
+                                                                       name="entertainments[{{ $index }}][quantity]"
+                                                                       value="0"
+                                                                       min="0"
+                                                                       max="10"
+                                                                       class="quantity-input form-control text-center"
+                                                                       data-price="{{ $ent->price }}"
+                                                                       id="entertainment-qty-{{ $index }}">
+                                                                <button type="button" 
+                                                                        class="btn btn-outline-secondary quantity-plus"
+                                                                        data-target="entertainments[{{ $index }}][quantity]">
+                                                                    <i class="fas fa-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-center mt-2">
+                                                            <small class="text-muted">Макс. 10 шт. на человека</small>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                  
                                                 </div>
                                             </div>
                                         @endforeach
@@ -297,7 +289,7 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <div class="col-lg-4">
                         <div class="total-card">
                             <div class="card-body p-4">
@@ -331,7 +323,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('purchase-form');
     const seats = document.querySelectorAll('.seat');
 
-    
     const deckButtons = document.querySelectorAll('.deck-button');
     const deckSections = document.querySelectorAll('.deck-section[data-deck]');
 
@@ -339,13 +330,9 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const targetDeck = this.dataset.deck;
 
-            
             deckButtons.forEach(btn => btn.classList.remove('active'));
-
-            
             this.classList.add('active');
 
-            
             deckSections.forEach(section => {
                 if (section.dataset.deck === targetDeck) {
                     section.style.display = 'block';
@@ -360,7 +347,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let total = 0;
         let hasTickets = false;
 
-        
         ticketCheckboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 hasTickets = true;
@@ -369,17 +355,14 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        
         quantityInputs.forEach(input => {
             const quantity = parseInt(input.value) || 0;
             const price = parseFloat(input.dataset.price) || 0;
             total += quantity * price;
         });
 
-        
         totalPriceEl.textContent = total.toLocaleString('ru-RU') + ' ₽';
 
-        
         if (hasTickets) {
             submitBtn.disabled = false;
             submitBtn.classList.add('active');
@@ -389,9 +372,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    
     seats.forEach(seat => {
-        
         if (seat.classList.contains('booked')) {
             return;
         }
@@ -400,20 +381,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const ticketId = this.dataset.ticketId;
             const checkbox = document.getElementById('ticket-' + ticketId);
 
-            console.log('Клик по билету:', ticketId, 'Трапеция:', this.classList.contains('trapezoid-left') || this.classList.contains('trapezoid-right'));
-
             if (checkbox) {
-                
                 checkbox.checked = !checkbox.checked;
 
-                
                 if (checkbox.checked) {
                     this.classList.add('selected');
                 } else {
                     this.classList.remove('selected');
                 }
 
-                
                 updateTotal();
             } else {
                 console.error('Чекбокс не найден для билета:', ticketId);
@@ -421,7 +397,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    
     form.addEventListener('submit', function(e) {
         const hasChecked = document.querySelector('.ticket-checkbox:checked');
         if (!hasChecked) {
@@ -430,23 +405,51 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Обработка...';
         submitBtn.disabled = true;
     });
 
-    
     ticketCheckboxes.forEach(cb => {
         cb.addEventListener('change', updateTotal);
     });
 
-    
     quantityInputs.forEach(input => {
         input.addEventListener('input', updateTotal);
         input.addEventListener('change', function() {
             if (this.value < 0) this.value = 0;
             if (this.value > 10) this.value = 10;
             updateTotal();
+        });
+    });
+
+    
+    document.querySelectorAll('.quantity-plus').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetName = this.dataset.target;
+            const input = document.querySelector(`input[name="${targetName}"]`);
+            const max = parseInt(input.max) || 10;
+            
+            let value = parseInt(input.value) || 0;
+            if (value < max) {
+                value++;
+                input.value = value;
+                updateTotal();
+            }
+        });
+    });
+    
+    document.querySelectorAll('.quantity-minus').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetName = this.dataset.target;
+            const input = document.querySelector(`input[name="${targetName}"]`);
+            const min = parseInt(input.min) || 0;
+            
+            let value = parseInt(input.value) || 0;
+            if (value > min) {
+                value--;
+                input.value = value;
+                updateTotal();
+            }
         });
     });
 
@@ -457,14 +460,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="{{ asset('js/seat-positions.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    
     const deckContainers = document.querySelectorAll('.seats-container[data-deck-type]');
 
     deckContainers.forEach(container => {
         const deckType = container.dataset.deckType;
         const seats = container.querySelectorAll('.seat[data-seat-index]');
 
-        
         const positions = seatPositions[deckType];
 
         if (!positions) {
@@ -477,13 +478,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const position = positions[seatIndex];
 
             if (position) {
-                
                 seat.style.position = 'absolute';
                 seat.style.top = position.top + '%';
                 seat.style.left = position.left + '%';
-                seat.style.transform = 'translate(-50%, -50%)'; 
+                seat.style.transform = 'translate(-50%, -50%)';
 
-                
                 if (position.isTrapezoid) {
                     if (position.isTrapezoid === 'left') {
                         seat.classList.add('trapezoid-left');

@@ -22,9 +22,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 
-Route::get('/voyage', function () {
-    return view('voyage');
-})->name('voyage');
+Route::get('/voyage', [ShopController::class, 'voyage'])->name('voyage');
 
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');

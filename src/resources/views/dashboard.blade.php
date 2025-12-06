@@ -102,19 +102,19 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="text-sm">Ваш прогресс</span>
-                                    <span class="text-sm font-weight-bold">{{ $loyaltyInfo['progress'] }}%</span>
-                                </div>
-                                <div class="progress" style="height: 10px; border-radius: 5px; background-color: #e5e7eb;">
-                                    <div class="progress-bar" role="progressbar" 
-                                         style="width: {{ $loyaltyInfo['progress'] }}%; background: linear-gradient(45deg, #fbbf24, #f59e0b); border-radius: 5px;"
-                                         aria-valuenow="{{ $loyaltyInfo['progress'] }}" 
-                                         aria-valuemin="0" aria-valuemax="100">
-                                    </div>
+                        <div class="mb-3">
+                            <div class="text-center mb-1">
+                                <span class="text-sm">Ваш прогресс </span>
+                                
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 5px; background-color: #e5e7eb;">
+                                <div class="progress-bar" role="progressbar" 
+                                    style="width: {{ $loyaltyInfo['progress'] }}%; background: linear-gradient(45deg, #fbbf24, #f59e0b); border-radius: 5px;"
+                                    aria-valuenow="{{ $loyaltyInfo['progress'] }}" 
+                                    aria-valuemin="0" aria-valuemax="100">
                                 </div>
                             </div>
+                        </div>
                             
                             <div class="row text-center mb-3">
                                 <div class="col-4">

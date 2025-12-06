@@ -1,5 +1,3 @@
-/* .accordion-button стили удалены - используются из head.css */
-
 .review-card {
     transition: transform 0.3s ease;
 }
@@ -8,21 +6,50 @@
     transform: translateY(-5px);
 }
 
-.route-item:hover, .route-item.active {
+.route-item:hover {
     border-color: #fbbf24 !important;
     background: #334155 !important;
     transform: translateX(5px);
 }
 
-.city-dot:hover, .iceberg-dot:hover {
-    r: 12;
-    filter: drop-shadow(0 0 8px currentColor);
+.route-item.active {
+    border-color: #fbbf24 !important;
+    background: #334155 !important;
+    transform: scale(1.02);
 }
 
 .route-line {
-    transition: opacity 0.5s ease;
+    transition: opacity 0.3s ease;
 }
-/* Адаптивность для карты */
+
+/* ЭТО ВАЖНО - УБИРАЕМ ВСЕ HOVER ЭФФЕКТЫ ДЛЯ ТОЧЕК */
+.city-dot:hover,
+.city-dot-group:hover,
+.iceberg-dot:hover {
+    r: 10 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+/* ОТКЛЮЧАЕМ ВСЕ ПЕРЕХОДЫ ДЛЯ SVG */
+.route-map svg * {
+    transition: none !important;
+}
+
+.btn-gold {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    color: #0f172a;
+    border: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    color: #0f172a;
+}
+
 @media (max-width: 768px) {
     .route-map {
         height: 300px !important;
@@ -50,47 +77,4 @@
     .route-map svg circle {
         r: 4 !important;
     }
-}
-
-/* Стили для активного маршрута */
-.route-item.active {
-    background: #334155 !important;
-    border-color: #fbbf24 !important;
-    transform: scale(1.02);
-}
-
-.route-item:hover {
-    background: #334155 !important;
-    border-color: #fbbf24 !important;
-    cursor: pointer;
-}
-
-/* Анимация для линий маршрута */
-.route-line {
-    transition: opacity 0.3s ease;
-}
-
-/* Стили для точек */
-.city-dot, .city-dot-group, .iceberg-dot {
-    transition: all 0.3s ease;
-}
-
-.city-dot:hover, .city-dot-group:hover, .iceberg-dot:hover {
-    transform: scale(1.2);
-    filter: brightness(1.2);
-}
-
-/* Кнопка */
-.btn-gold {
-    background: linear-gradient(45deg, #fbbf24, #f59e0b);
-    color: #0f172a;
-    border: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.btn-gold:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
-    color: #0f172a;
 }

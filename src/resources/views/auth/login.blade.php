@@ -84,7 +84,6 @@
                                     type="checkbox"
                                     name="remember"
                                     class="form-check-input"
-                                    style="background: #0f172a; border: 2px solid #475569; cursor: pointer;"
                                 >
                                 <label for="remember_me" style="color: #cbd5e1; font-size: 0.9rem; cursor: pointer;">
                                     Запомнить меня

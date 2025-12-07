@@ -48,8 +48,8 @@
                         </a>
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        <a href="{{ $sortUrl('type') }}" class="hover:text-gray-900 flex items-center gap-1">
-                            Тип <span class="text-gray-400">{{ $sortIcon('type') }}</span>
+                        <a href="{{ $sortUrl('item_type') }}" class="hover:text-gray-900 flex items-center gap-1">
+                            Тип <span class="text-gray-400">{{ $sortIcon('item_type') }}</span>
                         </a>
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -71,7 +71,7 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                 @forelse($orderItems as $item)
                     @php
-                        $isTicket = $item->type === 'ticket';
+                        $isTicket = $item->item_type === 'ticket';
                         $badgeClass = $isTicket
                             ? 'bg-indigo-100 text-indigo-800'
                             : 'bg-teal-100 text-teal-800';
@@ -93,14 +93,28 @@
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-700">
                             @if($isTicket)
-                                <div class="font-medium">{{ $item->ticket?->number ?? '—' }}</div>
-                                <div class="text-xs text-gray-500">
-                                    {{ $item->ticket?->voyage?->name ?? 'Рейс удалён' }}
-                                </div>
+                                @if($item->ticket)
+                                    <div class="space-y-1">
+                                        <div class="font-semibold text-indigo-700">
+                                            Билет #{{ $item->ticket->number }}
+                                        </div>
+                                        <div class="text-sm font-medium">
+                                            {{ $item->ticket->voyage?->name ?? 'Рейс удалён' }}
+                                        </div>
+                                    </div>
+                                @else
+                                    <span class="text-red-600">Билет удалён</span>
+                                @endif
                             @else
-                                <div>{{ $item->entertainment?->name ?? '—' }}</div>
-                                @if($item->quantity > 1)
-                                    <span class="text-xs text-gray-500">×{{ $item->quantity }}</span>
+                                @if($item->entertainment)
+                                    <div>
+                                        <div class="font-medium">{{ $item->entertainment->name }}</div>
+                                        @if($item->quantity > 1)
+                                            <span class="text-xs text-gray-500">×{{ $item->quantity }}</span>
+                                        @endif
+                                    </div>
+                                @else
+                                    <span class="text-red-600">Развлечение удалено</span>
                                 @endif
                             @endif
                         </td>

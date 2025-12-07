@@ -55,7 +55,6 @@
                     @enderror
                 </div>
 
-                <!-- Тип элемента — теперь можно менять! -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-3">
                         Тип элемента <span class="text-red-500">*</span>
@@ -68,7 +67,7 @@
                             <span class="text-lg">Билет</span>
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="entertainment"
+                            <input type="radio" name="item_type" value="entertainment"
                                    class="mr-3 text-blue-600 focus:ring-blue-500"
                                 {{ old('item_type', $orderItem->item_type) === 'entertainment' ? 'checked' : '' }}>
                             <span class="text-lg">Развлечение</span>
@@ -168,7 +167,7 @@
     </div>
 
     <script>
-        
+
         document.querySelectorAll('input[name="item_type"]').forEach(radio => {
             radio.addEventListener('change', function () {
                 const isTicket = this.value === 'ticket';
@@ -177,7 +176,7 @@
             });
         });
 
-        
+
         const currentType = "{{ old('item_type', $orderItem->item_type) }}";
         if (currentType === 'ticket') {
             document.querySelector('.ticket-section').classList.remove('hidden');

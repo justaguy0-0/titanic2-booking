@@ -3,12 +3,11 @@
 @section('title', 'Дашборд')
 @section('content')
     <div class="container mx-auto px-4 py-6 text-gray-800">
-        {{-- }}<div class="mb-6">
+        <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-800">
-                <i class="fas fa-ship mr-3 text-blue-600"></i> Дашборд Титаника 2
+                <i class="fas fa-ship mr-3 text-blue-600"></i> Дашборд Титаник 2
             </h1>
-            <p class="text-gray-600 mt-2">Обзор ключевых метрик и статистики</p>
-        </div> --}}
+        </div>
 
         @if(count($alerts) > 0)
             <div class="mb-6 space-y-3">
@@ -123,7 +122,13 @@
             <h3 class="text-lg font-semibold text-gray-800 mb-4">
                 <i class="fas fa-chart-line mr-2 text-green-600"></i> График продаж за последние 30 дней
             </h3>
-            <canvas id="sales-chart" class="w-full h-96"></canvas>
+            <canvas
+                id="sales-chart"
+                class="w-full h-96"
+                data-labels="{{ json_encode($chartLabels) }}"
+                data-orders="{{ json_encode($chartOrders) }}"
+                data-revenue="{{ json_encode($chartRevenue) }}">
+            </canvas>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -223,90 +228,6 @@
         </div>
     </div>
 
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            const ctx = document.getElementById('sales-chart');
-            const chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: @json($chartLabels),
-                    datasets: [
-                        {
-                            label: 'Количество заказов',
-                            data: @json($chartOrders),
-                            borderColor: 'rgb(59, 130, 246)',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.3,
-                            yAxisID: 'y',
-                        },
-                        {
-                            label: 'Выручка (₽)',
-                            data: @json($chartRevenue),
-                            borderColor: 'rgb(34, 197, 94)',
-                            backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                            tension: 0.3,
-                            yAxisID: 'y1',
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        if (context.datasetIndex === 1) {
-                                            label += new Intl.NumberFormat('ru-RU').format(context.parsed.y) + ' ₽';
-                                        } else {
-                                            label += context.parsed.y;
-                                        }
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Количество заказов'
-                            }
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            beginAtZero: true,
-                            grid: {
-                                drawOnChartArea: false,
-                            },
-                            title: {
-                                display: true,
-                                text: 'Выручка (₽)'
-                            }
-                        },
-                    }
-                }
-            });
-        </script>
-    @endpush
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @vite('resources/js/admin/dashboard-chart.js')
 @endsection

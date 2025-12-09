@@ -13,7 +13,6 @@
             <form action="{{ route('admin.orders.store') }}" method="POST">
                 @csrf
 
-                <!-- Пользователь -->
                 <div class="mb-6">
                     <label for="user_id" class="block text-sm font-medium text-gray-700 mb-2">
                         Пользователь <span class="text-red-500">*</span>
@@ -28,7 +27,6 @@
                     </select>
                 </div>
 
-                <!-- Билеты — новая чистая реализация -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Билеты <span class="text-red-500">*</span>
@@ -40,10 +38,8 @@
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-3"
                            autocomplete="off">
 
-                    <!-- Чипсы выбранных билетов -->
                     <div id="selected-tickets" class="flex flex-wrap gap-2 mb-4"></div>
 
-                    <!-- Список билетов с чекбоксами -->
                     <div class="border border-gray-300 rounded-lg max-h-96 overflow-y-auto bg-white">
                         @foreach(\App\Models\Ticket::where('status', 'Доступно')->orderBy('number')->get() as $ticket)
                             <label class="ticket-item flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0">
@@ -70,7 +66,6 @@
                     </div>
                 </div>
 
-                <!-- Развлечения -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Развлечения</label>
                     <div id="entertainments-container">
@@ -95,14 +90,12 @@
                     </div>
                 </div>
 
-                <!-- Итого -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Итого к оплате</label>
                     <div id="total_price_display" class="text-3xl font-bold text-green-600">0 ₽</div>
                     <input type="hidden" name="total_price" id="total_price" value="0">
                 </div>
 
-                <!-- Статус -->
                 <div class="mb-6">
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
                         Статус <span class="text-red-500">*</span>
@@ -128,5 +121,5 @@
         </div>
     </div>
 
-    @vite('resources/js/order-create.js')
+    @vite('resources/js/admin/order-create.js')
 @endsection

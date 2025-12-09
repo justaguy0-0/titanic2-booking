@@ -15,7 +15,6 @@
                 @csrf @method('PUT')
 
                 <div class="space-y-6">
-                    <!-- Имя -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Имя</label>
                         <input type="text" name="name" value="{{ old('name', $user->name) }}"
@@ -23,7 +22,6 @@
                         @error('name') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Email -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                         <input type="email" name="email" value="{{ old('email', $user->email) }}"
@@ -31,7 +29,6 @@
                         @error('email') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Пароль -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Новый пароль <span class="text-gray-500 text-xs">(оставьте пустым, чтобы не менять)</span>
@@ -43,7 +40,6 @@
                         @error('password') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Роли -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-3">Роли</label>
                         <div class="space-y-2">
@@ -78,7 +74,6 @@
                 </div>
             </form>
 
-            <!-- Опасная зона -->
             @if($user->id !== auth()->id())
                 <div class="mt-10 pt-8 border-t border-gray-200">
                     <h3 class="text-lg font-semibold text-red-700 mb-4">Опасная зона</h3>

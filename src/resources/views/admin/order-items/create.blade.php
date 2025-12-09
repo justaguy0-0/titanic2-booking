@@ -9,7 +9,6 @@
             <form action="{{ route('admin.order-items.store') }}" method="POST">
                 @csrf
 
-                <!-- Заказ -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Заказ <span class="text-red-500">*</span>
@@ -26,7 +25,6 @@
                     @error('order_id')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
 
-                <!-- Тип элемента -->
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Тип <span class="text-red-500">*</span>
@@ -38,7 +36,6 @@
                     @error('item_type')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
 
-                <!-- Билет (показывается только если выбран тип ticket) -->
                 <div class="mb-6 ticket-section">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Билет <span class="text-red-500">*</span>
@@ -55,7 +52,6 @@
                     @error('ticket_id')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                 </div>
 
-                <!-- Развлечение (показывается только если выбран тип entertainment) -->
                 <div class="mb-6 entertainment-section hidden">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Развлечение <span class="text-red-500">*</span>
@@ -92,13 +88,5 @@
         </div>
     </div>
 
-    <script>
-        document.querySelectorAll('input[name="item_type"]').forEach(radio => {
-            radio.addEventListener('change', function () {
-                document.querySelector('.ticket-section').classList.toggle('hidden', this.value !== 'ticket');
-                document.querySelector('.entertainment-section').classList.toggle('hidden', this.value !== 'entertainment');
-            });
-        });
-        document.querySelector('input[name="item_type"]:checked')?.dispatchEvent(new Event('change'));
-    </script>
+    @vite('resources/js/admin/order-item-type-switcher.js')
 @endsection

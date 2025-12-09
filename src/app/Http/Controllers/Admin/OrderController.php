@@ -74,6 +74,7 @@ class OrderController extends Controller
             'user_id' => $validated['user_id'],
             'status' => $validated['status'],
             'total_price' => $validated['total_price'],
+            'final_price' => $validated['total_price'],
         ]);
 
         if (!empty($validated['tickets'])) {
@@ -136,8 +137,12 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
+        \Log::info('Update order request:', $request->all());
+
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
+            'existing_tickets' => 'nullable|array',
+            'existing_tickets.*' => 'exists:tickets,id',
             'tickets' => 'nullable|array',
             'tickets.*' => 'exists:tickets,id',
             'entertainments' => 'nullable|array',
@@ -145,69 +150,103 @@ class OrderController extends Controller
             'entertainments.*.quantity' => 'integer|min:1',
             'status' => 'required|string|in:Новый,Обработан,Оплачен,Отправлен,Отменён',
             'total_price' => 'required|numeric|min:0',
+            'final_price' => 'required|numeric|min:0',
         ]);
 
-        $order->update([
-            'user_id' => $validated['user_id'],
-            'status' => $validated['status'],
-        ]);
+        try {
+            \DB::beginTransaction();
 
-        $newTicketIds = $validated['tickets'] ?? [];
+            // Обновляем основную информацию заказа
+            $order->update([
+                'user_id' => $validated['user_id'],
+                'status' => $validated['status'],
+                'total_price' => $validated['total_price'],
+                'final_price' => $validated['final_price'],
+            ]);
 
-        $order->orderItems()
-            ->where('item_type', 'ticket')
-            ->whereNotIn('ticket_id', $newTicketIds)
-            ->each(function ($item) {
-                if ($item->ticket) {
-                    $item->ticket->update(['status' => 'Доступно']);
-                }
-                $item->delete();
-            });
-
-        foreach ($newTicketIds as $ticketId) {
-            $ticket = Ticket::find($ticketId);
-            if (!$ticket || $ticket->status !== 'Доступно') continue;
-
-            $exists = $order->orderItems()
-                ->where('item_type', 'ticket')
-                ->where('ticket_id', $ticketId)
-                ->exists();
-
-            if (!$exists) {
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'ticket_id' => $ticketId,
-                    'item_type' => 'ticket',
-                    'price' => $ticket->price,
-                    'quantity' => 1,
-                ]);
-                $ticket->update(['status' => 'Забронировано']);
-            }
-        }
-
-        $newEntIds = collect($validated['entertainments'] ?? [])->pluck('id')->toArray();
-
-        $order->orderItems()
-            ->where('item_type', 'entertainment')
-            ->whereNotIn('entertainment_id', $newEntIds)
-            ->delete();
-
-        foreach ($validated['entertainments'] ?? [] as $item) {
-            $ent = Entertainment::findOrFail($item['id']);
-            OrderItem::updateOrCreate(
-                [
-                    'order_id' => $order->id,
-                    'entertainment_id' => $ent->id,
-                ],
-                [
-                    'item_type' => 'entertainment',
-                    'price' => $ent->price,
-                    'quantity' => $item['quantity'] ?? 1,
-                ]
+            // Обрабатываем билеты
+            // Собираем все ID билетов, которые должны остаться в заказе
+            $allTicketIds = array_merge(
+                $validated['existing_tickets'] ?? [],
+                $validated['tickets'] ?? []
             );
-        }
 
-        return redirect()->route('admin.orders.edit', $order)->with('success', 'Заказ обновлён.');
+            // Удаляем билеты, которых больше нет в заказе
+            $order->orderItems()
+                ->where('item_type', 'ticket')
+                ->whereNotIn('ticket_id', $allTicketIds)
+                ->each(function ($item) {
+                    if ($item->ticket) {
+                        $item->ticket->update(['status' => 'Доступно']);
+                    }
+                    $item->delete();
+                });
+
+            // Добавляем новые билеты
+            if (!empty($validated['tickets'])) {
+                foreach ($validated['tickets'] as $ticketId) {
+                    $ticket = Ticket::find($ticketId);
+                    if (!$ticket || $ticket->status !== 'Доступно') {
+                        continue;
+                    }
+
+                    $exists = $order->orderItems()
+                        ->where('item_type', 'ticket')
+                        ->where('ticket_id', $ticketId)
+                        ->exists();
+
+                    if (!$exists) {
+                        OrderItem::create([
+                            'order_id' => $order->id,
+                            'ticket_id' => $ticketId,
+                            'item_type' => 'ticket',
+                            'price' => $ticket->price,
+                            'quantity' => 1,
+                        ]);
+                        $ticket->update(['status' => 'Забронировано']);
+                    }
+                }
+            }
+
+            // Обрабатываем развлечения
+            $order->orderItems()
+                ->where('item_type', 'entertainment')
+                ->delete();
+
+            if (!empty($validated['entertainments'])) {
+                foreach ($validated['entertainments'] as $entItem) {
+                    if (empty($entItem['id'])) {
+                        continue;
+                    }
+
+                    $ent = Entertainment::find($entItem['id']);
+                    if (!$ent) {
+                        continue;
+                    }
+
+                    OrderItem::create([
+                        'order_id' => $order->id,
+                        'entertainment_id' => $ent->id,
+                        'item_type' => 'entertainment',
+                        'price' => $ent->price,
+                        'quantity' => $entItem['quantity'] ?? 1,
+                    ]);
+                }
+            }
+
+            \DB::commit();
+
+            return redirect()->route('admin.orders.edit', $order)
+                ->with('success', 'Заказ успешно обновлён.');
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            \Log::error('Error updating order: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Произошла ошибка при обновлении заказа: ' . $e->getMessage())
+                ->withInput();
+        }
     }
 
     public function destroy(Order $order)

@@ -113,6 +113,6 @@
     </div>
 </div>
 
-@vite('resources/js/voyage-form.js')
+@vite('resources/js/admin/voyage-form.js')
 
 @endsection

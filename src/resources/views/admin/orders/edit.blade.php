@@ -1,6 +1,10 @@
 @extends('admin.admin')
 @section('title', 'Редактировать заказ')
 @section('content')
+    @section('head')
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    @endsection
+
     <div class="container mx-auto px-4 py-6">
         <div class="mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Редактировать заказ</h1>
@@ -8,105 +12,159 @@
         </div>
 
         <div class="bg-white shadow-md rounded-lg p-6 max-w-3xl">
-            <form action="{{ route('admin.orders.update', $order) }}" method="POST">
+            @if($errors->any())
+                <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                    <ul class="list-disc list-inside">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            <form action="{{ route('admin.orders.update', $order) }}" method="POST" id="editOrderForm">
                 @csrf
                 @method('PUT')
 
-                <!-- Пользователь -->
                 <div class="mb-6">
                     <label for="user_id" class="block text-sm font-medium text-gray-700 mb-2">Пользователь <span class="text-red-500">*</span></label>
                     <select name="user_id" id="user_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('user_id') border-red-500 @enderror" required>
                         <option value="">Выберите пользователя</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}" {{ old('user_id', $order->user_id) == $user->id ? 'selected' : '' }}>{{ $user->email }}</option>
+                            <option value="{{ $user->id }}" {{ old('user_id', $order->user_id) == $user->id ? 'selected' : '' }}>
+                                {{ $user->email }} ({{ $user->name }})
+                            </option>
                         @endforeach
                     </select>
                     @error('user_id') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <!-- Текущие билеты -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Текущие билеты</label>
-                    <div class="bg-gray-50 p-4 rounded-lg" id="current-tickets">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Текущие билеты в заказе</label>
+                    <div class="bg-gray-50 p-4 rounded-lg space-y-2" id="current-tickets-container">
                         @php
-                            $currentTickets = $order->orderItems->where('type', 'ticket');
+                            $currentTickets = $order->orderItems->where('item_type', 'ticket');
+                            $currentTicketIds = $currentTickets->pluck('ticket_id')->toArray();
                         @endphp
                         @forelse($currentTickets as $item)
-                            <div class="flex justify-between items-center mb-2 current-ticket-item" data-price="{{ $item->price }}">
-                                <span>
-                                    Билет {{ $item->ticket->number }} ({{ $item->ticket->voyage->name ?? 'N/A' }}, {{ number_format($item->price, 2, ',', ' ') }} ₽)
+                            <div class="current-ticket-item flex justify-between items-center py-2 px-3 bg-white rounded border"
+                                 data-price="{{ $item->price }}"
+                                 data-item-id="{{ $item->id }}">
+                                <span class="text-sm">
+                                    Билет {{ $item->ticket->number }}
+                                    ({{ $item->ticket->voyage->name ?? '—' }})
+                                    — <strong>{{ number_format($item->price, 0, '', ' ') }} ₽</strong>
                                 </span>
-                                <form action="{{ route('admin.order-items.destroy', $item) }}" method="POST" class="inline" onsubmit="return confirm('Удалить?')">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 text-sm">Удалить</button>
-                                </form>
+                                <input type="hidden" name="existing_tickets[]" value="{{ $item->ticket_id }}">
+                                <button type="button"
+                                        class="delete-ticket-btn text-red-600 hover:text-red-900 text-sm"
+                                        data-item-id="{{ $item->id }}"
+                                        data-delete-url="{{ route('admin.order-items.destroy', $item) }}">
+                                    Удалить
+                                </button>
                             </div>
                         @empty
-                            <p class="text-gray-500 text-sm">Билеты не выбраны.</p>
+                            <p class="text-gray-500 text-sm">Билетов пока нет</p>
                         @endforelse
                     </div>
                 </div>
 
-                <!-- Добавить билеты -->
                 <div class="mb-6">
-                    <label for="tickets" class="block text-sm font-medium text-gray-700 mb-2">Добавить билеты</label>
-                    <select name="tickets[]" id="tickets" multiple size="5" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('tickets') border-red-500 @enderror">
-                        @foreach($tickets as $ticket)
-                            <option value="{{ $ticket->id }}" data-price="{{ $ticket->price }}" {{ in_array($ticket->id, old('tickets', [])) ? 'selected' : '' }}>
-                                {{ $ticket->number }} ({{ $ticket->voyage->name ?? 'N/A' }}, {{ number_format($ticket->price, 2, ',', ' ') }} ₽)
-                            </option>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Добавить билеты
+                    </label>
+                    <input type="text"
+                           id="ticket-search"
+                           placeholder="Поиск по номеру, рейсу, каюте..."
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 mb-3"
+                           autocomplete="off">
+
+                    <div id="selected-tickets" class="flex flex-wrap gap-2 mb-4"></div>
+
+                    <div class="border border-gray-300 rounded-lg max-h-96 overflow-y-auto bg-white">
+                        @php
+                            $availableTickets = \App\Models\Ticket::where('status', 'Доступно')
+                                ->whereNotIn('id', $currentTicketIds)
+                                ->orderBy('number')
+                                ->get();
+                        @endphp
+                        @foreach($availableTickets as $ticket)
+                            <label class="ticket-item flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0">
+                                <input type="checkbox"
+                                       name="tickets[]"
+                                       value="{{ $ticket->id }}"
+                                       data-price="{{ $ticket->price }}"
+                                       data-text="{{ $ticket->number }} — {{ $ticket->voyage->name ?? '—' }} — {{ number_format($ticket->price, 0, '', ' ') }} ₽"
+                                       class="ticket-checkbox rounded text-blue-600 focus:ring-blue-500"
+                                    {{ in_array($ticket->id, old('tickets', [])) ? 'checked' : '' }}>
+                                <span class="ml-3 flex-1 text-sm">
+                                    <span class="font-medium">{{ $ticket->number }}</span>
+                                    — {{ $ticket->voyage->name ?? '—' }}
+                                    <span class="text-green-600 font-semibold">{{ number_format($ticket->price, 0, '', ' ') }} ₽</span>
+                                </span>
+                            </label>
                         @endforeach
-                    </select>
-                    @error('tickets') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                    <p class="text-gray-500 text-xs mt-1">Ctrl/Cmd для множественного выбора.</p>
+                    </div>
+
+                    <div class="mt-3 text-sm text-gray-600">
+                        Выбрано: <span id="selected-count" class="font-bold text-blue-600">0</span> новых билетов
+                    </div>
                 </div>
 
-                <!-- Добавить развлечения -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Добавить развлечения</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Развлечения</label>
                     <div id="entertainments-container">
-                        @foreach($entertainments as $ent)
-                            @php
-                                $isChecked = !old() && isset($existingEntertainments[$ent->id]);
-                                $quantity = $existingEntertainments[$ent->id] ?? 1;
-                            @endphp
+                        @php
+                            $existingEntertainments = $order->orderItems
+                                ->where('item_type', 'entertainment')
+                                ->keyBy('entertainment_id')
+                                ->toArray();
+                        @endphp
 
-                            <div class="flex items-center gap-3 mb-2 entertainment-item" data-price="{{ $ent->price }}" data-ent-id="{{ $ent->id }}">
+                        @foreach($entertainments as $index => $ent)
+                            @php
+                                $existing = $existingEntertainments[$ent->id] ?? null;
+                                $isChecked = old("entertainments.{$ent->id}.checked", $existing ? true : false);
+                                $quantity = old("entertainments.{$ent->id}.quantity", $existing['quantity'] ?? 1);
+                            @endphp
+                            <div class="entertainment-item flex items-center gap-3 mb-2">
                                 <input type="checkbox"
+                                       name="entertainments[{{ $ent->id }}][id]"
+                                       value="{{ $ent->id }}"
                                        class="ent-checkbox"
-                                       data-ent-id="{{ $ent->id }}"
+                                       data-price="{{ $ent->price }}"
                                     {{ $isChecked ? 'checked' : '' }}>
 
-                                <label class="flex-1">
-                                    {{ $ent->name }} — {{ number_format($ent->price, 2, ',', ' ') }} ₽
+                                <label class="flex-1 cursor-pointer">
+                                    {{ $ent->name }} — {{ number_format($ent->price, 0, '', ' ') }} ₽
                                 </label>
 
                                 <input type="number"
+                                       name="entertainments[{{ $ent->id }}][quantity]"
                                        min="1"
                                        value="{{ $quantity }}"
-                                       class="w-20 px-3 py-2 border rounded-lg ent-quantity"
-                                       data-ent-id="{{ $ent->id }}"
+                                       class="ent-quantity w-20 px-3 py-2 border rounded-lg"
                                     {{ $isChecked ? '' : 'disabled' }}>
                             </div>
                         @endforeach
-
-                        <!-- Контейнер для скрытых полей (будем генерировать при отправке) -->
-                        <div id="entertainments-hidden"></div>
                     </div>
-                    @error('entertainments') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <!-- Сумма -->
                 <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Сумма</label>
-                    <input type="hidden" name="total_price" id="total_price" value="{{ old('total_price', $order->total_price) }}">
-                    <div id="total_price_display" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100">
-                        {{ number_format($order->total_price, 2, ',', ' ') }} ₽
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Итого к оплате</label>
+                    <div id="total_price_display" class="text-3xl font-bold text-green-600">
+                        {{ number_format($order->total_price, 0, '', ' ') }} ₽
                     </div>
-                    <p class="text-gray-500 text-xs mt-1">Рассчитывается автоматически.</p>
+                    <input type="hidden" name="total_price" id="total_price" value="{{ $order->total_price }}">
+                    <input type="hidden" name="final_price" id="final_price" value="{{ $order->final_price }}">
                 </div>
 
-                <!-- Статус -->
                 <div class="mb-6">
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Статус <span class="text-red-500">*</span></label>
                     <select name="status" id="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 @error('status') border-red-500 @enderror" required>
@@ -117,7 +175,6 @@
                     @error('status') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <!-- Информация -->
                 <div class="mb-6 p-4 bg-gray-50 rounded-lg text-sm text-gray-600">
                     <p><strong>ID:</strong> {{ $order->id }}</p>
                     <p><strong>Создано:</strong> {{ $order->created_at->format('d.m.Y H:i') }}</p>
@@ -125,12 +182,11 @@
                 </div>
 
                 <div class="flex gap-3">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg">Сохранить</button>
+                    <button type="submit" id="save-button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg">Сохранить</button>
                     <a href="{{ route('admin.orders.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-2 rounded-lg">Отмена</a>
                 </div>
             </form>
 
-            <!-- Опасная зона -->
             <div class="mt-6 pt-6 border-t border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2">Опасная зона</h3>
                 <form action="{{ route('admin.orders.destroy', $order) }}" method="POST" onsubmit="return confirm('Удалить заказ?')">
@@ -141,95 +197,5 @@
         </div>
     </div>
 
-    @push('scripts')
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const ticketsSelect = document.getElementById('tickets');
-                const totalPriceInput = document.getElementById('total_price');
-                const totalPriceDisplay = document.getElementById('total_price_display');
-                const form = document.getElementById('user_id').closest('form');
-
-                function updateTotalPrice() {
-                    let total = 0;
-
-                    document.querySelectorAll('.current-ticket-item').forEach(item => {
-                        total += parseFloat(item.dataset.price || 0);
-                    });
-
-                    Array.from(ticketsSelect.selectedOptions).forEach(option => {
-                        total += parseFloat(option.dataset.price || 0);
-                    });
-
-                    document.querySelectorAll('.entertainment-item').forEach(item => {
-                        const checkbox = item.querySelector('.ent-checkbox');
-                        const quantityInput = item.querySelector('.ent-quantity');
-                        if (checkbox.checked && quantityInput.value) {
-                            const price = parseFloat(item.dataset.price || 0);
-                            const quantity = parseInt(quantityInput.value) || 1;
-                            total += price * quantity;
-                        }
-                    });
-
-                    totalPriceInput.value = total.toFixed(2);
-                    totalPriceDisplay.textContent = new Intl.NumberFormat('ru-RU', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    }).format(total) + ' ₽';
-                }
-
-                
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault(); 
-
-                    const container = document.getElementById('entertainments-hidden');
-                    container.innerHTML = '';
-
-                    let index = 0;
-                    document.querySelectorAll('.entertainment-item').forEach(item => {
-                        const checkbox = item.querySelector('.ent-checkbox');
-                        const quantityInput = item.querySelector('.ent-quantity');
-                        if (checkbox && checkbox.checked && quantityInput && quantityInput.value) {
-                            const entId = item.getAttribute('data-ent-id'); 
-                            const quantity = quantityInput.value;
-
-                            const idInput = document.createElement('input');
-                            idInput.type = 'hidden';
-                            idInput.name = `entertainments[${index}][id]`;
-                            idInput.value = entId;
-
-                            const qtyInput = document.createElement('input');
-                            qtyInput.type = 'hidden';
-                            qtyInput.name = `entertainments[${index}][quantity]`;
-                            qtyInput.value = quantity;
-
-                            container.appendChild(idInput);
-                            container.appendChild(qtyInput);
-                            index++;
-                        }
-                    });
-
-                    
-                    form.submit();
-                });
-
-                
-                ticketsSelect.addEventListener('change', updateTotalPrice);
-
-                document.querySelectorAll('.ent-checkbox').forEach(cb => {
-                    cb.addEventListener('change', function () {
-                        const qty = this.closest('.entertainment-item').querySelector('.ent-quantity');
-                        qty.disabled = !this.checked;
-                        if (!this.checked) qty.value = 1;
-                        updateTotalPrice();
-                    });
-                });
-
-                document.querySelectorAll('.ent-quantity').forEach(input => {
-                    input.addEventListener('input', updateTotalPrice);
-                });
-
-                updateTotalPrice();
-            });
-        </script>
-    @endpush
+    @vite('resources/js/admin/order-edit.js')
 @endsection

@@ -79,36 +79,4 @@
             </form>
         </div>
     </div>
-
-    @push('scripts')
-        <script>
-            const cabinSelect = document.getElementById('cabin_type_id');
-            const priceInput = document.getElementById('price');
-
-            
-            function updatePrice() {
-                const selected = cabinSelect.options[cabinSelect.selectedIndex];
-                if (selected && selected.value) {
-                    const basePrice = selected.getAttribute('data-price');
-                    if (basePrice && !priceInput.dataset.manuallyEdited) {
-                        priceInput.value = parseFloat(basePrice).toFixed(2);
-                    }
-                }
-            }
-
-            
-            cabinSelect.addEventListener('change', function () {
-                updatePrice();
-                priceInput.dataset.manuallyEdited = 'false';
-            });
-
-            
-            priceInput.addEventListener('input', function () {
-                this.dataset.manuallyEdited = 'true';
-            });
-
-            
-            document.addEventListener('DOMContentLoaded', updatePrice);
-        </script>
-    @endpush
 @endsection

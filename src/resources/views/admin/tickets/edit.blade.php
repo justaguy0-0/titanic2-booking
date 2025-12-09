@@ -101,15 +101,4 @@
             </form>
         </div>
     </div>
-
-    @section('scripts')
-        <script>
-            document.getElementById('cabin_type_id').addEventListener('change', function () {
-                const priceInput = document.getElementById('price');
-                const selectedOption = this.options[this.selectedIndex];
-                const basePrice = selectedOption.getAttribute('data-price') || 0;
-                priceInput.value = parseFloat(basePrice).toFixed(2);
-            });
-        </script>
-    @endsection
 @endsection

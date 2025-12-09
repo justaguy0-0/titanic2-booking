@@ -34,7 +34,6 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Заказ — можно менять -->
                 <div class="mb-6">
                     <label for="order_id" class="block text-sm font-medium text-gray-700 mb-2">
                         Заказ <span class="text-red-500">*</span>
@@ -78,7 +77,6 @@
                     @enderror
                 </div>
 
-                <!-- Билет — показывается только при выборе типа "ticket" -->
                 <div class="mb-6 ticket-section {{ old('item_type', $orderItem->item_type) === 'ticket' ? '' : 'hidden' }}">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Выберите билет <span class="text-red-500">*</span>
@@ -101,7 +99,6 @@
                     @enderror
                 </div>
 
-                <!-- Развлечение — показывается только при выборе типа "entertainment" -->
                 <div class="mb-6 entertainment-section {{ old('item_type', $orderItem->item_type) === 'entertainment' ? '' : 'hidden' }}">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -146,7 +143,6 @@
                 </div>
             </form>
 
-            <!-- Опасная зона -->
             <div class="mt-10 pt-8 border-t-2 border-red-200">
                 <h3 class="text-lg font-bold text-red-700 mb-4">Опасная зона</h3>
                 <p class="text-gray-700 mb-4">
@@ -166,24 +162,5 @@
         </div>
     </div>
 
-    <script>
-
-        document.querySelectorAll('input[name="item_type"]').forEach(radio => {
-            radio.addEventListener('change', function () {
-                const isTicket = this.value === 'ticket';
-                document.querySelector('.ticket-section').classList.toggle('hidden', !isTicket);
-                document.querySelector('.entertainment-section').classList.toggle('hidden', isTicket);
-            });
-        });
-
-
-        const currentType = "{{ old('item_type', $orderItem->item_type) }}";
-        if (currentType === 'ticket') {
-            document.querySelector('.ticket-section').classList.remove('hidden');
-            document.querySelector('.entertainment-section').classList.add('hidden');
-        } else {
-            document.querySelector('.ticket-section').classList.add('hidden');
-            document.querySelector('.entertainment-section').classList.remove('hidden');
-        }
-    </script>
+    @vite('resources/js/admin/order-item-type-switcher.js')
 @endsection

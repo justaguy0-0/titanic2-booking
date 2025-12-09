@@ -4,7 +4,6 @@
 @section('content')
     <div class="container mx-auto px-4 py-6">
 
-        <!-- Хлебные крошки -->
         <nav class="mb-6">
             <ol class="list-reset flex text-gray-600">
                 <li>
@@ -17,7 +16,6 @@
             </ol>
         </nav>
 
-        <!-- Уведомления -->
         @if(session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 {{ session('success') }}
@@ -29,7 +27,6 @@
             </div>
         @endif
 
-        <!-- Заголовок + кнопки -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold text-gray-800">Заказ #{{ $order->id }}</h1>
             <div class="flex gap-3">
@@ -40,14 +37,12 @@
             </div>
         </div>
 
-        <!-- Основная информация -->
         <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Основная информация</h2>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Левая колонка -->
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-500">ID заказа</label>
@@ -84,7 +79,6 @@
                         </div>
                     </div>
 
-                    <!-- Правая колонка -->
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-500">Сумма заказа</label>
@@ -109,7 +103,6 @@
             </div>
         </div>
 
-        <!-- Состав заказа -->
         <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-xl font-semibold text-gray-800">Состав заказа</h2>
@@ -187,7 +180,6 @@
             </div>
         </div>
 
-        <!-- Кнопка возврата -->
         <div class="mt-6">
             <a href="{{ route('admin.orders.index') }}"
                class="inline-flex items-center text-gray-600 hover:text-gray-900">

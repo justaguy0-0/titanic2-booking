@@ -191,10 +191,27 @@ class OrderItemController extends Controller
 
             $order->refreshTotalPrice();
 
+            // Возвращаем JSON ответ для AJAX запросов
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Билет успешно удален из заказа',
+                    'order_id' => $order->id
+                ]);
+            }
+
             return redirect()
                 ->route('admin.orders.edit', $order)
                 ->with('success', 'Элемент удалён.');
+
         } catch (\Exception $e) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ошибка удаления: ' . $e->getMessage()
+                ], 500);
+            }
+
             return back()->with('error', 'Ошибка удаления: ' . $e->getMessage());
         }
     }

@@ -7,7 +7,6 @@
             <h1 class="text-3xl font-bold text-gray-800">Все пользователи</h1>
         </div>
 
-        <!-- Поиск -->
         <form method="GET" class="mb-6 flex gap-3">
             <input type="text"
                    name="search"
@@ -103,19 +102,16 @@
                             {{ $user->created_at->format('d.m.Y H:i') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
-                            <!-- Просмотр -->
                             <a href="{{ route('admin.users.show', $user) }}"
                                class="text-gray-600 hover:text-blue-600" title="Просмотр">
                                 <i class="fas fa-eye"></i>
                             </a>
 
-                            <!-- Редактировать -->
                             <a href="{{ route('admin.users.edit', $user) }}"
                                class="text-gray-600 hover:text-indigo-600" title="Редактировать">
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <!-- Удалить (с защитой) -->
                             @if($user->id !== auth()->id() && !( \App\Models\User::role('admin')->count() === 1 && $user->hasRole('admin') ))
                                 <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline">
                                     @csrf @method('DELETE')

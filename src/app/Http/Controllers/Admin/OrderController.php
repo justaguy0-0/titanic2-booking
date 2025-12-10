@@ -137,7 +137,6 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
-        \Log::info('Update order request:', $request->all());
 
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -156,7 +155,6 @@ class OrderController extends Controller
         try {
             \DB::beginTransaction();
 
-            // Обновляем основную информацию заказа
             $order->update([
                 'user_id' => $validated['user_id'],
                 'status' => $validated['status'],
@@ -164,14 +162,11 @@ class OrderController extends Controller
                 'final_price' => $validated['final_price'],
             ]);
 
-            // Обрабатываем билеты
-            // Собираем все ID билетов, которые должны остаться в заказе
             $allTicketIds = array_merge(
                 $validated['existing_tickets'] ?? [],
                 $validated['tickets'] ?? []
             );
 
-            // Удаляем билеты, которых больше нет в заказе
             $order->orderItems()
                 ->where('item_type', 'ticket')
                 ->whereNotIn('ticket_id', $allTicketIds)
@@ -182,7 +177,6 @@ class OrderController extends Controller
                     $item->delete();
                 });
 
-            // Добавляем новые билеты
             if (!empty($validated['tickets'])) {
                 foreach ($validated['tickets'] as $ticketId) {
                     $ticket = Ticket::find($ticketId);
@@ -208,7 +202,6 @@ class OrderController extends Controller
                 }
             }
 
-            // Обрабатываем развлечения
             $order->orderItems()
                 ->where('item_type', 'entertainment')
                 ->delete();

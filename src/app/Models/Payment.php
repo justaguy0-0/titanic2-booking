@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    /** @use HasFactory<\Database\Factories\PaymentFactory> */
     use HasFactory;
 
     protected $fillable = [
-    'order_id', // foreign key
+    'order_id',
     'amount',
     'provider',
     'transaction_id',

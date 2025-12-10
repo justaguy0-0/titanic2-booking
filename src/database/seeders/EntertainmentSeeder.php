@@ -8,9 +8,6 @@ use App\Models\Entertainment;
 
 class EntertainmentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $entertainments = [
@@ -68,7 +65,7 @@ class EntertainmentSeeder extends Seeder
         foreach ($entertainments as $entertainment) {
             Entertainment::firstOrCreate(
                 ['name' => $entertainment['name']],
-                $entertainment 
+                $entertainment
             );
         }
     }

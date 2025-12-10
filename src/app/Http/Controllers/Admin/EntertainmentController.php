@@ -52,11 +52,6 @@ class EntertainmentController extends Controller
             return redirect()->route('admin.entertainments.index')->with('success', 'Развлечение успешно добавлено.');
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
     public function edit(Entertainment $entertainment)
     {
         return view('admin.entertainments.edit', compact('entertainment'));

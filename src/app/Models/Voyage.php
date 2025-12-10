@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Voyage extends Model
 {
-    /** @use HasFactory<\Database\Factories\VoyageFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -47,10 +46,6 @@ class Voyage extends Model
         return number_format((float)$this->base_price, 2, ',', ' ') . ' ₽';
     }
 
-    /**
-     * Accessor: Получить длительность путешествия в днях
-     * Использование: $voyage->duration_days
-     */
     public function getDurationDaysAttribute()
     {
         if ($this->departure_date && $this->arrival_date) {

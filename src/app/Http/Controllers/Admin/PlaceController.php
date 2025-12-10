@@ -57,11 +57,6 @@ class PlaceController extends Controller
         return redirect()->route('admin.places.index', ['type' => $type])->with('success', 'Место добавлено!');
     }
 
-    public function show(string $id)
-    {
-        //
-    }
-
     public function edit(Place $place)
     {
         return view('admin.places.edit', compact('place'));

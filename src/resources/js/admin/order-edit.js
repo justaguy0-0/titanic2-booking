@@ -35,18 +35,15 @@ function updateSelectedTickets() {
 function updateTotalPrice() {
     let total = 0;
 
-    // Текущие билеты
     document.querySelectorAll('.current-ticket-item').forEach(item => {
         const price = parseFloat(item.dataset.price || 0);
         total += price;
     });
 
-    // Новые выбранные билеты
     document.querySelectorAll('.ticket-checkbox:checked').forEach(cb => {
         total += parseFloat(cb.dataset.price || 0);
     });
 
-    // Развлечения
     document.querySelectorAll('.entertainment-item').forEach(item => {
         const checkbox = item.querySelector('.ent-checkbox');
         const quantityInput = item.querySelector('.ent-quantity');
@@ -73,13 +70,11 @@ function updateTotalPrice() {
     }
 }
 
-// Функция для удаления билета через AJAX
 function deleteTicket(itemId, deleteUrl) {
     if (!confirm('Удалить билет из заказа?')) {
         return;
     }
 
-    // Получаем CSRF токен
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ||
         document.querySelector('input[name="_token"]')?.value;
 
@@ -89,7 +84,6 @@ function deleteTicket(itemId, deleteUrl) {
         return;
     }
 
-    // Показываем индикатор загрузки
     const button = document.querySelector(`.delete-ticket-btn[data-item-id="${itemId}"]`);
     if (button) {
         const originalText = button.textContent;
@@ -97,25 +91,22 @@ function deleteTicket(itemId, deleteUrl) {
         button.disabled = true;
     }
 
-    // Используем fetch для отправки DELETE запроса
     fetch(deleteUrl, {
         method: 'DELETE',
         headers: {
             'X-CSRF-TOKEN': csrfToken,
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest' // Добавляем заголовок для Laravel
+            'X-Requested-With': 'XMLHttpRequest'
         },
     })
         .then(response => {
-            // Восстанавливаем кнопку
             if (button) {
                 button.textContent = 'Удалить';
                 button.disabled = false;
             }
 
             if (!response.ok) {
-                // Если ответ не OK, пытаемся прочитать JSON ошибки
                 return response.json().then(errorData => {
                     throw new Error(errorData.message || 'Ошибка при удалении билета');
                 }).catch(() => {
@@ -127,16 +118,13 @@ function deleteTicket(itemId, deleteUrl) {
         })
         .then(data => {
             if (data.success) {
-                // Удаляем элемент из DOM
                 const ticketItem = document.querySelector(`.current-ticket-item[data-item-id="${itemId}"]`);
                 if (ticketItem) {
                     ticketItem.remove();
                     updateTotalPrice();
 
-                    // Показываем сообщение об успехе
                     showNotification(data.message || 'Билет успешно удален из заказа', 'success');
 
-                    // Обновляем список доступных билетов (перезагружаем страницу)
                     setTimeout(() => {
                         window.location.reload();
                     }, 1500);
@@ -149,7 +137,6 @@ function deleteTicket(itemId, deleteUrl) {
             console.error('Error:', error);
             showNotification(error.message || 'Ошибка при удалении билета', 'error');
 
-            // Восстанавливаем кнопку в случае ошибки
             if (button) {
                 button.textContent = 'Удалить';
                 button.disabled = false;
@@ -157,12 +144,9 @@ function deleteTicket(itemId, deleteUrl) {
         });
 }
 
-// Вспомогательная функция для уведомлений
 function showNotification(message, type = 'info') {
-    // Удаляем старые уведомления
     document.querySelectorAll('.custom-notification').forEach(el => el.remove());
 
-    // Создаем элемент уведомления
     const notification = document.createElement('div');
     notification.className = `custom-notification fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
         type === 'success' ? 'bg-green-500 text-white' :
@@ -173,7 +157,6 @@ function showNotification(message, type = 'info') {
 
     document.body.appendChild(notification);
 
-    // Удаляем уведомление через 5 секунд
     setTimeout(() => {
         if (notification.parentNode) {
             notification.remove();
@@ -181,11 +164,9 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Инициализация при загрузке
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Скрипт редактирования заказа загружен');
 
-    // Инициализация билетов
     document.querySelectorAll('.ticket-checkbox').forEach(cb => {
         cb.addEventListener('change', () => {
             updateSelectedTickets();
@@ -193,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Инициализация развлечений
     document.querySelectorAll('.ent-checkbox').forEach(cb => {
         cb.addEventListener('change', function() {
             const item = this.closest('.entertainment-item');
@@ -207,7 +187,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateTotalPrice();
         });
 
-        // Триггерим change для инициализации состояния
         if (cb.checked) {
             const item = cb.closest('.entertainment-item');
             const quantityInput = item?.querySelector('.ent-quantity');
@@ -221,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', updateTotalPrice);
     });
 
-    // Поиск билетов
     const searchInput = document.getElementById('ticket-search');
     if (searchInput) {
         searchInput.addEventListener('input', function() {
@@ -233,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Обработка кнопок удаления билетов
     document.querySelectorAll('.delete-ticket-btn').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
@@ -251,17 +228,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Упрощенная обработка кнопки сохранения
     const saveButton = document.getElementById('save-button');
     const editOrderForm = document.getElementById('editOrderForm');
 
     if (saveButton && editOrderForm) {
-        // Удаляем все предыдущие обработчики
         saveButton.replaceWith(saveButton.cloneNode(true));
         const newSaveButton = document.getElementById('save-button');
 
         newSaveButton.addEventListener('click', function(e) {
-            // Простая проверка формы
             const userId = document.getElementById('user_id').value;
             if (!userId) {
                 e.preventDefault();
@@ -270,12 +244,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             console.log('Сохранение формы...');
-            // Форма отправится обычным образом
             return true;
         });
     }
 
-    // Первоначальный расчет
     updateSelectedTickets();
     updateTotalPrice();
 });

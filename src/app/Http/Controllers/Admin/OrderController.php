@@ -153,7 +153,7 @@ class OrderController extends Controller
         ]);
 
         try {
-            \DB::beginTransaction();
+            DB::beginTransaction();
 
             $order->update([
                 'user_id' => $validated['user_id'],
@@ -227,14 +227,14 @@ class OrderController extends Controller
                 }
             }
 
-            \DB::commit();
+            DB::commit();
 
             return redirect()->route('admin.orders.edit', $order)
                 ->with('success', 'Заказ успешно обновлён.');
 
         } catch (\Exception $e) {
-            \DB::rollBack();
-            \Log::error('Error updating order: ' . $e->getMessage());
+            DB::rollBack();
+            Log::error('Error updating order: ' . $e->getMessage());
 
             return redirect()->back()
                 ->with('error', 'Произошла ошибка при обновлении заказа: ' . $e->getMessage())

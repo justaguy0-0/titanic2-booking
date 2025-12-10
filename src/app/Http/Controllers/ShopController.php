@@ -52,8 +52,8 @@ class ShopController extends Controller
         return view('shop.select-tickets', compact('voyage', 'tickets', 'availableCabinTypes', 'entertainments'));
     }
 
-    
-    public function purchase(Request $request)
+
+    public function createOrder(Request $request)
     {
         $validated = $request->validate([
             'voyage_id' => 'required|exists:voyages,id',
@@ -442,15 +442,4 @@ class ShopController extends Controller
             'loyalty_info' => $loyaltyInfo
         ];
     }
-    public function voyage()
-{
-    
-    $voyages = Voyage::with(['departurePlace', 'arrivalPlace'])
-        ->where('departure_date', '>=', now())
-        ->orderBy('departure_date')
-        ->get();
-
-    
-    return view('voyage', compact('voyages'));
-}
 }

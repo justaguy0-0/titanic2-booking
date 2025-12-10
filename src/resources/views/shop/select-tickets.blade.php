@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <form action="{{ route('shop.purchase') }}" method="POST" id="purchase-form">
+            <form action="{{ route('shop.create-order') }}" method="POST" id="purchase-form">
                 @csrf
                 <input type="hidden" name="voyage_id" value="{{ $voyage->id }}">
 

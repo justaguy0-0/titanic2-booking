@@ -2,7 +2,31 @@
    HOME PAGE - СТИЛИ
    ============================================ */
 
-/* Hero секция */
+/* Hero секція */
+.hero-section {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-section img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(0.5);
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 1;
+}
+
 .hero-title {
     font-family: Georgia, serif;
     color: #fbbf24;
@@ -59,11 +83,12 @@
 }
 
 .cabin-image {
+    width: 100%;
     height: 200px;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
     border: 1px solid #fbbf24;
     transition: all 0.3s ease;
+    filter: brightness(0.7);
 }
 
 .cabin-comparison-card:hover .cabin-image {
@@ -83,39 +108,6 @@
 .cabin-features {
     color: #94a3b8;
     font-size: 0.8rem;
-}
-
-/* Специфичные изображения кают */
-.cabin-image-rouz {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabinaf.webp');
-}
-
-.cabin-image-cost {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/cabinareal.jpg');
-}
-
-.cabin-image-djek {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/nosfilm.webp');
-}
-
-.cabin-image-chip {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/realnos.webp');
-}
-
-.cabin-image-lestni {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/lestni.webp');
-}
-
-.cabin-image-film {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/film.jpg');
-}
-
-.cabin-image-restfilm {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/restfilm.webp');
-}
-
-.cabin-image-film2 {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/film2.jpg');
 }
 
 /* Информационный блок */
@@ -142,44 +134,17 @@
 }
 
 .entertainment-image {
+    width: 100%;
     height: 300px;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
     border: 2px solid #fbbf24;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    filter: brightness(0.7);
 }
 
 .entertainment-image:hover {
     transform: scale(1.02);
     box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-}
-
-.entertainment-image-rest {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rest.jpg');
-}
-
-.entertainment-image-spa {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/spa.jpg');
-}
-
-.entertainment-image-mus {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/mus.jpg');
-}
-
-.entertainment-image-child {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/child.jpg');
-}
-
-.entertainment-image-akro {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/akro.jpg');
-}
-
-.entertainment-image-dance {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/dance.webp');
-}
-
-.entertainment-image-ioga {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/ioga.jpg');
 }
 
 /* Бейджи */
@@ -225,27 +190,16 @@
 }
 
 .restaurant-image {
+    width: 100%;
     height: 250px;
-    background-size: cover;
-    background-position: center;
+    object-fit: cover;
     border: 2px solid #fbbf24;
     transition: all 0.3s ease;
+    filter: brightness(0.7);
 }
 
 .restaurant-card:hover .restaurant-image {
     box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-}
-
-.restaurant-image-1 {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rest1.webp');
-}
-
-.restaurant-image-2 {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/rest2.jpg');
-}
-
-.restaurant-image-3 {
-    background-image: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('../../images/Rest3_new.jpg');
 }
 
 /* Media queries */

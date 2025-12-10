@@ -215,7 +215,7 @@
                     </div>
                 </div>
 
-               
+
                 <div class="row g-4 mt-4">
                     <div class="col-lg-8">
                         <div class="section-card entertainment-card-select">
@@ -239,18 +239,18 @@
                                                                 {{ number_format($ent->price, 0) }} ₽
                                                             </div>
                                                         </div>
-                                                        <small class="entertainment-desc text-muted d-block">
+                                                        <small class="entertainment-desc d-block">
                                                             {{ $ent->description ?? 'Дополнительная услуга' }}
                                                         </small>
                                                     </div>
-                                                    
+
                                                     <div class="quantity-control">
-                                                        <input type="hidden" name="entertainments[{{ $index }}][id]" 
+                                                        <input type="hidden" name="entertainments[{{ $index }}][id]"
                                                                value="{{ $ent->id }}">
                                                         <div class="d-flex align-items-center justify-content-between">
                                                             <label class="me-3 mb-0">Количество:</label>
                                                             <div class="input-group input-group-sm" style="width: 150px;">
-                                                                <button type="button" 
+                                                                <button type="button"
                                                                         class="btn btn-outline-secondary quantity-minus"
                                                                         data-target="entertainments[{{ $index }}][quantity]">
                                                                     <i class="fas fa-minus"></i>
@@ -263,7 +263,7 @@
                                                                        class="quantity-input form-control text-center"
                                                                        data-price="{{ $ent->price }}"
                                                                        id="entertainment-qty-{{ $index }}">
-                                                                <button type="button" 
+                                                                <button type="button"
                                                                         class="btn btn-outline-secondary quantity-plus"
                                                                         data-target="entertainments[{{ $index }}][quantity]">
                                                                     <i class="fas fa-plus"></i>
@@ -271,11 +271,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="text-center mt-2">
-                                                            <small class="text-muted">Макс. 10 шт. на человека</small>
+                                                            <small>Макс. 10 шт. на человека</small>
                                                         </div>
                                                     </div>
-                                                    
-                                                  
+
+
                                                 </div>
                                             </div>
                                         @endforeach
@@ -289,7 +289,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-lg-4">
                         <div class="total-card">
                             <div class="card-body p-4">
@@ -422,13 +422,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    
+
     document.querySelectorAll('.quantity-plus').forEach(button => {
         button.addEventListener('click', function() {
             const targetName = this.dataset.target;
             const input = document.querySelector(`input[name="${targetName}"]`);
             const max = parseInt(input.max) || 10;
-            
+
             let value = parseInt(input.value) || 0;
             if (value < max) {
                 value++;
@@ -437,13 +437,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     document.querySelectorAll('.quantity-minus').forEach(button => {
         button.addEventListener('click', function() {
             const targetName = this.dataset.target;
             const input = document.querySelector(`input[name="${targetName}"]`);
             const min = parseInt(input.min) || 0;
-            
+
             let value = parseInt(input.value) || 0;
             if (value > min) {
                 value--;

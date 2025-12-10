@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VoyageController;
+use App\Http\Controllers\SupportController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EntertainmentController;
 use App\Http\Controllers\Admin\TicketController;
-use App\Http\Controllers\Admin\VoyageController;
+use App\Http\Controllers\Admin\VoyageController as AdminVoyageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\CabinTypeController;
@@ -22,10 +24,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 
-Route::get('/voyage', function () {
-    return view('voyage');
-})->name('voyage');
+Route::get('/voyage', [VoyageController::class, 'index'])->name('voyage');
 
+Route::get('/support', [SupportController::class, 'index'])->name('support');
 
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 
@@ -33,7 +34,7 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::middleware('auth')->group(function () {
 
     Route::get('/shop/select-tickets/{voyage}', [ShopController::class, 'showVoyage'])->name('shop.select-tickets');
-    Route::post('/shop/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
+    Route::post('/shop/create-order', [ShopController::class, 'createOrder'])->name('shop.create-order');
     Route::get('/shop/payment', [ShopController::class, 'showPayment'])->name('shop.payment');
     Route::post('/shop/process-payment', [ShopController::class, 'processPayment'])->name('shop.process-payment');
 
@@ -54,7 +55,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('places', PlaceController::class);
-    Route::resource('voyages', VoyageController::class);
+    Route::resource('voyages', AdminVoyageController::class);
     Route::resource('tickets', TicketController::class);
     Route::resource('orders', OrderController::class);
     Route::resource('entertainments', EntertainmentController::class);

@@ -102,19 +102,19 @@
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="text-sm">Ваш прогресс</span>
-                                    <span class="text-sm font-weight-bold">{{ $loyaltyInfo['progress'] }}%</span>
-                                </div>
-                                <div class="progress" style="height: 10px; border-radius: 5px; background-color: #e5e7eb;">
-                                    <div class="progress-bar" role="progressbar" 
-                                         style="width: {{ $loyaltyInfo['progress'] }}%; background: linear-gradient(45deg, #fbbf24, #f59e0b); border-radius: 5px;"
-                                         aria-valuenow="{{ $loyaltyInfo['progress'] }}" 
-                                         aria-valuemin="0" aria-valuemax="100">
-                                    </div>
+                        <div class="mb-3">
+                            <div class="text-center mb-1">
+                                <span class="text-sm">Ваш прогресс </span>
+                                
+                            </div>
+                            <div class="progress" style="height: 10px; border-radius: 5px; background-color: #e5e7eb;">
+                                <div class="progress-bar" role="progressbar" 
+                                    style="width: {{ $loyaltyInfo['progress'] }}%; background: linear-gradient(45deg, #fbbf24, #f59e0b); border-radius: 5px;"
+                                    aria-valuenow="{{ $loyaltyInfo['progress'] }}" 
+                                    aria-valuemin="0" aria-valuemax="100">
                                 </div>
                             </div>
+                        </div>
                             
                             <div class="row text-center mb-3">
                                 <div class="col-4">
@@ -224,7 +224,7 @@
                         </div>
 
                         <div class="col-md-6 col-lg-3">
-                            <a href="#" class="action-card action-card-yellow">
+                            <a href="{{ route('support') }}" class="action-card action-card-yellow">
                                 <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>

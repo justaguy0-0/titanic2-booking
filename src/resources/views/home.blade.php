@@ -3,6 +3,7 @@
 @section('main_content')
 
 <section class="hero-section text-center py-5">
+    <img src="/images/i.webp" alt="Титаник 2">
     <div class="container">
         <h1 class="display-4 fw-bold mb-3 hero-title">ТИТАНИК 2</h1>
         <p class="lead mb-4 hero-subtitle">Легенда возвращается в будущее</p>
@@ -29,14 +30,14 @@
                         <div class="col-md-6">
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
-                                <div class="cabin-image cabin-image-rouz mb-3"></div>
+                                <img src="{{ asset('images/cabinaf.webp') }}" alt="Кабина капитана" class="cabin-image mb-3">
                                 <p class="cabin-description">Кабина капитана</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
-                                <div class="cabin-image cabin-image-cost mb-3"></div>
+                                <img src="{{ asset('images/cabinareal.jpg') }}" alt="Новое управление" class="cabin-image mb-3">
                                 <p class="cabin-description">Новое управление</p>
                                 <div class="price-tag mb-2">Обеспечение</div>
                                 <ul class="list-unstyled cabin-features">
@@ -57,14 +58,14 @@
                         <div class="col-md-6">
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
-                                <div class="cabin-image cabin-image-djek mb-3"></div>
+                                <img src="{{ asset('images/nosfilm.webp') }}" alt="Нос корабля" class="cabin-image mb-3">
                                 <p class="cabin-description">Нос корабля</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
-                                <div class="cabin-image cabin-image-chip mb-3"></div>
+                                <img src="{{ asset('images/realnos.webp') }}" alt="Достопримечательность" class="cabin-image mb-3">
                                 <p class="cabin-description">Достопримечательность</p>
                                 <div class="price-tag mb-2">Место для ваших фото</div>
                                 <ul class="list-unstyled cabin-features">
@@ -88,14 +89,14 @@
                         <div class="col-md-6">
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
-                                <div class="cabin-image cabin-image-lestni mb-3"></div>
+                                <img src="{{ asset('images/lestni.webp') }}" alt="Парадная лестница" class="cabin-image mb-3">
                                 <p class="cabin-description">Парадная лестница</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
-                                <div class="cabin-image cabin-image-film mb-3"></div>
+                                <img src="{{ asset('images/film.jpg') }}" alt="Главный атриум" class="cabin-image mb-3">
                                 <p class="cabin-description">Главный атриум</p>
                                 <div class="price-tag mb-2">Общественное</div>
                                 <ul class="list-unstyled cabin-features">
@@ -116,14 +117,14 @@
                         <div class="col-md-6">
                             <div class="p-3 text-center">
                                 <h5 class="cabin-year">1912 ГОД</h5>
-                                <div class="cabin-image cabin-image-restfilm mb-3"></div>
+                                <img src="{{ asset('images/restfilm.webp') }}" alt="Ресторан 1 класса" class="cabin-image mb-3">
                                 <p class="cabin-description">Ресторан 1 класса</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="p-3 text-center cabin-modern">
                                 <h5 class="cabin-year">2042 ГОД</h5>
-                                <div class="cabin-image cabin-image-film2 mb-3"></div>
+                                <img src="{{ asset('images/film2.jpg') }}" alt="Гранд Салон" class="cabin-image mb-3">
                                 <p class="cabin-description">Гранд Салон</p>
                                 <div class="price-tag mb-2">Ресторан</div>
                                 <ul class="list-unstyled cabin-features">
@@ -160,7 +161,7 @@
         @foreach($entertainmentForHome as $index => $entertainment)
         <div class="row align-items-center mb-5 g-4">
             <div class="col-md-6 {{ $index % 2 != 0 ? 'order-md-2' : '' }}">
-                <div class="entertainment-image {{ $entertainment->image }} rounded"></div>
+                <img src="{{ asset('images/' . $entertainment->image) }}" alt="{{ $entertainment->name }}" class="entertainment-image rounded">
             </div>
             <div class="col-md-6 {{ $index % 2 != 0 ? 'order-md-1' : '' }}">
                 <h3 class="entertainment-title">{{ $entertainment->name }}</h3>
@@ -188,7 +189,7 @@
 
             <div class="col-md-4">
                 <div class="restaurant-card text-center">
-                    <div class="restaurant-image restaurant-image-1 rounded mb-3"></div>
+                    <img src="{{ asset('images/rest1.webp') }}" alt="Палуба Нептуна" class="restaurant-image rounded mb-3">
                     <h4 class="restaurant-title">"Палуба Нептуна"</h4>
                     <p class="restaurant-subtitle small">Ресторан под открытым небом</p>
                     <p class="restaurant-description small">
@@ -205,7 +206,7 @@
 
             <div class="col-md-4">
                 <div class="restaurant-card text-center">
-                    <div class="restaurant-image restaurant-image-2 rounded mb-3"></div>
+                    <img src="{{ asset('images/rest2.jpg') }}" alt="Гранд Салон" class="restaurant-image rounded mb-3">
                     <h4 class="restaurant-title">"Гранд Салон"</h4>
                     <p class="restaurant-subtitle small">Премиум ресторан</p>
                     <p class="restaurant-description small">
@@ -222,7 +223,7 @@
 
             <div class="col-md-4">
                 <div class="restaurant-card text-center">
-                    <div class="restaurant-image restaurant-image-3 rounded mb-3"></div>
+                    <img src="{{ asset('images/Rest3_new.jpg') }}" alt="Океанский Фуршет" class="restaurant-image rounded mb-3">
                     <h4 class="restaurant-title">"Океанский Фуршет"</h4>
                     <p class="restaurant-subtitle small">Общая столовая</p>
                     <p class="restaurant-description small">

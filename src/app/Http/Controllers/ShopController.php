@@ -52,8 +52,8 @@ class ShopController extends Controller
         return view('shop.select-tickets', compact('voyage', 'tickets', 'availableCabinTypes', 'entertainments'));
     }
 
-    
-    public function purchase(Request $request)
+
+    public function createOrder(Request $request)
     {
         $validated = $request->validate([
             'voyage_id' => 'required|exists:voyages,id',

@@ -11,7 +11,7 @@ export default defineConfig({
             input: ['resources/css/app.css',
                     'resources/css/admin.css',
                     'resources/js/app.js',
-                    'resources/js/voyage-form.js',
+                    'resources/js/admin/voyage-form.js',
                     'resources/js/admin/order-create.js',
                     'resources/js/admin/order-edit.js',
                     'resources/js/admin/order-item-type-switcher.js',

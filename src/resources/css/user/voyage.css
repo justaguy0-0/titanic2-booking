@@ -22,7 +22,6 @@
     transition: opacity 0.3s ease;
 }
 
-/* ЭТО ВАЖНО - УБИРАЕМ ВСЕ HOVER ЭФФЕКТЫ ДЛЯ ТОЧЕК */
 .city-dot:hover,
 .city-dot-group:hover,
 .iceberg-dot:hover {
@@ -31,7 +30,6 @@
     filter: none !important;
 }
 
-/* ОТКЛЮЧАЕМ ВСЕ ПЕРЕХОДЫ ДЛЯ SVG */
 .route-map svg * {
     transition: none !important;
 }
@@ -54,11 +52,11 @@
     .route-map {
         height: 300px !important;
     }
-    
+
     .route-map svg text {
         font-size: 10px !important;
     }
-    
+
     .route-map svg circle {
         r: 6 !important;
         stroke-width: 1.5 !important;
@@ -69,11 +67,11 @@
     .route-map {
         height: 250px !important;
     }
-    
+
     .route-map svg text {
         font-size: 8px !important;
     }
-    
+
     .route-map svg circle {
         r: 4 !important;
     }

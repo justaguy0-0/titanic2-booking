@@ -11,6 +11,7 @@
 @import 'user/select-tickets.css';
 @import 'user/payment.css';
 @import 'user/dashboard.css';
+@import 'components/alert.css';
 
 @tailwind base;
 @tailwind components;

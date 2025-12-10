@@ -1,13 +1,7 @@
-/* ============================================
-   SHOP PAGE - СТИЛИ РЕЙСОВ И РАЗВЛЕЧЕНИЙ
-   ============================================ */
-
-/* Фоны и контейнеры */
 .shop-container {
     min-height: 100vh;
 }
 
-/* Компактный заголовок страницы */
 .shop-page-header {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     border-radius: 16px;
@@ -41,7 +35,6 @@
     }
 }
 
-/* Карточки рейсов */
 .flight-card {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     border-radius: 16px;
@@ -139,7 +132,6 @@
     50% { transform: scale(1.05); }
 }
 
-/* Сообщения */
 .shop-alert {
     background: linear-gradient(135deg, #1e293b, #334155);
     border: 2px solid #fbbf24;
@@ -160,7 +152,6 @@
     }
 }
 
-/* Заголовок секции */
 .shop-section-title {
     color: #fbbf24;
     font-family: Georgia, serif;
@@ -182,7 +173,6 @@
     border-radius: 2px;
 }
 
-/* Карточка развлечений */
 .entertainment-card {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     border-radius: 16px;
@@ -238,7 +228,6 @@
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Accordion стили для развлечений */
 #entertainmentsAccordion .entertainment-accordion-item {
     background: transparent !important;
     border: none !important;
@@ -287,7 +276,6 @@
     opacity: 1 !important;
 }
 
-/* Дополнительные стили для даты рейса */
 .flight-date-container {
     background: rgba(251, 191, 36, 0.1);
     border-radius: 8px;
@@ -295,7 +283,6 @@
     border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
-/* Стили для длительности */
 .flight-duration {
     color: #94a3b8;
     font-size: 0.95rem;
@@ -304,5 +291,3 @@
     border-radius: 6px;
     display: inline-block;
 }
-
-/* .btn-gold, body, .accordion-button удалены - используются из head.css */

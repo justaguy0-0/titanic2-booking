@@ -1,17 +1,11 @@
-/* ============================================
-   БАЗОВЫЕ СТИЛИ BODY
-   ============================================ */
 body, html {
     margin: 0 !important;
     padding: 0 !important;
     background: #0f172a;
     color: #fcd34d;
-    overflow-x: hidden; /* Убираем горизонтальный скролл */
+    overflow-x: hidden;
 }
 
-/* ============================================
-   HEADER СТИЛИ
-   ============================================ */
 .site-header {
     background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%);
     border-bottom: 2px solid #fbbf24;
@@ -34,7 +28,6 @@ body, html {
     margin-bottom: 0;
 }
 
-/* Стили для ссылок в шапке - ЖЕЛТЫЙ ЦВЕТ */
 header .nav-link {
     color: #fbbf24 !important;
     font-weight: 600;
@@ -146,9 +139,6 @@ header .nav-link:hover {
     color: #fcd34d;
 }
 
-/* ============================================
-   ACCORDION СТИЛИ
-   ============================================ */
 .accordion-button:not(.collapsed) {
     background: #475569 !important;
     color: #fbbf24 !important;
@@ -159,22 +149,15 @@ header .nav-link:hover {
     border-color: #fbbf24;
 }
 
-/* ============================================
-   MAIN СТИЛИ
-   ============================================ */
 main {
     background: #0f172a;
 }
 
-/* Фон для страниц login/register/password */
 body.auth-bg {
     background: #1e293b;
     min-height: 100vh;
 }
 
-/* ============================================
-   FOOTER СТИЛИ
-   ============================================ */
 .footer-section {
     background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
     border-top: 2px solid #fbbf24;
@@ -246,8 +229,8 @@ body.auth-bg {
     min-height: 80vh;
     display: flex;
     align-items: center;
-    width: 100vw; /* Важно! */
-    margin-left: -50vw; /* Важно! */
+    width: 100vw;
+    margin-left: -50vw;
     left: 50%;
     position: relative;
 }

@@ -12,7 +12,6 @@ main {
     padding-top: 1rem;
 }
 
-/* Заголовки страниц */
 .page-title {
     font-size: 1.75rem;
     font-weight: 700;
@@ -20,7 +19,6 @@ main {
     margin-bottom: 1.5rem;
 }
 
-/* Сообщения */
 .empty-message {
     text-align: center;
     padding: 2rem 0;

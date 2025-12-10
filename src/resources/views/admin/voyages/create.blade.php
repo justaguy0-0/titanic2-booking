@@ -1,12 +1,12 @@
 @extends('admin.admin')
 
-@section('title', 'Добавить путешествие')
+@section('title', 'Добавить рейс')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">Добавить путешествие</h1>
-        <p class="text-gray-600 mt-2">Введите данные и сохраните новое путешествие</p>
+        <h1 class="text-3xl font-bold text-gray-800">Добавить рейс</h1>
+        <p class="text-gray-600 mt-2">Введите данные и сохраните новое рейс</p>
     </div>
 
     <div class="bg-white shadow-md rounded-lg p-6 max-w-2xl">
@@ -17,43 +17,43 @@
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Название <span class="text-red-500">*</span></label>
                 <input type="text" name="name" id="name" value="{{ old('name') }}"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('name') border-red-500 @enderror"
-                       placeholder="Например: Путешествие к айсбергу" required>
+                       placeholder="Например: Рейс к айсбергу" required>
                 @error('name')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="mb-6">
-                <label for="place_departure" class="block text-sm font-medium text-gray-700 mb-2">Место отправления <span class="text-red-500">*</span></label>
-                <select name="place_departure" id="place_departure"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('place_departure') border-red-500 @enderror"
+                <label for="departure_place_id" class="block text-sm font-medium text-gray-700 mb-2">Место отправления <span class="text-red-500">*</span></label>
+                <select name="departure_place_id" id="departure_place_id"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('departure_place_id') border-red-500 @enderror"
                         required>
                     <option value="">Выберите место отправления</option>
-                    @foreach($placeDepartures as $departure)
-                        <option value="{{ $departure->id }}" {{ old('place_departure') == $departure->id ? 'selected' : '' }}>
-                            {{ $departure->name }}
+                    @foreach($departures as $place)
+                        <option value="{{ $place->id }}" {{ old('departure_place_id') == $place->id ? 'selected' : '' }}>
+                            {{ $place->name }}
                         </option>
                     @endforeach
                 </select>
-                @error('place_departure')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @error('departure_place_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="mb-6">
-                <label for="iceberg_arrival" class="block text-sm font-medium text-gray-700 mb-2">Место прибытия <span class="text-red-500">*</span></label>
-                <select name="iceberg_arrival" id="iceberg_arrival"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('iceberg_arrival') border-red-500 @enderror"
+                <label for="arrival_place_id" class="block text-sm font-medium text-gray-700 mb-2">Место прибытия <span class="text-red-500">*</span></label>
+                <select name="arrival_place_id" id="arrival_place_id"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('arrival_place_id') border-red-500 @enderror"
                         required>
                     <option value="">Выберите место прибытия</option>
-                    @foreach($icebergArrivals as $arrival)
-                        <option value="{{ $arrival->id }}" {{ old('iceberg_arrival') == $arrival->id ? 'selected' : '' }}>
-                            {{ $arrival->name }}
+                    @foreach($arrivals as $place)
+                        <option value="{{ $place->id }}" {{ old('arrival_place_id') == $place->id ? 'selected' : '' }}>
+                            {{ $place->name }}
                         </option>
                     @endforeach
                 </select>
-                @error('iceberg_arrival')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @error('arrival_place_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -78,12 +78,16 @@
             </div>
 
             <div class="mb-6">
-                <label for="travel_time" class="block text-sm font-medium text-gray-700 mb-2">Время в пути (часы) <span class="text-red-500">*</span></label>
+                <label for="travel_time" class="block text-sm font-medium text-gray-700 mb-2">
+                    Время в пути (часы) <span class="text-red-500">*</span>
+                    <span class="text-xs text-gray-500 font-normal">(автозаполняется)</span>
+                </label>
                 <input type="number" name="travel_time" id="travel_time" value="{{ old('travel_time') }}"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('travel_time') border-red-500 @enderror"
-                       required>
+                       required readonly>
+                <p class="text-xs text-gray-500 mt-1">Вычисляется автоматически по датам отправления и прибытия</p>
                 @error('travel_time')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -108,4 +112,7 @@
         </form>
     </div>
 </div>
+
+@vite('resources/js/admin/voyage-form.js')
+
 @endsection

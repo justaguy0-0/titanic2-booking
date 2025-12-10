@@ -7,33 +7,38 @@ use Illuminate\Database\Eloquent\Model;
 
 class Voyage extends Model
 {
-    /** @use HasFactory<\Database\Factories\VoyageFactory> */
     use HasFactory;
 
     protected $fillable = [
-    'name',
-    'place_departure', // foreign key
-    'iceberg_arrival', // foreign key
-    'departure_date',
-    'arrival_date',
-    'travel_time',
-    'base_price',
-];
+        'name',
+        'departure_place_id',
+        'arrival_place_id',
+        'departure_date',
+        'arrival_date',
+        'travel_time',
+        'base_price',
+    ];
 
-protected $casts = [
+    protected $casts = [
         'departure_date' => 'datetime',
         'arrival_date' => 'datetime',
         'travel_time' => 'integer',
-        'base_price' => 'decimal:2', // 2 знака после запятой
+        'base_price' => 'decimal:2',
     ];
- public function placeDeparture()
+
+    public function departurePlace()
     {
-        return $this->belongsTo(PlaceDeparture::class, 'place_departure');
+        return $this->belongsTo(Place::class, 'departure_place_id');
     }
 
-    public function icebergArrival()
+    public function arrivalPlace()
     {
-        return $this->belongsTo(IcebergArrival::class, 'iceberg_arrival');
+        return $this->belongsTo(Place::class, 'arrival_place_id');
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class, 'voyages_id');
     }
 
     public function getFormattedPriceAttribute()
@@ -41,10 +46,6 @@ protected $casts = [
         return number_format((float)$this->base_price, 2, ',', ' ') . ' ₽';
     }
 
-    /**
-     * Accessor: Получить длительность путешествия в днях
-     * Использование: $voyage->duration_days
-     */
     public function getDurationDaysAttribute()
     {
         if ($this->departure_date && $this->arrival_date) {

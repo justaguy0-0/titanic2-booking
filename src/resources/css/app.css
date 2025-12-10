@@ -1,3 +1,18 @@
+/* Font Awesome */
+@import "@fortawesome/fontawesome-free/css/all.min.css";
+
+/* Bootstrap CSS */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+@import 'user/head.css';
+@import 'user/home.css';
+@import 'user/voyage.css';
+@import 'user/shop.css';
+@import 'user/select-tickets.css';
+@import 'user/payment.css';
+@import 'user/dashboard.css';
+@import 'components/alert.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

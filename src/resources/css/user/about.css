@@ -1,0 +1,110 @@
+.hero-title {
+    font-family: Georgia, serif;
+    color: #fbbf24;
+}
+
+.hero-subtitle {
+    font-family: Georgia, serif;
+    color: #fcd34d;
+    font-style: italic;
+}
+
+.company-info {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.company-text {
+    color: #fcd34d;
+}
+.text-gold {
+    color: #fbbf24;
+}
+
+.carousel-item img {
+    filter: brightness(0.7);
+}
+
+.carousel-caption {
+    background: rgba(15, 23, 42, 0.7);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.feature-highlight {
+    border-left: 3px solid #fbbf24;
+    transition: transform 0.3s ease;
+}
+
+.feature-highlight:hover {
+    transform: translateY(-2px);
+}
+.text-gold {
+    color: #fbbf24;
+}
+
+.text-blue {
+    color: #3b82f6;
+}
+
+.about-section {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.about-section:hover {
+    transform: translateY(-5px);
+}
+
+.plan-card {
+    transition: all 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.plan-icon {
+    margin-top: 2px;
+}
+
+.quote-section {
+    font-style: italic;
+}
+
+.stat-number {
+    font-family: 'Arial', sans-serif;
+}
+
+.final-banner {
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timeline-item {
+    position: relative;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fbbf24;
+}
+
+@media (max-width: 768px) {
+    .timeline-item:before {
+        left: -15px;
+    }
+    
+    .carousel-inner {
+        height: 300px !important;
+    }
+}

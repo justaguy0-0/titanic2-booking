@@ -1,0 +1,78 @@
+.review-card {
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+}
+
+.route-item:hover {
+    border-color: #fbbf24 !important;
+    background: #334155 !important;
+    transform: translateX(5px);
+}
+
+.route-item.active {
+    border-color: #fbbf24 !important;
+    background: #334155 !important;
+    transform: scale(1.02);
+}
+
+.route-line {
+    transition: opacity 0.3s ease;
+}
+
+.city-dot:hover,
+.city-dot-group:hover,
+.iceberg-dot:hover {
+    r: 10 !important;
+    transform: none !important;
+    filter: none !important;
+}
+
+.route-map svg * {
+    transition: none !important;
+}
+
+.btn-gold {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    color: #0f172a;
+    border: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    color: #0f172a;
+}
+
+@media (max-width: 768px) {
+    .route-map {
+        height: 300px !important;
+    }
+
+    .route-map svg text {
+        font-size: 10px !important;
+    }
+
+    .route-map svg circle {
+        r: 6 !important;
+        stroke-width: 1.5 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .route-map {
+        height: 250px !important;
+    }
+
+    .route-map svg text {
+        font-size: 8px !important;
+    }
+
+    .route-map svg circle {
+        r: 4 !important;
+    }
+}

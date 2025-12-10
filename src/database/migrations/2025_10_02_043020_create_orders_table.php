@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
@@ -16,14 +13,14 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->decimal('total_price', 10, 2);
             $table->string('status', 20);
+            $table->integer('ticket_count')->default(1);
+            $table->decimal('loyalty_discount_applied', 5, 2)->default(0);
+            $table->decimal('final_price', 10, 2);
             $table->timestamps();
             $table->engine = 'InnoDB';
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('orders');

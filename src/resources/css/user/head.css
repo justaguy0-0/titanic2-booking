@@ -1,0 +1,236 @@
+body, html {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #0f172a;
+    color: #fcd34d;
+    overflow-x: hidden;
+}
+
+.site-header {
+    background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%);
+    border-bottom: 2px solid #fbbf24;
+}
+
+.site-logo-title {
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+    color: #fbbf24;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.site-logo-subtitle {
+    font-family: Georgia, serif;
+    font-size: 0.75rem;
+    color: #fcd34d;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+header .nav-link {
+    color: #fbbf24 !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+header .nav-link:hover {
+    color: #fcd34d !important;
+    border-bottom: 2px solid #fcd34d;
+    padding-bottom: 0.25rem;
+}
+
+.btn-login {
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.btn-login:hover {
+    background-color: #fbbf24;
+    color: #1e293b;
+}
+
+.btn-signup {
+    background-color: #fbbf24;
+    color: #1e293b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.btn-signup:hover {
+    background-color: #f59e0b;
+    color: #1e293b;
+}
+
+.btn-logout {
+    border: 2px solid #fbbf24;
+    color: #fbbf24;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+}
+
+.btn-logout:hover {
+    background-color: #fbbf24;
+    color: #1e293b;
+}
+
+.btn-admin {
+    background: transparent;
+    border: 2px solid #f59e0b;
+    color: #f59e0b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    display: inline-block;
+}
+
+.btn-admin:hover {
+    background: #f59e0b;
+    color: #1e293b;
+    border-color: #fbbf24;
+}
+
+.btn-gold {
+    background: linear-gradient(45deg, #fbbf24, #f59e0b);
+    border: none;
+    color: #1e293b;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    background: linear-gradient(45deg, #f59e0b, #d97706);
+    color: #1e293b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4);
+}
+
+.user-name {
+    color: #fbbf24;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.user-name:hover {
+    color: #fcd34d;
+}
+
+.accordion-button:not(.collapsed) {
+    background: #475569 !important;
+    color: #fbbf24 !important;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(251, 191, 36, 0.25);
+    border-color: #fbbf24;
+}
+
+main {
+    background: #0f172a;
+}
+
+body.auth-bg {
+    background: #1e293b;
+    min-height: 100vh;
+}
+
+.footer-section {
+    background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    border-top: 2px solid #fbbf24;
+}
+
+.footer-brand-title {
+    color: #fbbf24;
+    font-family: Georgia, serif;
+}
+
+.footer-text {
+    color: #fcd34d;
+    line-height: 1.6;
+}
+
+.footer-heading {
+    color: #fbbf24;
+    margin-bottom: 1rem;
+}
+
+.footer-link {
+    color: #fcd34d;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    color: #fbbf24 !important;
+    text-decoration: underline !important;
+}
+
+.footer-contact-text {
+    color: #fcd34d;
+}
+
+.footer-copyright {
+    color: #94a3b8;
+}
+
+.footer-bottom-link {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.footer-bottom-link:hover {
+    color: #fbbf24 !important;
+    text-decoration: underline !important;
+}
+
+.social-icon {
+    color: #fcd34d;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    transform: scale(1.2);
+    transition: transform 0.3s ease;
+    color: #fbbf24 !important;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.8)),
+    url('../../images/i.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #fbbf24;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    width: 100vw;
+    margin-left: -50vw;
+    left: 50%;
+    position: relative;
+}

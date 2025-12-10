@@ -7,17 +7,35 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
 
     protected $fillable = [
         'user_id',
         'total_price',
         'status',
+        'ticket_count',           
+        'loyalty_discount_applied', 
+        'final_price',            
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    public function refreshTotalPrice()
+    {
+        $total = $this->orderItems()->sum(\DB::raw('price * quantity'));
+        $this->update(['total_price' => $total]);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 }

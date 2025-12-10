@@ -52,3 +52,14 @@ services:
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: password
+
+  cron:
+    build:
+      context: .
+      dockerfile: dockerfiles/cron.Dockerfile
+    volumes:
+      - ./src:/var/www/laravel
+    depends_on:
+      - mysql
+      - php
+    restart: unless-stopped

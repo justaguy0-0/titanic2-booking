@@ -4,66 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ТИТАНИК 2')</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @stack('styles')
 </head>
 <body class="@if(request()->is('login') || request()->is('register') || request()->is('password.request*')) auth-bg @endif">
 
-    {{-- Шапка для авторизованных пользователей --}}
-    @if (Auth::check())
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4"
-                style="background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%); border-bottom: 2px solid #fbbf24;">
-            
+    @if (Auth::check() || (!request()->routeIs('login') && !request()->routeIs('register') && !request()->is('password.request*')))
+        <header class="site-header d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3">
             <div class="col-md-3 mb-2 mb-md-0 ps-3">
                 <a href="/" class="d-inline-flex align-items-center text-decoration-none">
                     <div class="ms-2">
-                        <h1 class="mb-0" style="font-family: Georgia, serif; font-size: 1.5rem; color: #fbbf24; letter-spacing: 2px; font-weight: bold;">ТИТАНИК 2</h1>
-                        <p class="mb-0" style="font-family: Georgia, serif; font-size: 0.75rem; color: #fcd34d; font-style: italic;">Плавание сквозь Время</p>
+                        <h1 class="site-logo-title">ТИТАНИК 2</h1>
+                        <p class="site-logo-subtitle">Плавание сквозь Время</p>
                     </div>
                 </a>
             </div>
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-3">Home</a></li>
-                <li><a href="#" class="nav-link px-3">Voyage</a></li>
-                <li><a href="#" class="nav-link px-3">Amenities</a></li>
-                <li><a href="#" class="nav-link px-3">Booking</a></li>
+                <li><a href="{{ route('home') }}" class="nav-link px-3">Главная</a></li>
+                <li><a href="{{ route('about') }}" class="nav-link px-3">О нас</a></li> 
+                <li><a href="{{ route('voyage') }}" class="nav-link px-3">Рейсы</a></li>
+                <li><a href="{{ route('shop') }}" class="nav-link px-3">Билеты</a></li>
             </ul>
 
-            <div class="col-md-3 text-end pe-3">
-                <span class="me-3">
-                    <a href="profile" class="profile-link">{{ Auth::user()->name }}</a>
-                </span>
-                <form method="POST" action="{{ route('logout') }}" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-logout">Logout</button>
-                </form>
-            </div>
-        </header>
+            <div class="col-md-3 text-end pe-3 d-flex align-items-center justify-content-end gap-2">
+                @auth
+                    <a href="{{ route('dashboard') }}" class="user-name">
+                        <i class="fas fa-user me-1"></i>{{ Auth::user()->name }}
+                    </a>
 
-    {{-- Шапка для гостей (только на публичных страницах, кроме login/register/password) --}}
-    @elseif (!request()->routeIs('login') && !request()->routeIs('register') && !request()->is('password.request*'))
-        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3"
-                style="background: linear-gradient(90deg, #1e293b 0%, #334155 50%, #1e293b 100%); border-bottom: 2px solid #fbbf24;">
-            
-            <div class="col-md-3 mb-2 mb-md-0 ps-3">
-                <a href="/" class="d-inline-flex align-items-center text-decoration-none">
-                    <div class="ms-2">
-                        <h1 class="mb-0" style="font-family: Georgia, serif; font-size: 1.5rem; color: #fbbf24; letter-spacing: 2px; font-weight: bold;">ТИТАНИК 2</h1>
-                        <p class="mb-0" style="font-family: Georgia, serif; font-size: 0.75rem; color: #fcd34d; font-style: italic;">Плавание сквозь Время</p>
-                    </div>
-                </a>
-            </div>
+                    @if(Auth::user()->hasRole('admin'))
+                        <a href="{{ route('admin.dashboard.index') }}" class="btn btn-admin">
+                            <i class="fas fa-crown me-1"></i>Админка
+                        </a>
+                    @endif
 
-            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-3">Home</a></li>
-                <li><a href="#" class="nav-link px-3">Voyage</a></li>
-                <li><a href="#" class="nav-link px-3">Amenities</a></li>
-                <li><a href="#" class="nav-link px-3">Booking</a></li>
-            </ul>
-
-            <div class="col-md-3 text-end pe-3">
-                <a href="{{ route('login') }}" class="btn btn-login me-2">Login</a>
-                <a href="{{ route('register') }}" class="btn btn-signup">Sign-up</a>
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-logout">Выйти</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-login">Войти</a>
+                    <a href="{{ route('register') }}" class="btn btn-signup">Регистрация</a>
+                @endauth
             </div>
         </header>
     @endif
@@ -72,93 +57,97 @@
         @yield('main_content')
     </main>
 
-    <style>
-        /* Навигация */
-        header .nav-link {
-            color: #fcd34d;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
+    @if (Auth::check() || (!request()->routeIs('login') && !request()->routeIs('register') && !request()->is('password.request*')))
+        <footer class="footer-section py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-5 col-md-6">
+                    <div class="footer-brand mb-3">
+                        <h4 class="footer-brand-title">ТИТАНИК 2</h4>
+                    </div>
+                    <p class="footer-text">
+                        Легенда возвращается в будущее. Самый роскошный круизный лайнер 21 века,
+                        сочетающий историческое наследие с современными технологиями.
+                    </p>
+                 
+                </div>
 
-        header .nav-link:hover {
-            color: #fbbf24 !important;
-            border-bottom: 2px solid #fbbf24;
-            padding-bottom: 0.25rem;
-        }
+                <div class="col-lg-7 col-md-6">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <h5 class="footer-heading">Навигация</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="{{ route('home') }}" class="footer-link">Главная</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ route('shop') }}" class="footer-link">Билеты</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ route('voyage') }}" class="footer-link">Рейсы</a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ route('about') }}" class="footer-link">О нас</a>
+                                </li>
+                                @auth
+                                    <li class="mb-2">
+                                        <a href="{{ route('dashboard') }}" class="footer-link">Личный кабинет</a>
+                                    </li>
+                                @endauth
+                            </ul>
+                        </div>
 
-        /* Кнопки */
-        .btn-login {
-            border: 2px solid #fbbf24;
-            color: #fbbf24;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
+                        <div class="col-md-7">
+                            <h5 class="footer-heading">Контакты и поддержка</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <div class="footer-contact-text">
+                                        <i class="fas fa-phone me-2"></i>
+                                        <span>+7 (800) 555-35-35</span>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="footer-contact-text">
+                                        <i class="fas fa-envelope me-2"></i>
+                                        <span>booking@titanic2.ru</span>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="footer-contact-text">
+                                        <i class="fas fa-map-marker-alt me-2"></i>
+                                        <span>г. Москва, Порт Сочи</span>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="footer-contact-text">
+                                        <i class="fas fa-clock me-2"></i>
+                                        <span>Пн-Вс: 9:00-21:00</span>
+                                    </div>
+                                </li>
+                                @guest
+                                    <li class="mb-2">
+                                        <a href="{{ route('login') }}" class="footer-link">Войти в аккаунт</a>
+                                    </li>
+                                    <li class="mb-2">
+                                        <a href="{{ route('register') }}" class="footer-link">Регистрация</a>
+                                    </li>
+                                @endguest
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        .btn-login:hover {
-            background-color: #a6801f;
-            color: #1e293b;
-        }
-
-        .btn-signup {
-            background-color: #fbbf24;
-            color: #1e293b;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: none;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-signup:hover {
-            background-color: #f59e0b;
-        }
-
-        .btn-logout {
-            border: 2px solid #fbbf24;
-            color: #fbbf24;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: none;
-            transition: all 0.3s ease;
-        }
-
-        .btn-logout:hover {
-            background-color: #a6801f;
-            color: #1e293b;
-        }
-
-        .profile-link {
-            color: #fcd34d;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .profile-link:hover {
-            color: #fbbf24 !important;
-            border-bottom: 2px solid #fbbf24;
-            padding-bottom: 0.25rem;
-        }
-
-        /* Фон для страниц login/register/password */
-        body.auth-bg {
-            background: #1e293b;  /* Однотонный темно-синий */
-            min-height: 100vh;
-        }
-
-        /* Отступ для контента */
-        main {
-            padding-top: 1rem;
-        }
-    </style>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <div class="row mt-5 pt-4 border-top border-secondary">
+                <div class="col-md-6">
+                    <p class="footer-copyright mb-0">
+                        &copy; 2026 Титаник 2. Все права защищены.
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+    </footer>
+    @endif
 </body>
 </html>

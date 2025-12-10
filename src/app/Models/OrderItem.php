@@ -7,13 +7,44 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
 {
-    /** @use HasFactory<\Database\Factories\OrderItemFactory> */
     use HasFactory;
 
     protected $fillable = [
-    'order_id', // foreign key (если добавил)
-    'user_id',
-    'total_price',
-    'status',
-];
+        'order_id',
+        'ticket_id',
+        'entertainment_id',
+        'type',
+        'price',
+        'quantity',
+        'item_type',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class);
+    }
+
+    public function entertainment()
+    {
+        return $this->belongsTo(Entertainment::class);
+    }
+
+    public function getItemAttribute()
+    {
+        return $this->item_type === 'ticket' ? $this->ticket : $this->entertainment;
+    }
+
+    public function passenger()
+    {
+        return $this->hasOne(Passenger::class, 'order_item_id');
+    }
 }

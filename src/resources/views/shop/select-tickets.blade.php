@@ -80,7 +80,7 @@
                             <div class="ship-layout">
 
                                 @php
-                                    
+
                                     $ticketsByType = $tickets->groupBy('type');
                                 @endphp
 
@@ -159,15 +159,15 @@
                                                     <div class="seats-container {{ $gridClass }}" data-deck-type="{{ $deckKey }}">
                                                         @foreach($cabinType->tickets as $ticket)
                                                         @php
-                                                            
+
                                                             $isBooked = in_array($ticket->status, ['Забронировано']);
                                                             $seatClass = $isBooked ? 'seat booked' : 'seat available';
-                                                            
+
                                                             $seatClass .= ' ' . $deckKey . '-seat';
                                                             $tooltipText = $isBooked
                                                                 ? "Место {$ticket->number} — Забронировано"
                                                                 : number_format($ticket->price, 0, '', ' ') . " ₽";
-                                                            
+
                                                             $seatIndex = $loop->index;
                                                         @endphp
                                                         <div class="{{ $seatClass }}"
@@ -330,8 +330,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const submitBtn = document.getElementById('submit-btn');
     const form = document.getElementById('purchase-form');
     const seats = document.querySelectorAll('.seat');
+    const deckContainers = document.querySelectorAll('.seats-container[data-deck-type]');
 
-    
     const deckButtons = document.querySelectorAll('.deck-button');
     const deckSections = document.querySelectorAll('.deck-section[data-deck]');
 
@@ -339,13 +339,13 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const targetDeck = this.dataset.deck;
 
-            
+
             deckButtons.forEach(btn => btn.classList.remove('active'));
 
-            
+
             this.classList.add('active');
 
-            
+
             deckSections.forEach(section => {
                 if (section.dataset.deck === targetDeck) {
                     section.style.display = 'block';
@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let total = 0;
         let hasTickets = false;
 
-        
+
         ticketCheckboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 hasTickets = true;
@@ -369,17 +369,17 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        
+
         quantityInputs.forEach(input => {
             const quantity = parseInt(input.value) || 0;
             const price = parseFloat(input.dataset.price) || 0;
             total += quantity * price;
         });
 
-        
+
         totalPriceEl.textContent = total.toLocaleString('ru-RU') + ' ₽';
 
-        
+
         if (hasTickets) {
             submitBtn.disabled = false;
             submitBtn.classList.add('active');
@@ -389,9 +389,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    
+
     seats.forEach(seat => {
-        
+
         if (seat.classList.contains('booked')) {
             return;
         }
@@ -403,17 +403,17 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Клик по билету:', ticketId, 'Трапеция:', this.classList.contains('trapezoid-left') || this.classList.contains('trapezoid-right'));
 
             if (checkbox) {
-                
+
                 checkbox.checked = !checkbox.checked;
 
-                
+
                 if (checkbox.checked) {
                     this.classList.add('selected');
                 } else {
                     this.classList.remove('selected');
                 }
 
-                
+
                 updateTotal();
             } else {
                 console.error('Чекбокс не найден для билета:', ticketId);
@@ -421,7 +421,44 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    
+    deckContainers.forEach(container => {
+        const deckType = container.dataset.deckType;
+        const seats = container.querySelectorAll('.seat[data-seat-index]');
+
+
+        const positions = seatPositions[deckType];
+
+        if (!positions) {
+            console.warn('Позиции не найдены для палубы:', deckType);
+            return;
+        }
+
+        seats.forEach(seat => {
+            const seatIndex = parseInt(seat.dataset.seatIndex);
+            const position = positions[seatIndex];
+
+            if (position) {
+
+                seat.style.position = 'absolute';
+                seat.style.top = position.top + '%';
+                seat.style.left = position.left + '%';
+                seat.style.transform = 'translate(-50%, -50%)';
+
+
+                if (position.isTrapezoid) {
+                    if (position.isTrapezoid === 'left') {
+                        seat.classList.add('trapezoid-left');
+                    } else if (position.isTrapezoid === 'right') {
+                        seat.classList.add('trapezoid-right');
+                    }
+                }
+            } else {
+                console.warn('Позиция не найдена для места', seatIndex, 'на палубе', deckType);
+            }
+        });
+    });
+
+
     form.addEventListener('submit', function(e) {
         const hasChecked = document.querySelector('.ticket-checkbox:checked');
         if (!hasChecked) {
@@ -430,17 +467,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        
+
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Обработка...';
         submitBtn.disabled = true;
     });
 
-    
+
     ticketCheckboxes.forEach(cb => {
         cb.addEventListener('change', updateTotal);
     });
 
-    
+
     quantityInputs.forEach(input => {
         input.addEventListener('input', updateTotal);
         input.addEventListener('change', function() {
@@ -455,47 +492,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script src="{{ asset('js/seat-positions.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    
-    const deckContainers = document.querySelectorAll('.seats-container[data-deck-type]');
-
-    deckContainers.forEach(container => {
-        const deckType = container.dataset.deckType;
-        const seats = container.querySelectorAll('.seat[data-seat-index]');
-
-        
-        const positions = seatPositions[deckType];
-
-        if (!positions) {
-            console.warn('Позиции не найдены для палубы:', deckType);
-            return;
-        }
-
-        seats.forEach(seat => {
-            const seatIndex = parseInt(seat.dataset.seatIndex);
-            const position = positions[seatIndex];
-
-            if (position) {
-                
-                seat.style.position = 'absolute';
-                seat.style.top = position.top + '%';
-                seat.style.left = position.left + '%';
-                seat.style.transform = 'translate(-50%, -50%)'; 
-
-                
-                if (position.isTrapezoid) {
-                    if (position.isTrapezoid === 'left') {
-                        seat.classList.add('trapezoid-left');
-                    } else if (position.isTrapezoid === 'right') {
-                        seat.classList.add('trapezoid-right');
-                    }
-                }
-            } else {
-                console.warn('Позиция не найдена для места', seatIndex, 'на палубе', deckType);
-            }
-        });
-    });
-});
-</script>
 @endsection

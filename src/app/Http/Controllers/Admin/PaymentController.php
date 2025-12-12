@@ -41,7 +41,7 @@ class PaymentController extends Controller
             $query->orderBy('order_id', $sortDirection === 'asc' ? 'asc' : 'desc');
         }
 
-        $payments = $query->paginate(20)->appends($request->query());
+        $payments = $query->paginate(15)->appends($request->query());
 
         return view('admin.payments.index', compact('payments'));
     }

@@ -191,7 +191,6 @@ class OrderItemController extends Controller
 
             $order->refreshTotalPrice();
 
-            // Возвращаем JSON ответ для AJAX запросов
             if (request()->expectsJson()) {
                 return response()->json([
                     'success' => true,

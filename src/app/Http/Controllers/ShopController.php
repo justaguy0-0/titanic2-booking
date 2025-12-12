@@ -316,7 +316,7 @@ class ShopController extends Controller
             $paymentChance = rand(1, 100);
             if ($paymentChance > 70) {
                 DB::rollBack();
-                return back()->with('error', 'Оплата отклонена. Пожалуйста, попробуйте снова или используйте другой способ оплаты.');
+                return back()->withInput()->with('error', 'Оплата отклонена. Пожалуйста, попробуйте снова или используйте другой способ оплаты.');
             }
 
             $order->update([

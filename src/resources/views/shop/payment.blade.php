@@ -152,14 +152,21 @@
                                             <div class="row g-3">
                                                 <div class="col-md-6">
                                                     <label class="passenger-label">Имя <span class="required-mark">*</span></label>
-                                                    <input type="text" name="passengers[{{ $index }}][first_name]" class="passenger-input" required>
+                                                    <input type="text" name="passengers[{{ $index }}][first_name]" class="passenger-input" value="{{ old('passengers.'.$index.'.first_name') }}" required>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="passenger-label">Фамилия <span class="required-mark">*</span></label>
-                                                    <input type="text" name="passengers[{{ $index }}][last_name]" class="passenger-input" required>
+                                                    <input type="text" name="passengers[{{ $index }}][last_name]" class="passenger-input" value="{{ old('passengers.'.$index.'.last_name') }}" required>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="passenger-label">Дата рождения <span class="required-mark">*</span></label>
+                                                    @php
+                                                        $oldBirthDate = old('passengers.'.$index.'.birth_date');
+                                                        $displayDate = '';
+                                                        if ($oldBirthDate) {
+                                                            $displayDate = \Carbon\Carbon::parse($oldBirthDate)->format('d.m.Y');
+                                                        }
+                                                    @endphp
                                                     <input
                                                         type="text"
                                                         class="passenger-input passenger-birthdate-display"
@@ -167,25 +174,27 @@
                                                         placeholder="дд.мм.гггг"
                                                         maxlength="10"
                                                         autocomplete="off"
+                                                        value="{{ $displayDate }}"
                                                         required>
                                                     <input
                                                         type="hidden"
                                                         name="passengers[{{ $index }}][birth_date]"
                                                         class="passenger-birthdate-hidden"
-                                                        data-index="{{ $index }}">
+                                                        data-index="{{ $index }}"
+                                                        value="{{ $oldBirthDate }}">
                                                     <small class="age-display" id="age-display-{{ $index }}"></small>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="passenger-label">Гражданство <span class="required-mark">*</span></label>
-                                                    <input type="text" name="passengers[{{ $index }}][citizenship]" class="passenger-input" value="Россия" required>
+                                                    <input type="text" name="passengers[{{ $index }}][citizenship]" class="passenger-input" value="{{ old('passengers.'.$index.'.citizenship', 'Россия') }}" required>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="passenger-label">Серия паспорта <span class="required-mark">*</span></label>
-                                                    <input type="text" name="passengers[{{ $index }}][passport_series]" class="passenger-input" placeholder="1234" maxlength="10" required>
+                                                    <input type="text" name="passengers[{{ $index }}][passport_series]" class="passenger-input" placeholder="1234" maxlength="10" value="{{ old('passengers.'.$index.'.passport_series') }}" required>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="passenger-label">Номер паспорта <span class="required-mark">*</span></label>
-                                                    <input type="text" name="passengers[{{ $index }}][passport_number]" class="passenger-input" placeholder="567890" maxlength="20" required>
+                                                    <input type="text" name="passengers[{{ $index }}][passport_number]" class="passenger-input" placeholder="567890" maxlength="20" value="{{ old('passengers.'.$index.'.passport_number') }}" required>
                                                 </div>
                                                 <input type="hidden" name="passengers[{{ $index }}][ticket_id]" value="{{ $ticket->id }}">
                                             </div>
@@ -242,6 +251,7 @@
                                                     placeholder="1234 5678 9012 3456"
                                                     maxlength="19"
                                                     autocomplete="off"
+                                                    value="{{ old('card_number') }}"
                                                     required>
                                                 <div class="card-type-indicator" id="card-type-indicator">
                                                     <span class="card-type-text">Введите номер</span>
@@ -258,6 +268,7 @@
                                                 placeholder="MM/ГГ"
                                                 maxlength="5"
                                                 autocomplete="off"
+                                                value="{{ old('card_expiry') }}"
                                                 required>
                                         </div>
                                         <div class="col-md-6">
@@ -270,6 +281,7 @@
                                                 placeholder="123"
                                                 maxlength="3"
                                                 autocomplete="off"
+                                                value="{{ old('card_cvv') }}"
                                                 required>
                                         </div>
                                         <div class="col-12">
@@ -281,6 +293,7 @@
                                                 class="passenger-input"
                                                 placeholder="IVAN IVANOV"
                                                 style="text-transform: uppercase;"
+                                                value="{{ old('card_holder') }}"
                                                 required>
                                         </div>
                                     </div>
@@ -504,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Остальной код для валидации карты...
+
     const cardNumberInput = document.getElementById('card-number-input');
     const cardExpiryInput = document.getElementById('card-expiry-input');
     const cardCvvInput = document.getElementById('card-cvv-input');
@@ -562,6 +575,23 @@ document.addEventListener('DOMContentLoaded', function() {
     cardHolderInput.addEventListener('input', function(e) {
         this.value = this.value.toUpperCase();
         this.value = this.value.replace(/[^A-ZА-ЯЁ\s]/g, '');
+    });
+
+
+    window.addEventListener('DOMContentLoaded', function() {
+        // Восстановление типа карты
+        const cardNumber = cardNumberInput.value;
+        if (cardNumber.replace(/\s/g, '').length >= 4) {
+            detectCardType();
+        }
+
+        birthdateInputs.forEach(input => {
+            if (input.value) {
+                setTimeout(() => {
+                    validateDate(input);
+                }, 100);
+            }
+        });
     });
 
     const originalFormSubmit = form.onsubmit;

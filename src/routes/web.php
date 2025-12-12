@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\CabinTypeController;
 use App\Http\Controllers\Admin\OrderItemController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\PassengerController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -64,6 +65,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('order-items', OrderItemController::class);
     Route::resource('payments', PaymentController::class);
     Route::resource('users', UserController::class);
+    Route::resource('passengers', PassengerController::class);
 
     Route::get('/tickets/search', [TicketController::class, 'search'])
         ->name('tickets.search');

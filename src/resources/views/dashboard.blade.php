@@ -119,7 +119,7 @@
                             <div class="row text-center mb-3">
                                 <div class="col-4">
                                     <div class="text-xs text-gray-500">Билетов куплено</div>
-                                    <div class="font-weight-bold" style="color: #f59e0b;">{{ Auth::user()->total_tickets ?? 0 }}</div>
+                                    <div class="font-weight-bold" style="color: #f59e0b;">{{ $totalTickets }}</div>
                                 </div>
                                 <div class="col-4">
                                     <div class="text-xs text-gray-500">Текущая скидка</div>
@@ -299,7 +299,7 @@
                         </svg>
                         <h3 class="empty-title">Заказов пока нет</h3>
                         <p class="empty-text">Начните делать покупки прямо сейчас!</p>
-                        <a href="/" class="btn-submit mt-3">Перейти к каталогу</a>
+                        <a href="{{ route('shop') }}" class="btn-submit mt-3">Перейти к каталогу</a>
                     </div>
                 </div>
             @endif

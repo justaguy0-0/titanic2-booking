@@ -85,6 +85,10 @@
                    class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700 transition">
                     <i class="fas fa-users mr-3"></i> Все пользователи
                 </a>
+                <a href="{{ route('admin.passengers.index') }}"
+                   class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 text-gray-700 transition">
+                    <i class="fas fa-passport mr-3"></i> Пассажиры
+                </a>
             </div>
 
             <div class="border-t border-gray-200 mt-8 pt-4">

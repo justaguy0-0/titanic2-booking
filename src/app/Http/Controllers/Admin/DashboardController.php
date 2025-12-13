@@ -24,7 +24,7 @@ class DashboardController extends Controller
         $totalOrders = Order::where('created_at', '>=', $lastMonth)->count();
 
         $revenue = Order::where('created_at', '>=', $lastMonth)
-            ->where('status', '!=', 'cancelled')
+            ->where('status', '!=', 'Отменён')
             ->sum('total_price');
 
         $activeVoyages = Voyage::where('departure_date', '>=', Carbon::now())
@@ -32,7 +32,7 @@ class DashboardController extends Controller
             ->count();
 
         $totalTicketsSold = Order::where('orders.created_at', '>=', $lastMonth)
-            ->where('orders.status', '!=', 'cancelled')
+            ->where('orders.status', '!=', 'Отменён')
             ->join('order_items', 'orders.id', '=', 'order_items.order_id')
             ->where('order_items.item_type', 'ticket')
             ->sum('order_items.quantity');
@@ -41,7 +41,7 @@ class DashboardController extends Controller
         $totalUsers = User::count();
 
         $averageOrderValue = Order::where('created_at', '>=', $lastMonth)
-            ->where('status', '!=', 'cancelled')
+            ->where('status', '!=', 'Отменён')
             ->avg('total_price');
 
         $recentOrders = Order::with('user')
@@ -59,7 +59,7 @@ class DashboardController extends Controller
             });
 
         $salesData = Order::where('created_at', '>=', Carbon::now()->subDays(30))
-            ->where('status', '!=', 'cancelled')
+            ->where('status', '!=', 'Отменён')
             ->select(
                 DB::raw('DATE(created_at) as date'),
                 DB::raw('COUNT(*) as orders_count'),
@@ -87,7 +87,7 @@ class DashboardController extends Controller
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
             ->join('places as dep', 'voyages.departure_place_id', '=', 'dep.id')
             ->join('places as arr', 'voyages.arrival_place_id', '=', 'arr.id')
-            ->where('orders.status', '!=', 'cancelled')
+            ->where('orders.status', '!=', 'Отменён')
             ->groupBy('voyages.id', 'dep.name', 'arr.name')
             ->orderByDesc('bookings_count')
             ->take(5)
@@ -102,7 +102,7 @@ class DashboardController extends Controller
         )
             ->join('order_items', 'entertainments.id', '=', 'order_items.entertainment_id')
             ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->where('orders.status', '!=', 'cancelled')
+            ->where('orders.status', '!=', 'Отменён')
             ->groupBy('entertainments.id', 'entertainments.name', 'entertainments.price')
             ->orderByDesc('total_bookings')
             ->take(5)

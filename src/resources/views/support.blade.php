@@ -87,7 +87,7 @@
                 </div>
             </div>
 
-   
+
             <div style="background: #1e293b; border: 2px solid #334155; border-radius: 12px; padding: 2rem; margin-bottom: 2rem;">
                 <h3 style="color: #fbbf24; text-align: center; margin-bottom: 2rem; font-family: Georgia, serif;">
                     ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ
@@ -167,18 +167,5 @@
         </div>
     </div>
 </div>
-
-<style>
-    .col-md-6 > div:hover {
-        transform: translateY(-5px);
-        border-color: #fbbf24 !important;
-        box-shadow: 0 10px 25px rgba(251, 191, 36, 0.3);
-    }
-
-    a[href="{{ route('shop') }}"]:hover {
-        background: #f59e0b !important;
-        transform: scale(1.05);
-    }
-</style>
 
 @endsection

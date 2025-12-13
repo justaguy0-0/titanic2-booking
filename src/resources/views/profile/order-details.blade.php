@@ -6,7 +6,7 @@
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="page-title mb-0">Детали заказа #{{ $order->id ?? '' }}</h2>
                 <a href="{{ route('profile.orders') }}" class="btn-back">← Назад к заказам</a>
@@ -49,7 +49,7 @@
                                 <div class="order-detail-item">
                                     <div class="detail-label">Статус</div>
                                     <div class="detail-value">
-                                        <span class="status-badge 
+                                        <span class="status-badge
                                             @if($order->status === 'Новый') status-new
                                             @elseif($order->status === 'Обработан') status-processing
                                             @elseif($order->status === 'Оплачен') status-paid
@@ -71,8 +71,8 @@
 
                         @if(in_array($order->status, ['Новый', 'Обработан']))
                             <div class="mt-4">
-                                <form action="{{ route('profile.orders.cancel', $order->id) }}" 
-                                      method="POST" 
+                                <form action="{{ route('profile.orders.cancel', $order->id) }}"
+                                      method="POST"
                                       onsubmit="return confirm('Вы уверены, что хотите отменить заказ?');">
                                     @csrf
                                     @method('PATCH')
@@ -107,19 +107,19 @@
                                             <tr>
                                                 <td>
                                                     <div class="item-info">
-                                                        @if($item->type === 'ticket' && isset($item->ticket))
-                                                            <div class="item-name">{{ $item->ticket->type ?? 'Билет' }}</div>
+                                                        @if($item->item_type === 'ticket' && isset($item->ticket))
+                                                            <div class="item-name">{{ $item->ticket->item_type ?? 'Билет' }}</div>
                                                             <div class="item-details">Билет № {{ $item->ticket->number ?? '' }}</div>
                                                             @if(isset($item->ticket->voyage))
                                                                 <div class="item-voyage">{{ $item->ticket->voyage->name ?? '' }}</div>
                                                                 @if(isset($item->ticket->voyage->placeDeparture) && isset($item->ticket->voyage->icebergArrival))
                                                                     <div class="item-route">
-                                                                        {{ $item->ticket->voyage->placeDeparture->name ?? '' }} → 
+                                                                        {{ $item->ticket->voyage->placeDeparture->name ?? '' }} →
                                                                         {{ $item->ticket->voyage->icebergArrival->name ?? '' }}
                                                                     </div>
                                                                 @endif
                                                             @endif
-                                                        @elseif($item->type === 'entertainment' && isset($item->entertainment))
+                                                        @elseif($item->item_type === 'entertainment' && isset($item->entertainment))
                                                             <div class="item-name">{{ $item->entertainment->name ?? 'Развлечение' }}</div>
                                                             <div class="item-details">Развлечение</div>
                                                         @else
@@ -128,11 +128,11 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span class="type-badge 
-                                                        @if($item->type === 'ticket') type-ticket
+                                                    <span class="type-badge
+                                                        @if($item->item_type === 'ticket') type-ticket
                                                         @else type-entertainment
                                                         @endif">
-                                                        @if($item->type === 'ticket') Билет
+                                                        @if($item->item_type === 'ticket') Билет
                                                         @else Развлечение
                                                         @endif
                                                     </span>
@@ -304,7 +304,7 @@
         font-size: 0.875rem;
         padding: 0.75rem;
     }
-    
+
     .item-info {
         font-size: 0.875rem;
     }
